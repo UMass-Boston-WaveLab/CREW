@@ -1,5 +1,8 @@
-%This is eric testing how GitHub changes things
+%UMass Boston Physical Layer Security Channel Model
+%
 %--------------------------------------------
+
+
 %input # of scatterers 
 %input number of samples for E and distance
 %for each scatterer
