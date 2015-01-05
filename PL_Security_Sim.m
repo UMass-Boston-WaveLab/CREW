@@ -1,3 +1,5 @@
+%This is eric testing how GitHub changes things
+%--------------------------------------------
 %input # of scatterers 
 %input number of samples for E and distance
 %for each scatterer
