@@ -56,10 +56,10 @@ SR = sum(ASC, 1);
 a = lpc(x);
 estimates = x;
 
-for Q = 1:q
-    estimates = predict(a, estimates);
-end
-
+%for Q = 1:q
+%    estimates = dot(a, estimates);
+%end
+estimates(Q,:) = dot(a, estimates(Q-1,:));
 
 
 %PC is the Predictor coefficients
