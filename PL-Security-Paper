@@ -1,0 +1,92 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+\title{Physical Layer Security in Wireless Channels Using ???? Encryption}
+\author{Dr. K.C. Kerby-Patel, Clara Gamboa, Eric Brown}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+
+\section{Abstract}
+
+This paper examines the security of local channel encryption methods based on the assumption of ergodicity. We argue that channels with a finite number of scatterers are non-ergoditic and therefore can be extrapolated by a third party. etc...
+
+\textbf{Key words:} -- Ergodicity, Ensemble Average, ???
+
+\section{Introduction}
+
+There is a strong case for an encryption method that can be used on the fly in a situation where two parties cannot pre-arrange keys. One possible solution is that the local channel between point A and B can be used as a source of randomness, and using it's characteristics a mutual key may be generated. Why it is supposed to work... Applications..., confounders.... etc. Our research sets out to prove that first, the channel is not ergotic in nature, and then seeks to determine the level of mutual information that is shared between A, B, and a eavesdropping third party in the area.
+
+\section{Spatial Ergodicity Analysis}
+
+Citing Isukapalli paper and explaining the math he used.
+
+\section{Channel Prediction}
+
+We are doing things differently. We take the channel model that is usually a fuction of time and align it along a listening array and transform it into a function of space. (This needs to be explained as the mathematical equations are given. Describe the variables and whatnot)
+
+\section{Channel Prediction Modeling and Results}
+
+In this section we will go on to describe how we set about creating a channel model and the methods we used. (LPC, ARYule, MATLAB code explanations and code may be used here.) This section should have graphs that show our channel model and explain the methodology clearly. We are using the sum of sinusoids method to assemble a wireless channel with "S" scatterers, "N" number of array listening points etc... In this section we also discuss how we went about our predictions and how far out we can reasonably predict. How many times were the tests run?
+
+\section{Conclusion}
+Is it broken? Is it safe? Can we be sure? What's the next step?
+
+
+More text.
+
+\end{document}
