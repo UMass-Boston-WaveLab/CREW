@@ -1,0 +1,5 @@
+# Ignore auto-generated TeX log files and PDFs #
+*.pdf
+*.log
+*.aux
+*.gz

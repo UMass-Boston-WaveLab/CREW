@@ -4,7 +4,7 @@
 % This is a simple template for a LaTeX document using the "article" class.
 % See "book", "report", "letter" for other types of document.
 
-\documentclass[11pt]{article} % use larger type; default would be 10pt
+\documentclass[11pt]{article} % This will be \documentclass{ieeetran} later
 
 \usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
 
@@ -53,8 +53,9 @@
 
 %%% The "real" document content comes below...
 
-\title{Physical Layer Security in Wireless Channels Using ???? Encryption}
-\author{Dr. K.C. Kerby-Patel, Clara Gamboa, Eric Brown}
+\title{Eavesdropping on Wireless Fading Key Generation Using Long-Range Prediction Techniques} %a shorter title would be great
+\author{Clara Gamboa, Eric Brown, K.C. Kerby-Patel}  %the convention is that the advisor's name goes last
+%also have to put in our UMB affiliation blurb
 %\date{} % Activate to display a given date or no date (if empty),
          % otherwise the current date is printed 
 
@@ -63,23 +64,30 @@
 
 \section{Abstract}
 
-This paper examines the security of local channel encryption methods based on the assumption of ergodicity. We argue that channels with a finite number of scatterers are non-ergoditic and therefore can be extrapolated by a third party. etc...
+Physical layer key generation techniques based on wireless channel fading are generally considered to be secure as long as any eavesdroppers are separated from the terminals by a distance greater than the channel correlation length.  This assertion depends on an assumption that the channel is ergodic, while many real-world channels are not ergodic.  In this work, we demonstrate a method to predict the transfer function of a non-ergodic channel by applying long-range fading prediction techniques to a series of spatial (rather than temporal) samples.  We show that it is possible to predict the channel transfer function over distances much larger than the correlation length.  %we will have to compute the correlation length from the observed channel covariance matrix.  
 
-\textbf{Key words:} -- Ergodicity, Ensemble Average, ???
+\textbf{Key words:} -- wireless, channel, key generation, physical layer, security
 
 \section{Introduction}
 
-There is a strong case for an encryption method that can be used on the fly in a situation where two parties cannot pre-arrange keys. One possible solution is that the local channel between point A and B can be used as a source of randomness, and using it's characteristics a mutual key may be generated. Why it is supposed to work... Applications..., confounders.... etc. Our research sets out to prove that first, the channel is not ergotic in nature, and then seeks to determine the level of mutual information that is shared between A, B, and a eavesdropping third party in the area.
+It has been demonstrated \cite{anyPLkeygenpaper} that two parties' reciprocal observations of wireless channel fading can be used to generate symmetric encryption keys on the fly in a situation where two parties cannot pre-arrange keys. 
+%possible applications
+%references about the current state of this technique 
+%security claims and their reasoning - implicit assumption of ergodicity by depending on the channel's correlation length
+However, it has been shown that real-world wireless channels are typically not ergodic vs. time \cite{isukapalli}.  In this work, we establish that the spatial average of such a channel's correlation function is not equal to the ensemble average, meaning that then channel is also not ergodic vs. space.  This indicates that security claims based on the correlation length are inappropriate.  %to find out what level of security we can actually expect, we apply channel prediction techniques \cite{any duel-hallen paper} to investigate the distance over which an eavesdropper could predict the channel transfer function.
 
-\section{Spatial Ergodicity Analysis}
+Section \ref{ergodicity} applies the method of \cite{isukapalli} to show that the spatial average of a channel's correlation function is not generally equal to the ensemble average, indicating that the channel is not spatially ergodic. Next, in Section \ref{prediction}, we examine the possibility of predicting the channel transfer function over distances greater than the correlation length by applying long-range prediction techniques.
+
+
+\section{Spatial Ergodicity Analysis}\label{ergodicity}
 
 Citing Isukapalli paper and explaining the math he used.
 
-\section{Channel Prediction}
+\section{Spatial Long-Range Channel Prediction Method}\label{prediction}
 
 We are doing things differently. We take the channel model that is usually a fuction of time and align it along a listening array and transform it into a function of space. (This needs to be explained as the mathematical equations are given. Describe the variables and whatnot)
 
-\section{Channel Prediction Modeling and Results}
+\section{Spatial Long-Range Channel Prediction Simulated Results}
 
 In this section we will go on to describe how we set about creating a channel model and the methods we used. (LPC, ARYule, MATLAB code explanations and code may be used here.) This section should have graphs that show our channel model and explain the methodology clearly. We are using the sum of sinusoids method to assemble a wireless channel with "S" scatterers, "N" number of array listening points etc... In this section we also discuss how we went about our predictions and how far out we can reasonably predict. How many times were the tests run?
 
