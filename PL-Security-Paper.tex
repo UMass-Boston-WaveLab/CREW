@@ -53,7 +53,7 @@
 
 %%% The "real" document content comes below...
 
-\title{Eavesdropping on Wireless Fading Key Generation Using Long-Range Prediction Techniques} %a shorter title would be great
+\title{On the Vulnerability of Wireless Fading Key Generation to Eavesdropping via Channel Prediction} %this title is not bad
 \author{Clara Gamboa, Eric Brown, K.C. Kerby-Patel}  %the convention is that the advisor's name goes last
 %also have to put in our UMB affiliation blurb
 %\date{} % Activate to display a given date or no date (if empty),
@@ -64,9 +64,10 @@
 
 \section{Abstract}
 
-Physical layer key generation techniques based on wireless channel fading are generally considered to be secure as long as any eavesdroppers are separated from the terminals by a distance greater than the channel correlation length.  This assertion depends on an assumption that the channel is ergodic, while many real-world channels are not ergodic.  In this work, we demonstrate a method to predict the transfer function of a non-ergodic channel by applying long-range fading prediction techniques to a series of spatial (rather than temporal) samples.  We show that it is possible to predict the channel transfer function over distances much larger than the correlation length.  %we will have to compute the correlation length from the observed channel covariance matrix.  
+Physical layer key generation techniques based on wireless channel fading are generally considered to be secure as long as any eavesdroppers are separated from the terminals by a distance greater than the channel correlation length.  This assertion depends on an assumption that the channel is ergodic, while many real-world channels are not ergodic.  Linear prediction has previously been employed to predict samples of the channel transfer function ahead in time.  In this work, we demonstrate that it is possible to predict the channel transfer function in space as well, over distances much larger than the correlation length.  %we will have to compute the correlation length from the observed channel covariance matrix.  
+This leads us to conclude that a more pessimistic ``safe'' eavesdropper distance for wireless fading based key generation is needed.
 
-\textbf{Key words:} -- wireless, channel, key generation, physical layer, security
+\textbf{Key words:} -- wireless, channel, fading, key generation, physical layer, security
 
 \section{Introduction}
 
