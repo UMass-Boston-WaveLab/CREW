@@ -75,9 +75,9 @@ It has been demonstrated \cite{anyPLkeygenpaper} that two parties' reciprocal ob
 %possible applications
 %references about the current state of this technique 
 %security claims and their reasoning - implicit assumption of ergodicity by depending on the channel's correlation length
-However, it has been shown that real-world wireless channels are typically not ergodic vs. time \cite{isukapalli}.  In this work, we establish that the spatial average of such a channel's correlation function is not equal to the ensemble average, meaning that then channel is also not ergodic vs. space.  This indicates that security claims based on the correlation length are inappropriate.  %to find out what level of security we can actually expect, we apply channel prediction techniques \cite{any duel-hallen paper} to investigate the distance over which an eavesdropper could predict the channel transfer function.
+However, it has been shown that real-world wireless channels are typically not ergodic vs. time \cite{isukapalli}.  In this work, we establish that the spatial average of such a channel's correlation function is not equal to the ensemble average, meaning that the channel is also not ergodic vs. space.  This indicates that security claims based on the correlation length are inappropriate.  To develop a more practical estimate of the minimum distance from a node to an eavesdropper, we apply channel prediction techniques \cite{any duel-hallen paper} to investigate the distance over which it is possible to predict the channel transfer function.
 
-Section \ref{ergodicity} applies the method of \cite{isukapalli} to show that the spatial average of a channel's correlation function is not generally equal to the ensemble average, indicating that the channel is not spatially ergodic. Next, in Section \ref{prediction}, we examine the possibility of predicting the channel transfer function over distances greater than the correlation length by applying long-range prediction techniques.
+Section \ref{ergodicity} applies the method of \cite{isukapalli} to show that the spatial average of a channel's correlation function is not generally equal to the ensemble average, indicating that the channel is not spatially ergodic. Next, in Section \ref{prediction}, we apply long-range prediction techniques to a series of spatial samples in order to predict the channel transfer function over distances greater than the correlation length.  In Section \ref{simresults}, we apply this technique to a simulated channel to examine the dependence of prediction length on the properties of the channel and the eavesdropper array. %these are: number of scatterers; eavesdropper element spacing; and number of eavesdropper elements.
 
 
 \section{Spatial Ergodicity Analysis}\label{ergodicity}
@@ -85,17 +85,22 @@ Section \ref{ergodicity} applies the method of \cite{isukapalli} to show that th
 Citing Isukapalli paper and explaining the math he used.
 
 \section{Spatial Long-Range Channel Prediction Method}\label{prediction}
+%since the channel's spatial variation is not ergodic, it is well suited to long-range prediction techniques (cite duel-hallen). rather than using long-range prediction to predict the channel transfer function ahead temporally, we predict it spatially.
+%describe the problem setup: channel, eavesdropper
 
-We are doing things differently. We take the channel model that is usually a fuction of time and align it along a listening array and transform it into a function of space. (This needs to be explained as the mathematical equations are given. Describe the variables and whatnot)
+We are doing things differently %(differently from what? we have to cite so people know what to compare to). 
 
-\section{Spatial Long-Range Channel Prediction Simulated Results}
+We take the channel model that is usually a fuction of time and align it along a listening array and transform it into a function of space. (This needs to be explained as the mathematical equations are given. Describe the variables and whatnot)
 
-In this section we will go on to describe how we set about creating a channel model and the methods we used. (LPC, ARYule, MATLAB code explanations and code may be used here.) This section should have graphs that show our channel model and explain the methodology clearly. We are using the sum of sinusoids method to assemble a wireless channel with "S" scatterers, "N" number of array listening points etc... In this section we also discuss how we went about our predictions and how far out we can reasonably predict. How many times were the tests run?
+\section{Spatial Long-Range Channel Prediction Simulated Results}\label{simresults}
+%in this section we apply the method from the previous section to a simulated channel
+%describe the channel simulation (very similar to problem setup from previous section)
+%find average prediction length and how it varies for different values of $d$ (element spacing in E), $N$ (number of elements in E), and $S$ (number of scatterers)
+
+In this section we will go on to describe how we set about creating a channel model and the methods we used. (LPC, ARYule, MATLAB code explanations and code may be used here.) This section should have graphs that show our channel model and explain the methodology clearly. We are using the sum of sinusoids method to assemble a wireless channel with $S$ scatterers, $N$ number of array elements (spatial samples) etc... In this section we also discuss how we went about our predictions and how far out we can reasonably predict. How many times were the tests run?
 
 \section{Conclusion}
-Is it broken? Is it safe? Can we be sure? What's the next step?
+%we applied long-range prediction to estimate the channel transfer function at a location in space that is separated from the eavesdropper by more than a correlation length.  This indicates that the minimum safe distance for secure key generation based on wireless fading must be reexamined.
 
-
-More text.
-
+%future work: add Doppler dependence, do a scenario where the eavesdropper moves through space and see if we can do spatiotemporal channel prediction simultaneously, see about 2D eavesdropper arrays and other problem geometries (what if all the scatterers are in an arc of the space instead of evenly distributed? does it matter?), do a security analysis by estimating the error of the prediction(?), demonstrate spatial channel prediction experimentally, investigate the effect of mutual coupling between array elements on the quality of the eavesdropper's predictions
 \end{document}
