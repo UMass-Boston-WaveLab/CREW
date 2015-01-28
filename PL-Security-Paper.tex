@@ -99,8 +99,19 @@ The correlation function (based on the ensemble average) for two spatially separ
 \begin{multline}\label{ensemblecorr}
 R_e(\vec{\Delta r})= E\left[\sum_{n=m=1}^N |\alpha_n|^2 e^{-j(k+k_d\cos\theta_n)|\vec{\Delta r}|\cos \psi_n}\right] +\\ E\left[\sum_{n=1}^N\sum_{m\neq n} \alpha_n^* \alpha_m e^{j \omega_d (\cos \theta_m - \cos \theta_n)} e^{-j(k+k_d\cos\theta_n)\left(\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|\right)}e^{-jk\left|\vec{\Delta r}\right| \cos \psi_m}\right]
 \end{multline}
-The second term in Equation \ref{ensemblecorr} is eliminated by the integration of the exponential containing $\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|$.  To simplify further, we assume that $E[|\alpha|^2]=1/N$.  
-%the math is broken here because of the addition of the Doppler wavenumber.  it means that we haven't eliminated the integral over \theta_n like we otherwise would have been able to do. Needs a small redo from this point.
+The second expected value term in Equation \ref{ensemblecorr} is eliminated by the integration of the complex exponential containing $\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|$.  To simplify further, we assume that $E[|\alpha|^2]=1/N$.  
+
+
+Now the correlation function depends on the distributions of $\theta$ and $\psi$:
+\begin{equation}
+R_e(\vec{\Delta r})=\iint_{-\pi, -\pi}^{\pi,\pi}e^{-j k |\vec{\Delta r}| \cos(u)} e^{-j k_d |\vec{\Delta r}| \cos (v) \cos(u)} p_{\theta}(v) p_{\psi}(u) du dv
+\end{equation}
+If $\theta$ is uniformly distributed, this can be simplified to 
+\begin{equation}
+R_e(\vec{\Delta r})=\int_{-\pi}^{\pi}e^{-j k |\vec{\Delta r}| \cos(u)} J_0(k_d |\vec{\Delta r}| \cos(u))p_{\psi}(u) du 
+\end{equation}
+%the math departs from Isukapalli here because of the addition of the Doppler wavenumber. I do not know if it can be simplified further than this, even if p_{\psi}(u) is a constant value.  If it can, it will probably be by using a plane wave expansion (Jacobi-Anger expansion)
+
 
 
 %this section might need some graphs in it, demonstrating how the correlation function and the spatial sample covariance are different for different situations
