@@ -81,38 +81,60 @@ Section \ref{ergodicity} applies the method of \cite{isukapalli} to show that th
 
 
 \section{Spatial Ergodicity}\label{ergodicity}
-%discuss ergodicity and its significance for the security assumption here - why does this section exist
-This section follows the derivation by Isukapalli et al. \cite{isukapalli}, applying the same techniques to the spatial rather than temporal variation of the channel.
 
+%discuss ergodicity and its significance for the security assumption here - why does this section exist?
+
+This section follows the derivation by Isukapalli et al. \cite{isukapalli}, applying the same techniques to the spatial rather than temporal variation of the channel.
 
 %added Doppler spatial phase variation to the channel model!!  f = fc+fd because f=(1+v/c)fc.  but k = 2pi/lambda, lambda = c/f, k = 2pi fc(1+v/c)/c.  so it's ok to write k as kc+kd, where kd = 2pi fd/c.
 Begin by assuming that the channel is represented by a sum-of-sinusoids model as shown in Equation \ref{chan}.  The parameters $\alpha_n$, $\omega_d\cos\theta_n$, $k_d\cos\theta_n$, and $\vec{r_n}$ describe the amplitude, Doppler frequency shift, Doppler wavenumber, and location of the $n$th scatterer, and $\vec{r}$ represents the observation point.
 \begin{equation}\label{chan}
 h(\vec{r},t)= \sum_{n=1}^N \alpha_n e^{j \omega_d t \cos \theta_n} e^{-j(k+k_d\cos\theta_n)\left|\vec{r_n} - \vec{r}\right|}
 \end{equation}
-An observation of the channel impulse response at a new location, $\vec{r}+\vec{\Delta r}$, can be written
-\begin{equation}
+An observation of the channel impulse response at a new location, $\vec{r}+\vec{\Delta r}$, can be written as shown in Equation \ref{chanloc2} if $|\vec{\Delta r}|$ is small enough that all scatterers are in the far field of the pair of observation points.
+\begin{equation}\label{chanloc2}
 h(\vec{r}+\vec{\Delta r},t) = \sum_{m=1}^N \alpha_m e^{j \omega_d t \cos \theta_m} e^{-j(k+k_d\cos\theta_n)\left|\vec{r_m}-\vec{r}\right|}e^{-jk\left|\vec{\Delta r}\right| \cos \psi_m}
 \end{equation}
 
-The correlation function (based on the ensemble average) for two spatially separated but simultaneous observations is shown in Equation \ref{ensemblecorr}.
+The correlation function (based on the ensemble average) for two spatially separated but simultaneous observations can be separated into a single sum of squared terms from the same scatterer (the first term in Equation \ref{ensemblecorr}) and a double sum of contributions from two different scatterers (the second term).
 \begin{multline}\label{ensemblecorr}
 R_e(\vec{\Delta r})= E\left[\sum_{n=m=1}^N |\alpha_n|^2 e^{-j(k+k_d\cos\theta_n)|\vec{\Delta r}|\cos \psi_n}\right] +\\ E\left[\sum_{n=1}^N\sum_{m\neq n} \alpha_n^* \alpha_m e^{j \omega_d (\cos \theta_m - \cos \theta_n)} e^{-j(k+k_d\cos\theta_n)\left(\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|\right)}e^{-jk\left|\vec{\Delta r}\right| \cos \psi_m}\right]
 \end{multline}
-The second expected value term in Equation \ref{ensemblecorr} is eliminated by the integration of the complex exponential containing $\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|$.  To simplify further, we assume that $E[|\alpha|^2]=1/N$.  
+The second expected value term in Equation \ref{ensemblecorr} is eliminated by the integration of the complex exponential containing $\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|$ during calculation of the expected value.  
 
-
-Now the correlation function depends on the distributions of $\theta$ and $\psi$:
-\begin{equation}
+To simplify further, we assume that $E[|\alpha|^2]=1/N$.  Now the correlation function depends on the distributions of $\theta$ and $\psi$:
+\begin{equation}\label{generalcorr}
 R_e(\vec{\Delta r})=\iint_{-\pi, -\pi}^{\pi,\pi}e^{-j k |\vec{\Delta r}| \cos(u)} e^{-j k_d |\vec{\Delta r}| \cos (v) \cos(u)} p_{\theta}(v) p_{\psi}(u) du dv
 \end{equation}
-If $\theta$ is uniformly distributed, this can be simplified to 
+
+Equation \ref{generalcorr} is simplified as much as is possible without making any assumptions about the probability distributions of $\theta$ and $\psi$.  However, if $\theta$ is uniformly distributed, this can be simplified to 
 \begin{equation}
 R_e(\vec{\Delta r})=\int_{-\pi}^{\pi}e^{-j k |\vec{\Delta r}| \cos(u)} J_0(k_d |\vec{\Delta r}| \cos(u))p_{\psi}(u) du 
 \end{equation}
-%the math departs from Isukapalli here because of the addition of the Doppler wavenumber. I do not know if it can be simplified further than this, even if p_{\psi}(u) is a constant value.  If it can, it will probably be by using a plane wave expansion (Jacobi-Anger expansion)
+%the math departs from Isukapalli here because of the addition of the Doppler wavenumber. 
 
+If $\psi$ is uniformly distributed, we can use the identity in Equation \ref{identity} \cite{integraltablebook} and a plane wave expansion to evaluate the integral with respect to $u$, arriving at Equation \ref{finalcorr}.
+\begin{equation}\label{identity}
+\int_0^{\pi} J_0(2z\cos(x))cox(2nx)dx = (-1)^n \pi J_n^2(z)
+\end{equation}
+% Gradshteyn, I. and Ryzhik, I., Table of Integrals, Series, and Products, 7th edition, Academic Press: Amsterdam, 2007 page 724
+\begin{equation}\label{finalcorr}
+R_e(\vec{\Delta_r}) = J_0^2(\frac{k_d |\vec{\Delta_r}|}{2})J_0(k|\vec{\Delta_r}|) + 2\sum_{n=1}^{\infty}(-1)^n J_n(k|\vec{\Delta_r}|)J_{n/2}^2(\frac{k_d |\vec{\Delta_r}|}{2})
+\end{equation}
 
+On the other hand, the spatial average of $h(\vec{r}+\vec{\Delta_r},t)h^*(\vec{r},t)$ is given by
+\begin{multline}
+R_r\left(\vec{\Delta r}\right) =  \lim_{D \rightarrow \infty} \frac{3}{4\pi D^3}\int_0^D\int_{-\pi}^\pi \int_{-\pi}^{\pi} \sum_{n=m=1}^N |\alpha_n|^2 e^{-j(k+k_d\cos\theta_n)|\vec{\Delta r}|\cos \psi_n}+\\ \sum_{n=1}^N\sum_{m\neq n} \alpha_n^* \alpha_m e^{j \omega_d t(\cos \theta_m - \cos \theta_n)} e^{-j(k+k_d\cos\theta_n)\left(\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|\right)}e^{-jk\left|\vec{\Delta r}\right| \cos \psi_m}r^2 \sin\theta dr d\theta d\phi
+\end{multline}
+Again the second term is eliminated by the integration of the complex exponential containing $\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|$.  What remains in the integrand does not depend on position, so the spatial average correlation is given by 
+\begin{equation}\label{spatialcorr}
+R_r\left(\vec{\Delta r}\right) =  \sum_{n=1}^N |\alpha_n|^2 e^{-j(k+k_d\cos\theta_n)|\vec{\Delta r}|\cos \psi_n}
+\end{equation}
+
+Depending on the number of scatterers $N$ and their angular distribution, Equation \ref{spatialcorr} may approach Equation \ref{finalcorr} \cite{isukapalli}.  However, real-world channels typically do not have sufficient scatterers to achieve this condition \cite{was it Duel-Hallen who said this?}.  
+%physically, no new realization of the channel occurs over the time or spatial interval in which we observe it - we are still in the same channel realization
+% in this case, successive temporal or spatial samples do contain some information about each other
+% we can use a series of samples to predict the channel transfer function at other temporal or spatial locations (cite duel-hallen)
 
 %this section might need some graphs in it, demonstrating how the correlation function and the spatial sample covariance are different for different situations
 
