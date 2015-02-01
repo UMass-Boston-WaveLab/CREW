@@ -20,7 +20,7 @@
 %   read geometry.pdf for detailed page layout information
 
 \usepackage{graphicx} % support the \includegraphics command and options
-
+\usepackage{amsmath}
 % \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
 
 %%% PACKAGES
@@ -53,7 +53,7 @@
 
 %%% The "real" document content comes below...
 
-\title{On the Vulnerability of Wireless Fading Key Generation to Eavesdropping via Channel Prediction} %this title is not bad
+\title{Vulnerability of Wireless Fading Key Generation to Eavesdropping via Channel Prediction} %this title is not bad
 \author{Clara Gamboa, Eric Brown, K.C. Kerby-Patel}  %the convention is that the advisor's name goes last
 %also have to put in our UMB affiliation blurb
 %\date{} % Activate to display a given date or no date (if empty),
@@ -75,27 +75,87 @@ It has been demonstrated \cite{anyPLkeygenpaper} that two parties' reciprocal ob
 %possible applications
 %references about the current state of this technique 
 %security claims and their reasoning - implicit assumption of ergodicity by depending on the channel's correlation length
-However, it has been shown that real-world wireless channels are typically not ergodic vs. time \cite{isukapalli}.  In this work, we establish that the spatial average of such a channel's correlation function is not equal to the ensemble average, meaning that then channel is also not ergodic vs. space.  This indicates that security claims based on the correlation length are inappropriate.  %to find out what level of security we can actually expect, we apply channel prediction techniques \cite{any duel-hallen paper} to investigate the distance over which an eavesdropper could predict the channel transfer function.
+However, it has been shown that real-world wireless channels are typically not ergodic vs. time \cite{isukapalli}.  In this work, we show that the spatial average of such a channel's correlation function is not equal to the ensemble average, meaning that the channel is also not ergodic vs. space.  This indicates that security claims based on the correlation length are inappropriate.  To develop a more practical estimate of the minimum distance from a node to an eavesdropper, we apply channel prediction techniques \cite{any duel-hallen paper} to investigate the distance over which it is possible to predict the channel transfer function.
 
-Section \ref{ergodicity} applies the method of \cite{isukapalli} to show that the spatial average of a channel's correlation function is not generally equal to the ensemble average, indicating that the channel is not spatially ergodic. Next, in Section \ref{prediction}, we examine the possibility of predicting the channel transfer function over distances greater than the correlation length by applying long-range prediction techniques.
+Section \ref{ergodicity} applies the method of \cite{isukapalli} to show that the spatial average of a channel's correlation function is not generally equal to the ensemble average, indicating that the channel is not spatially ergodic. Next, in Section \ref{prediction}, we apply long-range prediction techniques to a series of spatial samples in order to predict the channel transfer function over distances greater than the correlation length.  In Section \ref{simresults}, we apply this technique to a simple simulated channel to examine the dependence of prediction length on the properties of the channel and the eavesdropper array. %these are: number of scatterers; eavesdropper element spacing; and number of eavesdropper elements.
 
 
-\section{Spatial Ergodicity Analysis}\label{ergodicity}
+\section{Spatial Ergodicity}\label{ergodicity}
 
-Citing Isukapalli paper and explaining the math he used.
+%discuss ergodicity and its significance for the security assumption here - why does this section exist?
+
+This section follows the derivation by Isukapalli et al. \cite{isukapalli}, applying the same techniques to the spatial rather than temporal variation of the channel.
+
+%added Doppler spatial phase variation to the channel model!!  f = fc+fd because f=(1+v/c)fc.  but k = 2pi/lambda, lambda = c/f, k = 2pi fc(1+v/c)/c.  so it's ok to write k as kc+kd, where kd = 2pi fd/c.
+Begin by assuming that the channel is represented by a sum-of-sinusoids model as shown in Equation \ref{chan}.  The parameters $\alpha_n$, $\omega_d\cos\theta_n$, $k_d\cos\theta_n$, and $\vec{r_n}$ describe the amplitude, Doppler frequency shift, Doppler wavenumber, and location of the $n$th scatterer, and $\vec{r}$ represents the observation point.
+\begin{equation}\label{chan}
+h(\vec{r},t)= \sum_{n=1}^N \alpha_n e^{j \omega_d t \cos \theta_n} e^{-j(k+k_d\cos\theta_n)\left|\vec{r_n} - \vec{r}\right|}
+\end{equation}
+An observation of the channel impulse response at a new location, $\vec{r}+\vec{\Delta r}$, can be written as shown in Equation \ref{chanloc2} if $|\vec{\Delta r}|$ is small enough that all scatterers are in the far field of the pair of observation points.
+\begin{equation}\label{chanloc2}
+h(\vec{r}+\vec{\Delta r},t) = \sum_{m=1}^N \alpha_m e^{j \omega_d t \cos \theta_m} e^{-j(k+k_d\cos\theta_n)\left|\vec{r_m}-\vec{r}\right|}e^{-jk\left|\vec{\Delta r}\right| \cos \psi_m}
+\end{equation}
+
+The correlation function (based on the ensemble average) for two spatially separated but simultaneous observations can be separated into a single sum of squared terms from the same scatterer (the first term in Equation \ref{ensemblecorr}) and a double sum of contributions from two different scatterers (the second term).
+\begin{multline}\label{ensemblecorr}
+R_e(\vec{\Delta r})= E\left[\sum_{n=m=1}^N |\alpha_n|^2 e^{-j(k+k_d\cos\theta_n)|\vec{\Delta r}|\cos \psi_n}\right] +\\ E\left[\sum_{n=1}^N\sum_{m\neq n} \alpha_n^* \alpha_m e^{j \omega_d (\cos \theta_m - \cos \theta_n)} e^{-j(k+k_d\cos\theta_n)\left(\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|\right)}e^{-jk\left|\vec{\Delta r}\right| \cos \psi_m}\right]
+\end{multline}
+The second expected value term in Equation \ref{ensemblecorr} is eliminated by the integration of the complex exponential containing $\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|$ during calculation of the expected value.  
+
+To simplify further, we assume that $E[|\alpha|^2]=1/N$.  Now the correlation function depends on the distributions of $\theta$ and $\psi$:
+\begin{equation}\label{generalcorr}
+R_e(\vec{\Delta r})=\iint_{-\pi, -\pi}^{\pi,\pi}e^{-j k |\vec{\Delta r}| \cos(u)} e^{-j k_d |\vec{\Delta r}| \cos (v) \cos(u)} p_{\theta}(v) p_{\psi}(u) du dv
+\end{equation}
+
+Equation \ref{generalcorr} is simplified as much as is possible without making any assumptions about the probability distributions of $\theta$ and $\psi$.  However, if $\theta$ is uniformly distributed, this can be simplified to 
+\begin{equation}
+R_e(\vec{\Delta r})=\int_{-\pi}^{\pi}e^{-j k |\vec{\Delta r}| \cos(u)} J_0(k_d |\vec{\Delta r}| \cos(u))p_{\psi}(u) du 
+\end{equation}
+%the math departs from Isukapalli here because of the addition of the Doppler wavenumber. 
+
+If $\psi$ is uniformly distributed, we can use the identity in Equation \ref{identity} \cite{integraltablebook} and a plane wave expansion to evaluate the integral with respect to $u$, arriving at Equation \ref{finalcorr}.
+\begin{equation}\label{identity}
+\int_0^{\pi} J_0(2z\cos(x))cox(2nx)dx = (-1)^n \pi J_n^2(z)
+\end{equation}
+% Gradshteyn, I. and Ryzhik, I., Table of Integrals, Series, and Products, 7th edition, Academic Press: Amsterdam, 2007 page 724
+\begin{equation}\label{finalcorr}
+R_e(\vec{\Delta_r}) = J_0^2(\frac{k_d |\vec{\Delta_r}|}{2})J_0(k|\vec{\Delta_r}|) + 2\sum_{n=1}^{\infty}(-1)^n J_n(k|\vec{\Delta_r}|)J_{n/2}^2(\frac{k_d |\vec{\Delta_r}|}{2})
+\end{equation}
+
+On the other hand, the spatial average of $h(\vec{r}+\vec{\Delta_r},t)h^*(\vec{r},t)$ is given by
+\begin{multline}
+R_r\left(\vec{\Delta r}\right) =  \lim_{D \rightarrow \infty} \frac{3}{4\pi D^3}\int_0^D\int_{-\pi}^\pi \int_{-\pi}^{\pi} \sum_{n=m=1}^N |\alpha_n|^2 e^{-j(k+k_d\cos\theta_n)|\vec{\Delta r}|\cos \psi_n}+\\ \sum_{n=1}^N\sum_{m\neq n} \alpha_n^* \alpha_m e^{j \omega_d t(\cos \theta_m - \cos \theta_n)} e^{-j(k+k_d\cos\theta_n)\left(\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|\right)}e^{-jk\left|\vec{\Delta r}\right| \cos \psi_m}r^2 \sin\theta dr d\theta d\phi
+\end{multline}
+Again the second term is eliminated by the integration of the complex exponential containing $\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|$.  What remains in the integrand does not depend on position, so the spatial average correlation is given by 
+\begin{equation}\label{spatialcorr}
+R_r\left(\vec{\Delta r}\right) =  \sum_{n=1}^N |\alpha_n|^2 e^{-j(k+k_d\cos\theta_n)|\vec{\Delta r}|\cos \psi_n}
+\end{equation}
+
+Depending on the number of scatterers $N$ and their angular distribution, Equation \ref{spatialcorr} may approach Equation \ref{finalcorr} \cite{isukapalli}.  However, real-world channels typically do not have sufficient scatterers to achieve this condition \cite{was it Duel-Hallen who said this?}.  
+%physically, no new realization of the channel occurs over the time or spatial interval in which we observe it - we are still in the same channel realization
+% in this case, successive temporal or spatial samples do contain some information about each other
+% we can use a series of samples to predict the channel transfer function at other temporal or spatial locations (cite duel-hallen)
+
+%this section might need some graphs in it, demonstrating how the correlation function and the spatial sample covariance are different for different situations
 
 \section{Spatial Long-Range Channel Prediction Method}\label{prediction}
+%since the channel's spatial variation is not ergodic, it is well suited to long-range prediction techniques (cite duel-hallen). rather than using long-range prediction to predict the channel transfer function ahead temporally, we predict it spatially.
+%describe the problem setup: channel, eavesdropper
+%assumption: the angle from eavesdropper elements to scatterers stays the same over all the eavesdropper samples and predicted samples (all scatterers are in the far field of an array of length Nd+Qd)
 
-We are doing things differently. We take the channel model that is usually a fuction of time and align it along a listening array and transform it into a function of space. (This needs to be explained as the mathematical equations are given. Describe the variables and whatnot)
+We are doing things differently %(differently from what? we have to cite so people know what to compare to). 
 
-\section{Spatial Long-Range Channel Prediction Simulated Results}
+We take the channel model that is usually a fuction of time and align it along a listening array and transform it into a function of space. (This needs to be explained as the mathematical equations are given. Describe the variables and whatnot)
 
-In this section we will go on to describe how we set about creating a channel model and the methods we used. (LPC, ARYule, MATLAB code explanations and code may be used here.) This section should have graphs that show our channel model and explain the methodology clearly. We are using the sum of sinusoids method to assemble a wireless channel with "S" scatterers, "N" number of array listening points etc... In this section we also discuss how we went about our predictions and how far out we can reasonably predict. How many times were the tests run?
+\section{Spatial Long-Range Channel Prediction Simulated Results}\label{simresults}
+%in this section we apply the method from the previous section to a simulated channel
+%describe the channel simulation (very similar to problem setup from previous section)
+%find average prediction length and how it varies for different values of $d$ (element spacing in E), $N$ (number of elements in E), and $S$ (number of scatterers)
+
+In this section we will go on to describe how we set about creating a channel model and the methods we used. (LPC, ARYule, MATLAB code explanations and code may be used here.) This section should have graphs that show our channel model and explain the methodology clearly. We are using the sum of sinusoids method to assemble a wireless channel with $S$ scatterers, $N$ number of array elements (spatial samples) etc... In this section we also discuss how we went about our predictions and how far out we can reasonably predict. How many times were the tests run?
 
 \section{Conclusion}
-Is it broken? Is it safe? Can we be sure? What's the next step?
+%we applied long-range prediction to estimate the channel transfer function at a location in space that is separated from the eavesdropper by more than a correlation length.  This indicates that the minimum safe distance for secure key generation based on wireless fading must be reexamined.
 
-
-More text.
-
+%future work: add Doppler dependence, do a scenario where the eavesdropper moves through space and see if we can do spatiotemporal channel prediction simultaneously, see about 2D eavesdropper arrays and other problem geometries (what if all the scatterers are in an arc of the space instead of evenly distributed? does it matter?), do a security analysis by estimating the error of the prediction(?), demonstrate spatial channel prediction experimentally, investigate the effect of mutual coupling between array elements on the quality of the eavesdropper's predictions
 \end{document}
