@@ -1,4 +1,4 @@
-function [] = PL_Security_Sim(S, N, d, q)
+function [] = PL_Security_Sim(S, N, d, q, p)
 %%UMass Boston Physical Layer Security Channel Model
 %Authors: Eric Brown, Clara Gamboa, Dr. K.C. Kerby-Patel
 %
@@ -54,7 +54,7 @@ H = sum(ASC, 1);
    % p = 10;            %p is the order of the linear preaditions(FIF filter)
                        %that predicts value of x
 
-a = lpc(x, 20);
+a = lpc(x, p);
 %afilt = filter([0 -a(2:end)],1,x);
 afilt = a;
 estimates = x;
