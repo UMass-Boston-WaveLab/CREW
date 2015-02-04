@@ -1,5 +1,6 @@
+function [] = PL_Security_Sim(S, N, d, q)
 %%UMass Boston Physical Layer Security Channel Model
-%Authors: Eric Brown, Clara Gamboa, Dr. K.C. Kirby-Patel
+%Authors: Eric Brown, Clara Gamboa, Dr. K.C. Kerby-Patel
 %
 %       (SECTION 1) Variables
 %       (SECTION 2) Parameters
@@ -10,10 +11,10 @@
 
 %%  (SECTION 1)
 %This is where we define the variables
-S = 10;               % # of Scatterers
-N = 100;               % # of Eve samples
-d = 0.10;             % Spacing between eavesdropper samples in wavelengths
-q = 20;               % Number of samples ahead we attempt to predict
+% S = 10;               % # of Scatterers
+% N = 100;               % # of Eve samples
+% d = 0.10;             % Spacing between eavesdropper samples in wavelengths
+% q = 20;               % Number of samples ahead we attempt to predict
 Lamb = 1;             % Wavelength
 t = N+q;              % is the total number of readings
 %---------------------------------------------
@@ -76,7 +77,8 @@ end
 %    err = x-est;
 %    [acs,lags] = xcorr(err,'coeff');
     
-% Plot of the Original signal vs Estimated signal    
+% Plot of the Original signal vs Estimated signal  
+figure;
     plot(1:t,abs(H(1:t)),1:t,abs(estimates),'--'), grid
     title 'Original Signal vs. LPC Estimate'
     xlabel 'Sensors 1 through N+q', ylabel 'Readings'
@@ -87,6 +89,12 @@ end
 %    xlabel 'Lags', ylabel 'Normalized value'
 %---------------------------------------------
 
+R =abs(xcorr(H));
+figure;
+plot((1:length(R))-floor(length(R)/2),R)
+title('Autocorrelation Function Estimate from Samples')
+
 %% (SECTION 5)
 % Here we use the ARYule estimation method to predict the N to N+q sensor
 % values.
+end
