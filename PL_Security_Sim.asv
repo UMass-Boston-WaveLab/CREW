@@ -11,9 +11,9 @@
 %%  (SECTION 1)
 %This is where we define the variables
 S = 10;               % # of Scatterers
-N = 100;               % # of Eve samples
-d = 0.1;             % Spacing between eavesdropper samples in wavelengths
-q = 50;               % Number of samples ahead we attempt to predict
+N = 10;               % # of Eve samples
+d = 0.10;             % Spacing between eavesdropper samples in wavelengths
+q = 20;               % Number of samples ahead we attempt to predict
 Lamb = 1;             % Wavelength
 t = N+q;              % is the total number of readings
 %---------------------------------------------
@@ -53,9 +53,8 @@ H = sum(ASC, 1);
     p = 10;            %p is the order of the linear preaditions(FIF filter)
                        %that predicts value of x
 
-a = lpc(x, p);
+a = lpc(x);
 %afilt = filter([0 -a(2:end)],1,x);
-afilt = a;
 estimates = x;
 %a = lpc(x);
 %estimates = x;
