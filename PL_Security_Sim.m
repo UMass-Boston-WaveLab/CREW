@@ -15,7 +15,7 @@ function [] = PL_Security_Sim(S, N, d, q)
 % N = 100;               % # of Eve samples
 % d = 0.10;             % Spacing between eavesdropper samples in wavelengths
 % q = 20;               % Number of samples ahead we attempt to predict
-Lamb = 1;             % Wavelength
+Lamb = 1;             % Wavelength = 1 (distances are normalized to the wavelength)
 t = N+q;              % is the total number of readings
 %---------------------------------------------
 
@@ -77,6 +77,14 @@ end
 %    err = x-est;
 %    [acs,lags] = xcorr(err,'coeff');
     
+R =abs(xcorr(H));
+ind = max(find(R>R(length(H))/2)); %max of R always occurs at 0 offset 
+clen = ind-length(H); 
+figure;
+plot((1:length(R))-floor(length(R)/2),R)
+title(sprintf('Autocorrelation Function Estimate from Samples; Correlation length = %.0f samples', clen))
+
+
 % Plot of the Original signal vs Estimated signal  
 figure;
     plot(1:t,abs(H(1:t)),1:t,abs(estimates),'--'), grid
@@ -89,10 +97,6 @@ figure;
 %    xlabel 'Lags', ylabel 'Normalized value'
 %---------------------------------------------
 
-R =abs(xcorr(H));
-figure;
-plot((1:length(R))-floor(length(R)/2),R)
-title('Autocorrelation Function Estimate from Samples')
 
 %% (SECTION 5)
 % Here we use the ARYule estimation method to predict the N to N+q sensor
