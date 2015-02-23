@@ -1,5 +1,5 @@
 %%UMass Boston Physical Layer Security Channel Model
-%Authors: Eric Brown, Clara Gamboa, Dr. K.C. Kirby-Patel
+%Authors: Eric Brown, Clara Gamboa, Dr. K.C. Kerby-Patel
 %
 %       (SECTION 1) Variables
 %       (SECTION 2) Parameters
@@ -10,12 +10,13 @@
 
 %%  (SECTION 1)
 %This is where we define the variables
-S = 10;               % # of Scatterers
-N = 10;               % # of Eve samples
-d = 0.10;             % Spacing between eavesdropper samples in wavelengths
-q = 20;               % Number of samples ahead we attempt to predict
-Lamb = 1;             % Wavelength
-t = N+q;              % is the total number of readings
+ S = 3;               % # of Scatterers
+ N = 100;               % # of Eve samples
+ d = 0.10;             % Spacing between eavesdropper samples in wavelengths
+ q = 20;               % Number of samples ahead we attempt to predict
+Lamb = 1;             % Wavelength = 1 (distances are normalized to the wavelength)
+t = N+q;             % is the total number of readings
+ P = 10;             % Number of complex sinusoids that make up the wireless channel
 %---------------------------------------------
 
 %% (SECTION 2)
@@ -53,16 +54,17 @@ H = sum(ASC, 1);
     p = 10;            %p is the order of the linear preaditions(FIF filter)
                        %that predicts value of x
 
-a = lpc(x);
+%a = lpc(x, p);
 %afilt = filter([0 -a(2:end)],1,x);
-estimates = x;
+%afilt = a;
+%estimates = x;
 %a = lpc(x);
 %estimates = x;
 
-for Q = 1:q
-    temp = predict(afilt, estimates);
-    estimates = [estimates temp]; 
-end
+%for Q = 1:q
+%    temp = predict(afilt, estimates);
+%    estimates = [estimates temp]; 
+%end
 
 
 
@@ -75,17 +77,49 @@ end
 %    err = x-est;
 %    [acs,lags] = xcorr(err,'coeff');
     
-% Plot of the Original signal vs Estimated signal    
-    plot(1:t,abs(H(1:t)),1:t,abs(estimates),'--'), grid
-    title 'Original Signal vs. LPC Estimate'
-    xlabel 'Sensors 1 through N+q', ylabel 'Readings'
-    legend('Original signal','LPC estimate')
+%R =abs(xcorr(H));
+%ind = max(find(R>R(length(H))/2)); %max of R always occurs at 0 offset 
+%clen = ind-length(H); 
+%figure;
+%plot((1:length(R))-floor(length(R)/2),R)
+%title(sprintf('Autocorrelation Function Estimate from Samples; Correlation length = %.0f samples', clen))
+
+
+% Plot of the Original signal vs Estimated signal  
+%figure;
+%    plot(1:t,abs(H(1:t)),1:t,abs(estimates),'--'), grid
+%    title 'Original Signal vs. LPC Estimate'
+%    xlabel 'Sensors 1 through N+q', ylabel 'Readings'
+%    legend('Original signal','LPC estimate')
 % Plot of the Autocorrelation Prediction error
 %    plot(lags,acs), grid
 %    title 'Autocorrelation of the Prediction Error'
 %    xlabel 'Lags', ylabel 'Normalized value'
 %---------------------------------------------
 
+
 %% (SECTION 5)
-% Here we use the ARYule estimation method to predict the N to N+q sensor
-% values.
+% Here we use the pmusic spectrum analysis method. 
+% k in the frequency and POW is the amplitude
+
+[k,POW] = pmusic(x,P);
+
+% We have to make our sampling array into a matrix.(i.e 100 samples .1
+% wavelength apart would result in a single row .1 - 10 intervals of .1, or
+% 100 1 row columns
+Samp = (1:N)
+
+x_something = repmat(Samp, size(POW));
+a_thingy = repmat(POW, size(x));
+k_thingy = repmat(k, size(x));
+
+H_hat = sum(a_thingy.*exp(1i*k_thingy.*x_something), 1);
+
+
+
+
+%
+plot(1:N,abs(H(1:N)),1:N,abs(H_hat),'--'), grid
+title 'Original Signal vs. rootMUSIC Estimate'
+xlabel 'Sensors 1 through N+q', ylabel 'Readings'
+legend('Original signal','LPC estimate')
