@@ -10,10 +10,10 @@
 
 %%  (SECTION 1)
 %This is where we define the variables
- S = 3;               % # of Scatterers
+ S = 10;               % # of Scatterers
  N = 100;               % # of Eve samples
  d = 0.10;             % Spacing between eavesdropper samples in wavelengths
- q = 20;               % Number of samples ahead we attempt to predict
+ q = 200;               % Number of samples ahead we attempt to predict
 Lamb = 1;             % Wavelength = 1 (distances are normalized to the wavelength)
 t = N+q;             % is the total number of readings
  P = 10;             % Number of complex sinusoids that make up the wireless channel
@@ -102,24 +102,38 @@ H = sum(ASC, 1);
 % Here we use the pmusic spectrum analysis method. 
 % k in the frequency and POW is the amplitude
 
-[k,POW] = pmusic(x,P);
+[k,POW] = rootmusic(x,P);
 
 % We have to make our sampling array into a matrix.(i.e 100 samples .1
 % wavelength apart would result in a single row .1 - 10 intervals of .1, or
 % 100 1 row columns
-Samp = (1:N)
+Samp = (1:t);
 
-x_something = repmat(Samp, size(POW));
-a_thingy = repmat(POW, size(x));
-k_thingy = repmat(k, size(x));
-
-H_hat = sum(a_thingy.*exp(1i*k_thingy.*x_something), 1);
+x_mat = repmat(Samp, size(k));
+%a_mat = repmat(POW, size(x));
+k_mat = repmat(k, size(Samp));
 
 
+% Estimating complex amplitudes from the frequency
+z = exp(1i*k.');
+
+A = [];
+for ii = 1:N
+    A = [A; z.^ii];
+end
+
+
+
+%a = inv(A)*H(1:S).;
+a = inv(A'*A)*A'*(H(1:N).');
+a_mat = repmat(a,size(Samp));
+
+
+H_hat = sum(a_mat.*exp(1i*k_mat.*x_mat), 1);
 
 
 %
-plot(1:N,abs(H(1:N)),1:N,abs(H_hat),'--'), grid
+plot(1:t,abs(H(1:t)),1:t,abs(H_hat),'--'), grid
 title 'Original Signal vs. rootMUSIC Estimate'
 xlabel 'Sensors 1 through N+q', ylabel 'Readings'
 legend('Original signal','LPC estimate')
