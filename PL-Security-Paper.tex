@@ -70,7 +70,7 @@ This leads us to conclude that a more pessimistic ``safe'' eavesdropper distance
 \textbf{Key words:} -- wireless, channel, fading, key generation, physical layer, security
 
 \section{Introduction}
-
+%belongs to Clara
 It has been demonstrated \cite{anyPLkeygenpaper} that two parties' reciprocal observations of wireless channel fading can be used to generate symmetric encryption keys on the fly in a situation where two parties cannot pre-arrange keys. 
 %possible applications
 %references about the current state of this technique 
@@ -84,7 +84,7 @@ Section \ref{ergodicity} applies the method of \cite{isukapalli} to show that th
 
 
 \section{Spatial Ergodicity}\label{ergodicity}
-
+%KCKP to pretty this up 
 %discuss ergodicity and its significance for the security assumption here - why does this section exist?
 
 This section follows the derivation by Isukapalli et al. \cite{isukapalli}, applying the same techniques to the spatial rather than temporal variation of the channel.
@@ -142,6 +142,7 @@ Depending on the number of scatterers $N$ and their angular distribution, Equati
 %this section might need some graphs in it, demonstrating how the correlation function and the spatial sample covariance are different for different situations
 
 \section{Spatial Long-Range Channel Prediction Method}\label{prediction}
+%belongs to Eric
 Since the channel's spatial variation is not ergodic, it is well suited to long-range prediction techniques (cite duel-hallen). rather than using long-range prediction to predict the channel transfer function ahead temporally, we predict it spatially.  %say what we do and why (spectral estimation is ok because  parameters don't change very fast)
 
 %describe the problem setup: channel, eavesdropper
@@ -150,15 +151,17 @@ Since the channel's spatial variation is not ergodic, it is well suited to long-
 %summary of math - MUSIC (cite MATLAB) and how to estimate the coefficients (cite paper where we got that technique)
 
 \section{Spatial Long-Range Channel Prediction Simulated Results}\label{simresults}
+%belongs to Eric
 %in this section we apply the method from the previous section to a simulated channel
 
 %describe the channel simulation (very similar to problem setup from previous section)
 
-%find average prediction length and how it varies for different values of $d$ (element spacing in E), $N$ (number of elements in E), and $S$ (number of scatterers)
+%find average prediction length and how it varies for different values of $d$ (element spacing in E), $N$ (number of elements in E), and $S$ (number of scatterers) - include figures
 
 These prediction lengths are unrealistic because the simulated channel doesn't change vs. position at all.  A realistic channel will change as the eavesdropper's position changes.  In temporal prediction applications, it has been observed that the amplitudes and frequencies in the sum-of-sinusoids model typically change within X TIME PERIOD \cite{the duel-hallen paper that says that} \emph{This may depend on how fast they assume the receiver is moving?}.  Based on this observation, we expect that \emph{something something}.
 
 \section{Conclusion}
+%belongs to Clara
 %we applied long-range prediction to estimate the channel transfer function at a location in space that is separated from the eavesdropper by more than a correlation length.  This indicates that the minimum safe distance for secure key generation based on wireless fading must be reexamined.
 
 %future work: do a scenario where the eavesdropper moves through space and see if we can do spatiotemporal channel prediction simultaneously, see about 2D eavesdropper arrays and other problem geometries (what if all the scatterers are in an arc of the space instead of evenly distributed? does it matter?), do a security analysis by estimating the error of the prediction(?), demonstrate spatial channel prediction experimentally, investigate the effect of mutual coupling between array elements on the quality of the eavesdropper's predictions
