@@ -146,7 +146,8 @@ Spatial non-ergodicity physically means that all spatial samples observe the sam
 
 \section{Spatial Long-Range Channel Prediction Method}\label{prediction}
 %belongs to Eric
-Since the channel's spatial variation is not ergodic, it is well suited to long-range prediction techniques (someone, perhaps a duel-hallen paper, said this). rather than using long-range prediction to predict the channel transfer function ahead temporally, we predict it spatially.  %say what we do and why (spectral estimation is ok because  parameters don't change very fast)
+Since the channel's spatial variation is not ergodic, it is well suited to long-range prediction techniques \cite{(someone, perhaps a duel-hallen paper, said this)}. rather than using long-range prediction to predict the channel transfer function ahead temporally, we predict it spatially.  %say what we do and why (spectral estimation is ok because  parameters don't change very fast)
+ In temporal prediction applications, it has been observed that time variation of the amplitudes and frequencies in the sum-of-sinusoids model is on the order of 0.1 seconds \cite{duel-hallen2007} \emph{This may depend on how fast they assume the receiver is moving?}.  Based on this observation, we expect that \emph{something something}.
 
 %describe the problem setup: channel, eavesdropper
 %assumption: the angle from eavesdropper elements to scatterers stays the same over all the eavesdropper samples and predicted samples (all scatterers are in the far field of an array of length Nd+Qd)
@@ -161,7 +162,7 @@ Since the channel's spatial variation is not ergodic, it is well suited to long-
 
 %find average prediction length and how it varies for different values of $d$ (element spacing in E), $N$ (number of elements in E), and $S$ (number of scatterers) - include figures
 
-These prediction lengths are unrealistic because the simulated channel doesn't change vs. position at all.  A realistic channel will change as the eavesdropper's position changes.  In temporal prediction applications, it has been observed that time variation of the amplitudes and frequencies in the sum-of-sinusoids model is on the order of 0.1 seconds \cite{duel-hallen2007} \emph{This may depend on how fast they assume the receiver is moving?}.  Based on this observation, we expect that \emph{something something}.
+These prediction lengths are unrealistic because the simulated channel doesn't change vs. position at all.  A realistic channel will change as the eavesdropper's position changes. 
 
 \section{Conclusion}
 %belongs to Clara
