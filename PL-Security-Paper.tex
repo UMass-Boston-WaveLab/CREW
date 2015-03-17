@@ -61,6 +61,7 @@
 
 \begin{document}
 \maketitle
+\bibliographystyle{ieeetran}
 
 \section{Abstract}
 
@@ -132,11 +133,9 @@ R_r\left(\vec{\Delta r}\right) =  \sum_{n=1}^N |\alpha_n|^2 e^{-j(k+k_d\cos\thet
 \end{equation}
 
 Depending on the number of scatterers $N$ and their angular distribution, Equation \ref{spatialcorr} may approach Equation \ref{finalcorr} \cite{isukapalli}.  However, real-world channels typically do not have sufficient scatterers to achieve this condition \cite{was it Duel-Hallen who said this?}.  
-%physically, no new realization of the channel occurs over the time or spatial interval in which we observe it - we are still in the same channel realization
-% in this case, successive temporal or spatial samples do contain some information about each other
-% we can use a series of samples to predict the channel transfer function at other temporal or spatial locations (cite duel-hallen)
 
-%this section might need some graphs in it, demonstrating how the correlation function and the spatial sample covariance are different for different situations
+Spatial non-ergodicity physically means that all spatial samples observe the same channel realization.  The scatterer angles and amplitudes do not change appreciably within the collection of viewpoints.  In this case, successive spatial samples do have some mutual information, and a series of spatial samples can be used to predict the channel transfer function ahead spatially, using the same methods as have already been demonstrated for temporal long-range prediction \cite{duel-hallen}.
+%this section might need some graphs in it, demonstrating how the correlation function and the spatial sample covariance are different for different situations - that might make it too long, though, and I want to focus on the other bits.
 
 \section{Spatial Long-Range Channel Prediction Method}\label{prediction}
 %belongs to Eric
@@ -162,4 +161,5 @@ These prediction lengths are unrealistic because the simulated channel doesn't c
 %we applied long-range prediction to estimate the channel transfer function at a location in space that is separated from the eavesdropper by more than a correlation length.  This indicates that the minimum safe distance for secure key generation based on wireless fading must be reexamined.
 
 %future work: do a scenario where the eavesdropper moves through space and see if we can do spatiotemporal channel prediction simultaneously, see about 2D eavesdropper arrays and other problem geometries (what if all the scatterers are in an arc of the space instead of evenly distributed? does it matter?), do a security analysis by estimating the error of the prediction(?), demonstrate spatial channel prediction experimentally, investigate the effect of mutual coupling between array elements on the quality of the eavesdropper's predictions
+\bibliography{}{}
 \end{document}
