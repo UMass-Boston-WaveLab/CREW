@@ -139,8 +139,17 @@ Spatial non-ergodicity physically means that all spatial samples observe the sam
 
 \section{Spatial Long-Range Channel Prediction Method}\label{prediction}
 %belongs to Eric
-Since the channel's spatial variation is not ergodic, it is well suited to long-range prediction techniques \cite{(someone, perhaps a duel-hallen paper, said this)}. rather than using long-range prediction to predict the channel transfer function ahead temporally, we predict it spatially.  %say what we do and why (spectral estimation is ok because  parameters don't change very fast)
+Since the channel's spatial variation is not ergodic, it is well suited to long-range prediction techniques \cite{(someone, perhaps a duel-hallen paper, said this)}. rather than using long-range prediction to predict the channel transfer function ahead temporally, we predict it spatially. 
+
  In temporal prediction applications, it has been observed that time variation of the amplitudes and frequencies in the sum-of-sinusoids model is on the order of 0.1 seconds \cite{duel-hallen2007} \emph{This may depend on how fast they assume the receiver is moving?}.  Based on this observation, we expect that \emph{something something}.
+
+We create an array of antennas in line with the reciever. Since we assume that all sampling occurs simultaneously our equation is simplified. Beginning with \ref{chan} we drop the $e^{j\omega t}$ leaving simply. (insert equation). Where $\alpha_n$ us the $n^{th}$ complex amplitude, N is the number of samples and k is frequency.
+
+Our unknowns in this systme are the amplitude and frequencies. We assume that we know the location of B (the recieving endpoint of the transmission) and that we have a high SNR (give specific number).
+
+With this channel setup we obtain a set of data points for the channel in each location, then use spectral estimation to project this sample out to the location of B.
+  %say what we do and why (spectral estimation is ok because  parameters don't change very fast)
+
 
 %describe the problem setup: channel, eavesdropper
 %assumption: the angle from eavesdropper elements to scatterers stays the same over all the eavesdropper samples and predicted samples (all scatterers are in the far field of an array of length Nd+Qd)
