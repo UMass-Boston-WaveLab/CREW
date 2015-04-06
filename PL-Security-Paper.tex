@@ -158,9 +158,18 @@ Spatial non-ergodicity physically means that all spatial samples observe the sam
 %belongs to Eric
 As discussed in Section 3, the channel's spatial variation is not ergodic, therefore it is well suited to long-range prediction techniques \cite{(someone, perhaps a duel-hallen paper, said this)}. Rather than using long-range prediction to predict the channel transfer function ahead temporally, we predict it spatially. 
 
+The channel model is shown in Figure (insert). Point A is the transmitter, several scatterers S, an antenna array E, and a reciever B. The model uses 10 scatterers, as it has been shown in (DUAL HALLEN citation) most real world channels contain less than 10 large scatterers.  
+
  In temporal prediction applications, it has been observed that time variation of the amplitudes and frequencies in the sum-of-sinusoids model is on the order of 0.1 seconds \cite{duel-hallen2007} \emph{This may depend on how fast they assume the receiver is moving?}.  Based on this observation, we expect that the channel model is conducive to the application of spectral analysis. In order to assemble an acceptable set of data to solve a spectral analysis problem, we use an array of antennas with regular spacing to collect information on the wireless channel.
 
-We simulate an array of antennas in line with the reciever. Since we assume that all sampling occurs simultaneously our equation is simplified. Beginning with equation \ref{chan} we drop the $e^{j\omega_d t}$ leaving simply. (insert equation). Where $\alpha_n$ us the $n^{th}$ complex amplitude, N is the number of samples and k is frequency.
+We simulate the eavesdropper as an array of antennas in line with the reciever. Since we assume that all sampling occurs simultaneously our equation is simplified. Beginning with equation \ref{chan} we drop the $e^{j\omega_d t}$ leaving simply
+
+
+\begin{equation}\label{chan}
+h(\vec{r},t)= \sum_{n=1}^N \alpha_n e^{-j(k+k_d\cos\theta_n)d}
+\end{equation}
+
+ Where $\alpha_n$ us the $n^{th}$ complex amplitude, N is the number of samples, $d$ is the distance between the samples and k is frequency. As discussed previously 
 
 Our unknowns in this systme are the amplitude and frequencies. We assume that we know the location of B (the recieving endpoint of the transmission) and that we have a high SNR (give specific number).
 
