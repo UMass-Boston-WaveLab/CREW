@@ -72,10 +72,26 @@ This leads us to conclude that a more pessimistic ``safe'' eavesdropper distance
 
 \section{Introduction}
 %belongs to Clara
-It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of wireless channel fading can be used to generate symmetric encryption keys on the fly in a situation where two parties cannot pre-arrange keys. 
+It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of wireless channel fading can be used to generate symmetric encryption keys on the fly in a situation where two parties cannot pre-arrange keys.  
+\bigskip
+Current security claims of key generation from wireless channels measurements depend on the statics of the channel as a common source of randomness. To be able to connect two parties in an encrypted channel without needing predetermined keys would allow for ease of communication, but require a common source of random information that is unique to both communicating parties. It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of wireless channel fading can be used to generate symmetric encryption keys on the fly in a situation where two parties cannot pre-arrange keys.  Meaning that if you have a known waveform to measure a channel, the transmitting party can send the receiving party an encoded message that uses as a decryption key the reciprocity of the signals and the superposition of many corresponding scattered which will destructively or constructively, depending on location, and interfere with the known waveform.
+
+The common information between the two parties, $A$ and $B$, can be described by a sum of sinusoids, as seen in Equation 1, assuming that the transmitting party $A$ is moving at a velocity $= \lambda \omega/2 \pi$ that is max Doppler frequency. Previously it was assumed that for an eavesdropper $E$ farther than a correlation length of the channel away from source channel, between $A$ and $B$, that $E$ could know almost nothing about the reciprocity key. This assumption stemming from the idea that the channel model between A and B's location are random. Here it is argued that once the channel is ''chosen'' the communication channel between $A$ and $B$ then becomes deterministic with a set of unknown scatterers.  Meaning that the correlation length depends on an ensemble average of the channel correlation function. Other wise stated, $E$ could calculate the parameters of the channel between $A$ and $B$ because the wireless channel is not ergodic vs. time \cite{isukapalli2006} which can than be shown to not be ergodic vs. position as well. 
+
+In this case the observation points of the eavesdropper are placed in far-field of both transmitter and scatterers;, with stationary observation points; all observation occur at the same moment in time; and are predicted at the same instant in time. The far-field assumption allows us to say that the channel observations from those points are not specially ergodic, and having the channel be non-ergodic lets us know that that channel transfer function varies in an known but deterministic way.  This can be said since we don't see a change in the channel realization within the collection of observation points. Allowing $E$, a passive listener to obtain meaningful information about the channel key. 
+
+
+
+ \bigskip by creating a mirror of the scatterers and as long as the listener array,$E$, were in line with either $A$ or $B$ 
+
+Here we try to define what is the common information of an eavesdropper if the channel is not ergodic.
+\bigskip
+
 
 %possible applications
+
 %references about the current state of this technique 
+Currently it is seen that if you can ensure a secure radius of one realization of the channel around $A$ and $B$ than the channel this method of key generation is secure, yet the assumption works of the logic that channel key is random and channel ergodic. 
 
 \emph{missing paragraph}
 %security claims and their reasoning - implicit assumption of ergodicity by depending on the channel's correlation length
