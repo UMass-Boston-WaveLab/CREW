@@ -10,6 +10,12 @@ function [ Hn ] = gn( H , snr )
 %hAverage = mean (H.');
 %yTemp = wgn(m,n,p);            % y = wgn(m,n,p) generates an m-by-n matrix of white Gaussian noise. 
 %nAverage = mean (yTemp.');
+hAverage = mean(H.')
+L=100000; %Sample length for the random signal
+mu=0;
+sigma=2;
+X=sigma*randn(L,1)+mu;
+snr = 
 Hn = awgn(x,snr);     
  
 end
