@@ -65,7 +65,7 @@ H = sum(ASC, 1);
 % ability to have the power of H in decibles relative to a watt defined
 % as well as the imp is the specifies load impedance in ohms (default is 1)
 
-Hn = gn[ H ,;
+%Hn = gn[ H ,;
 %---------------------------------------------
 
 %% (SECTION 5)
