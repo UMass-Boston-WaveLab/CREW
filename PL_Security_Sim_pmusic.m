@@ -60,17 +60,12 @@ H = sum(ASC, 1);
 % k in the frequency and POW is the amplitude
 
 % Here is where we define the noise added to the signal. 
-% We have chosen to use a preset Matlab function, to generate our 
-% Gaussian white noies. 
-% Where gn is the function which adds white noise to our generated 
-% signal H, using the specified signal to noise ratio defined 
-% by the variable snr. 
+% gnS is the desired standard deviation of white noise
+% gnM is the mean of noise distribution
+% snr is the signal to noise ratio
+% Hn is the signal obsereved by the sensor array
 
-% if more specific noise needs to be added later the function has the 
-% ability to have the power of H in decibles relative to a watt defined
-% as well as the imp is the specifies load impedance in ohms (default is 1)
-
-%Hn = gn[ H ,;
+% Hn = gn[ H ,;
 %---------------------------------------------
 
 % Variables
