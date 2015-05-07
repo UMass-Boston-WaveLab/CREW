@@ -42,9 +42,13 @@ tAS = 2*pi*rand(S, 1);
 %ASC is the Array of Scatterers Continued???
 %H is the full channel as seen by eavesdroper
 
+% k is the wavenumber
+k = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE));
+% kd is doppler wavenumber. I think we need a velocity component
+kd = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tAS));
 
 
-AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE));
+AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + k + kd;
 ASC = exp(1i*AP);
 H = sum(ASC, 1);   
 %---------------------------------------------

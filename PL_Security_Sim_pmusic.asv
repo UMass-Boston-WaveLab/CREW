@@ -42,17 +42,34 @@ tAS = 2*pi*rand(S, 1);
 %ASC is the Array of Scatterers Continued???
 %H is the full channel as seen by eavesdroper
 
+k = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE));
+kd = 
 
 
-AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE));
+AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + k;
 ASC = exp(1i*AP);
 H = sum(ASC, 1);   
 %---------------------------------------------
 
 
 %% (SECTION 4)
+
 % Here we use the pmusic spectrum analysis method. 
 % k in the frequency and POW is the amplitude
+
+% Here is where we define the noise added to the signal. 
+% We have chosen to use a preset Matlab function, to generate our 
+% Gaussian white noies. 
+% Where gn is the function which adds white noise to our generated 
+% signal H, using the specified signal to noise ratio defined 
+% by the variable snr. 
+
+% if more specific noise needs to be added later the function has the 
+% ability to have the power of H in decibles relative to a watt defined
+% as well as the imp is the specifies load impedance in ohms (default is 1)
+
+%Hn = gn[ H ,;
+%---------------------------------------------
 
 % Variables
     x = H(1:N);        %sensor readings from our listening array
