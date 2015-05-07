@@ -51,10 +51,10 @@ H = sum(ASC, 1);
 
 
 %% (SECTION 4)
-<<<<<<< HEAD
+
 % Here we use the pmusic spectrum analysis method. 
 % k in the frequency and POW is the amplitude
-=======
+
 % Here is where we define the noise added to the signal. 
 % We have chosen to use a preset Matlab function, to generate our 
 % Gaussian white noies. 
@@ -68,7 +68,6 @@ H = sum(ASC, 1);
 
 %Hn = gn[ H ,;
 %---------------------------------------------
->>>>>>> 07421b447dbe9c0d31b90b4bb2ec8677c79323ca
 
 % Variables
     x = H(1:N);        %sensor readings from our listening array
