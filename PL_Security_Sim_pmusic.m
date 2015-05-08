@@ -12,7 +12,7 @@
 %       (SECTION 7) 
 %--------------------------------------------
 
-<<<<<<< HEAD
+
 %%  (SECTION 1)
 %This is where we define the variables
  S    = 10;                % # of Scatterers
@@ -29,21 +29,7 @@
 
  
 %---------------------------------------------
-=======
-%%  (SECTION 1) Variables
 
-    %This is where we define the variables
-     S    = 10;                % # of Scatterers
-     N    = 100;               % # of sensor array samples
-     d    = 0.10;              % Spacing between eavesdropper samples in wavelengths
-     q    = 200;               % Number of samples ahead we attempt to predict
-     Lamb = 1;                 % Wavelength = 1 (distances are normalized to the wavelength)
-     t    = N+q;               % is the total number of readings
-     P    = 10;                % Number of complex sinusoids that make up the wireless channel
->>>>>>> origin/Nightly-Build
-
-     %Here we define a velocity vector for A 
-%---------------------------------------------
 
 %% (SECTION 2) Parameters
 
@@ -103,10 +89,7 @@ Hn = H + gWN;
 hAve = mean(H.');                  % Finding ave. of H
 nAve = mean(gWN);                  % Finding ave. of noise
 snr  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
-%---------------------------------------------
 
-%%
-%---------------------------------------------
 
 %% (SECTION 5)
 % Here we use the pmusic spectrum analysis method. 
