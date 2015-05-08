@@ -14,22 +14,19 @@
 
 
 %%  (SECTION 1)
-%This is where we define the variables
- S    = 10;                % # of Scatterers
- N    = 100;               % # of sensor array samples
- d    = 0.10;              % Spacing between eavesdropper samples in wavelengths
- q    = 200;               % Number of samples ahead we attempt to predict
- Lamb = 1;                 % Wavelength = 1 (distances are normalized to the wavelength)
- t    = N+q;               % is the total number of readings
- P    = 10;                % Number of complex sinusoids that make up the wireless channel
- f_d  = 11;                 % doppler frequency
- f_c  = 3500000;            % carrier frequency
- 
- %Here we define a velocity vector for A
+    %This is where we define the variables
+     S    = 10;                % # of Scatterers
+     N    = 100;               % # of sensor array samples
+     d    = 0.10;              % Spacing between eavesdropper samples in wavelengths
+     q    = 200;               % Number of samples ahead we attempt to predict
+     Lamb = 1;                 % Wavelength = 1 (distances are normalized to the wavelength)
+     t    = N+q;               % is the total number of readings
+     P    = 10;                % Number of complex sinusoids that make up the wireless channel
+     f_d  = 11;                 % doppler frequency
+     f_c  = 3500000;            % carrier frequency
 
- 
+     %Here we define a velocity vector for A
 %---------------------------------------------
-
 
 %% (SECTION 2) Parameters
 
@@ -81,14 +78,14 @@ Hn = H + gWN;
 %---------------------------------------------
 
 %% (SECTION 4)
-% Here is where we define the noise. 
-% gWN is the function which adds the Gaussian white noise to our generated 
-% signal H. The desired mean and standard deviation can be specified with
-% gnS and gnM, while snr gives the signal to noise ratio.
+    % Here is where we define the noise. 
+    % gWN is the function which adds the Gaussian white noise to our generated 
+    % signal H. The desired mean and standard deviation can be specified with
+    % gnS and gnM, while snr gives the signal to noise ratio.
 
-hAve = mean(H.');                  % Finding ave. of H
-nAve = mean(gWN);                  % Finding ave. of noise
-snr  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
+    hAve = mean(H.');                  % Finding ave. of H
+    nAve = mean(gWN);                  % Finding ave. of noise
+    snr  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
 
 
 %% (SECTION 5)
