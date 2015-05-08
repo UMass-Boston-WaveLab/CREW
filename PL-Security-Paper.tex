@@ -72,31 +72,25 @@ This leads us to conclude that a more pessimistic ``safe'' eavesdropper distance
 
 \section{Introduction}
 %belongs to Clara
-It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of wireless channel fading can be used to generate symmetric encryption keys on the fly in a situation where two parties cannot pre-arrange keys.  
-\bigskip
-Current security claims of key generation from wireless channels measurements depend on the statics of the channel as a common source of randomness. To be able to connect two parties in an encrypted channel without needing predetermined keys would allow for ease of communication, but require a common source of random information that is unique to both communicating parties. It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of wireless channel fading can be used to generate symmetric encryption keys on the fly in a situation where two parties cannot pre-arrange keys.  Meaning that if you have a known waveform to measure a channel, the transmitting party can send the receiving party an encoded message that uses as a decryption key the reciprocity of the signals and the superposition of many corresponding scattered which will destructively or constructively, depending on location, and interfere with the known waveform.
+To be able to connect two parties in an encrypted channel without needing predetermined keys would allow for ease of communication, but require a common source of random information that is unique to both communicating parties. It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of wireless channel fading can be used as a common source of randomness to generate symmetric encryption keys on the fly in a situation where two parties cannot pre-arrange keys.  
+%this sentence is weird
+Meaning that if you have a known waveform to measure a channel, the transmitting party can send the receiving party an encoded message that uses as a decryption key the reciprocity of the signals and the superposition of many corresponding scattered which will destructively or constructively, depending on location, and interfere with the known waveform.
+%end weird sentence
 
-The common information between the two parties, $A$ and $B$, can be described by a sum of sinusoids, as seen in Equation 1, assuming that the transmitting party $A$ is moving at a velocity $= \lambda \omega/2 \pi$ that is max Doppler frequency. Previously it was assumed that for an eavesdropper $E$ farther than a correlation length of the channel away from source channel, between $A$ and $B$, that $E$ could know almost nothing about the reciprocity key. This assumption stemming from the idea that the channel model between A and B's location are random. Here it is argued that once the channel is ''chosen'' the communication channel between $A$ and $B$ then becomes deterministic with a set of unknown scatterers.  Meaning that the correlation length depends on an ensemble average of the channel correlation function. Other wise stated, $E$ could calculate the parameters of the channel between $A$ and $B$ because the wireless channel is not ergodic vs. time \cite{isukapalli2006} which can than be shown to not be ergodic vs. position as well. 
-
-In this case the observation points of the eavesdropper are placed in far-field of both transmitter and scatterers;, with stationary observation points; all observation occur at the same moment in time; and are predicted at the same instant in time. The far-field assumption allows us to say that the channel observations from those points are not specially ergodic, and having the channel be non-ergodic lets us know that that channel transfer function varies in an known but deterministic way.  This can be said since we don't see a change in the channel realization within the collection of observation points. Allowing $E$, a passive listener to obtain meaningful information about the channel key. 
-
-
-
- \bigskip by creating a mirror of the scatterers and as long as the listener array,$E$, were in line with either $A$ or $B$ 
-
-Here we try to define what is the common information of an eavesdropper if the channel is not ergodic.
-\bigskip
-
-
-%possible applications
-
-%references about the current state of this technique 
-Currently it is seen that if you can ensure a secure radius of one realization of the channel around $A$ and $B$ than the channel this method of key generation is secure, yet the assumption works of the logic that channel key is random and channel ergodic. 
-
-\emph{missing paragraph}
-%security claims and their reasoning - implicit assumption of ergodicity by depending on the channel's correlation length
-
+Recently proposed fading-based encryption methods \cite{some of them} assume that 
+%Previously it was assumed that
+ for an eavesdropper $E$ farther than a correlation length of the channel away from source channel, between $A$ and $B$, that $E$ could know almost nothing about the reciprocity key. 
+ %reword preceding sentence to remove notation by talking about an eavesdropper at least a correlation length away from both of the communicating nodes.
+ This assumption stemming from the idea that the channel model between A and B's location are random. %fix grammar, cite Jakes, depends on channel being Gaussian (because correlation function is proportional to mutual information for Gaussian random variables)
+ While it is often useful to use Gaussian random variables to generate a model channel for simulation purposes, channels in the real world depend deterministically on the physical environment, even if the environmental parameters are unknown.
+%Meaning that the correlation length depends on an ensemble average of the channel correlation function. Other wise stated, $E$ could calculate the parameters of the channel between $A$ and $B$ because the wireless channel is not ergodic vs. time \cite{isukapalli2006} which can than be shown to not be ergodic vs. position as well. 
+If the channel is ergodic, it is reasonable to assume that two observations of the channel separated in time or space are jointly Gaussian random variables, and the correlation length is an acceptable estimate for the minimum secure distance.
 However, it has been shown that real-world wireless channels are typically not ergodic vs. time \cite{isukapalli2006}.  In this work, we show that the spatial average of such a channel's correlation function is not equal to the ensemble average, meaning that the channel is also not ergodic vs. space.  This indicates that security claims based on the correlation length are inappropriate.  To develop a more practical estimate of the minimum distance from a node to an eavesdropper, we apply channel prediction techniques \cite{duel-hallen2007} to investigate the distance over which it is possible to predict the channel transfer function.
+
+
+Instead of describing the setup here, describe the topics that will be discussed in the rest of the paper.
+%In this case the observation points of the eavesdropper are placed in far-field of both transmitter and scatterers;, with stationary observation points; all observation occur at the same moment in time; and are predicted at the same instant in time. The far-field assumption allows us to say that the channel observations from those points are not specially ergodic, and having the channel be non-ergodic lets us know that that channel transfer function varies in an known but deterministic way.  This can be said since we don't see a change in the channel realization within the collection of observation points. Allowing $E$, a passive listener to obtain meaningful information about the channel key. 
+
 
 Section \ref{ergodicity} applies the method of \cite{isukapalli2006} to show that the spatial average of a channel's correlation function is not generally equal to the ensemble average, indicating that the channel is not spatially ergodic. Next, in Section \ref{prediction}, we apply long-range prediction techniques to a series of spatial samples in order to predict the channel transfer function over distances greater than the correlation length.  In Section \ref{simresults}, we apply this technique to a simple simulated channel to examine the dependence of prediction length on the properties of the channel and the eavesdropper array. %these are: number of scatterers; eavesdropper element spacing; and number of eavesdropper elements.
 
@@ -158,7 +152,7 @@ Spatial non-ergodicity physically means that all spatial samples observe the sam
 %belongs to Eric
 As discussed in Section 3, the channel's spatial variation is not ergodic, therefore it is well suited to long-range prediction techniques \cite{(someone, perhaps a duel-hallen paper, said this)}. Rather than using long-range prediction to predict the channel transfer function ahead temporally, we predict it spatially. 
 
-Previous literature(CITE) has shown that this problem is conducive to a spectral estimation approach. This is due tot he fact that we are only attempting to predict a small number of wavelengths forward in space. (DUAL HALLEN PAPER) States that channel can be very accurately estimated within a signle doppler wavelength, which encompasses several carrier wavelengths. In temporal prediction applications, it has been observed that time variation of the amplitudes and frequencies in the sum-of-sinusoids model is on the order of 0.1 seconds \cite{duel-hallen2007} \emph{This may depend on how fast they assume the receiver is moving?} (WHY Do we need this?).  In order to assemble an acceptable set of data to solve a spectral estimation problem, we simulate array of spatial samples with regular spacing to collect information on the wireless channel.
+Previous literature(CITE) has shown that this problem is conducive to a spectral estimation approach. This is due tot he fact that we are only attempting to predict a small number of wavelengths forward in space. (DUEL-HALLEN PAPER) States that channel can be very accurately estimated within a signle doppler wavelength, which encompasses several carrier wavelengths. In temporal prediction applications, it has been observed that time variation of the amplitudes and frequencies in the sum-of-sinusoids model is on the order of 0.1 seconds \cite{duel-hallen2007} \emph{This may depend on how fast they assume the receiver is moving?} (WHY Do we need this?).  In order to assemble an acceptable set of data to solve a spectral estimation problem, we simulate array of spatial samples with regular spacing to collect information on the wireless channel.
 
 We simulate the listener as a series of recievers along a line that points in the direction of the point we'd like to simulate. Since we assume that all sampling occurs simultaneously our equation is simplified. The Equation \ref{chan} describes a transfer function along a line.
 
