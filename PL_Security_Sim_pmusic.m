@@ -6,11 +6,13 @@
 %       (SECTION 2) Parameters
 %       (SECTION 3) Generated Signal
 %       (SECTION 4) Noise
+%       (SECTION 4) Specific Noise
 %       (SECTION 5) PMusic Spectrum Analysis
 %       (SECTION 6) 
 %       (SECTION 7) 
 %--------------------------------------------
 
+<<<<<<< HEAD
 %%  (SECTION 1)
 %This is where we define the variables
  S    = 10;                % # of Scatterers
@@ -27,35 +29,51 @@
 
  
 %---------------------------------------------
+=======
+%%  (SECTION 1) Variables
 
-%% (SECTION 2)
-%In this section we define our wave characteristics. Phase angles and
-%thetas. In general A is used to describe the source node, B the receiving
-%node, and E the sensor array.
+    %This is where we define the variables
+     S    = 10;                % # of Scatterers
+     N    = 100;               % # of sensor array samples
+     d    = 0.10;              % Spacing between eavesdropper samples in wavelengths
+     q    = 200;               % Number of samples ahead we attempt to predict
+     Lamb = 1;                 % Wavelength = 1 (distances are normalized to the wavelength)
+     t    = N+q;               % is the total number of readings
+     P    = 10;                % Number of complex sinusoids that make up the wireless channel
+>>>>>>> origin/Nightly-Build
 
-
-pAS = 2*pi*rand(S, 1);      % pAS creates a vertical array of values representing
-                            % the phase angles between S and source node (A)
-tAS = 2*pi*rand(S, 1);      % creates thetas for pAS
-
-pSE = 2*pi*rand(S, 1);      % pSE creates a vertical array of values representing
-                            % the phase angles between S and sensor array (E)
-tSE = 2*pi*rand(S, 1);      % creates thetas for pSE
-
-
+     %Here we define a velocity vector for A 
 %---------------------------------------------
-%% (SECTION 4)
-% Here is where we define the noise. 
-% gWN is the function which adds the Gaussian white noise to our generated 
-% signal H. The desired mean and standard deviation can be specified with
-% gnS and gnM, while snr gives the signal to noise ratio.
 
-% Variables
- gnM  = 0;                 % Mean for noise signal
- gnSD = 1;                 % Standard deviation for noise signal
+%% (SECTION 2) Parameters
 
-gWN  = gnSD*randn(1,t)+gnM;        % Generatin Guassian white noise signal
+    %In this section we define our wave characteristics. Phase angles and
+    %thetas. In general A is used to describe the source node, B the receiving
+    %node, and E the sensor array.
+
+
+    pAS = 2*pi*rand(S, 1);      % pAS creates a vertical array of values representing
+                                % the phase angles between S and source node (A)
+    tAS = 2*pi*rand(S, 1);      % creates thetas for pAS
+
+    pSE = 2*pi*rand(S, 1);      % pSE creates a vertical array of values representing
+                                % the phase angles between S and sensor array (E)
+    tSE = 2*pi*rand(S, 1);      % creates thetas for pSE
 %---------------------------------------------
+
+%% (SECTION 4) Noise 
+    % Here is where we define the noise. 
+    % gWN is the function which adds the Gaussian white noise to our generated 
+    % signal H. The desired mean and standard deviation can be specified with
+    % gnS and gnM, while snr gives the signal to noise ratio.
+
+    % Variables
+        gnM  = 0;                 % Mean for noise signal
+        gnSD = 1;                 % Standard deviation for noise signal
+
+    gWN  = gnSD*randn(1,t)+gnM;   % Generatin Guassian white noise signal
+%---------------------------------------------
+
 %% (SECTION 3)
 % Generated signal for testing, generate what sensors N through N+q should
 % be seeing.
@@ -85,7 +103,9 @@ Hn = H + gWN;
 hAve = mean(H.');                  % Finding ave. of H
 nAve = mean(gWN);                  % Finding ave. of noise
 snr  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
+%---------------------------------------------
 
+%%
 %---------------------------------------------
 
 %% (SECTION 5)
