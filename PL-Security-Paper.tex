@@ -4,21 +4,12 @@
 % This is a simple template for a LaTeX document using the "article" class.
 % See "book", "report", "letter" for other types of document.
 
-\documentclass[11pt]{article} % This will be \documentclass{ieeetran} later
-
-\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+\documentclass{allertonproc} 
 
 %%% Examples of Article customizations
 % These packages are optional, depending whether you want the features they provide.
 % See the LaTeX Companion or other references for full information.
 \usepackage{cite}
-%%% PAGE DIMENSIONS
-\usepackage{geometry} % to change the page dimensions
-\geometry{a4paper} % or letterpaper (US) or a5paper or....
-% \geometry{margin=2in} % for example, change the margins to 2 inches all round
-% \geometry{landscape} % set up the page for landscape
-%   read geometry.pdf for detailed page layout information
-
 \usepackage{graphicx} % support the \includegraphics command and options
 \usepackage{amsmath}
 % \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
@@ -31,44 +22,25 @@
 \usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
 % These packages are all incorporated in the memoir class to one degree or another...
 
-%%% HEADERS & FOOTERS
-\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
-\pagestyle{fancy} % options: empty , plain , fancy
-\renewcommand{\headrulewidth}{0pt} % customise the layout...
-\lhead{}\chead{}\rhead{}
-\lfoot{}\cfoot{\thepage}\rfoot{}
-
-%%% SECTION TITLE APPEARANCE
-\usepackage{sectsty}
-\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
-% (This matches ConTeXt defaults)
-
-%%% ToC (table of contents) APPEARANCE
-\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
-\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
-\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
-\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
-
-%%% END Article customizations
-
 %%% The "real" document content comes below...
 
-\title{Vulnerability of Wireless Fading Key Generation to Eavesdropping via Channel Prediction} %this title is not bad
-\author{Clara Gamboa, Eric Brown, K.C. Kerby-Patel}  %the convention is that the advisor's name goes last
+\title{SPATIAL CHANNEL PREDICTION FOR EAVESDROPPING ON WIRELESS FADING BASED KEY GENERATION} %this title is not bad
+\author{Eric Brown, Clara Gamboa, and K.~C.~Kerby-Patel\\University of Massachusetts Boston, Boston, MA\\kc.kerby-patel@umb.edu} %the convention is that the advisor's name goes last
 %also have to put in our UMB affiliation blurb
-%\date{} % Activate to display a given date or no date (if empty),
+\date{} % Activate to display a given date or no date (if empty),
          % otherwise the current date is printed 
 
 \begin{document}
 \maketitle
 \bibliographystyle{ieeetran}
 
-\section{Abstract}
+\begin{abstract}
 
-Physical layer key generation techniques based on wireless channel fading are generally considered to be secure as long as any eavesdroppers are separated from the terminals by a distance greater than the channel correlation length.  This assertion depends on an assumption that the channel is ergodic, while many real-world channels are not ergodic.  Linear prediction has previously been employed to predict samples of the channel transfer function ahead in time.  In this work, we demonstrate that it is possible to predict the channel transfer function in space as well, over distances much larger than the correlation length.  %we will have to compute the correlation length from the observed channel covariance matrix.  
-This leads us to conclude that a more pessimistic ``safe'' eavesdropper distance for wireless fading based key generation is needed.
+Physical layer key generation techniques based on wireless channel fading are generally considered to be secure as long as any eavesdroppers are separated from the terminals by a distance greater than the channel correlation length.  This assertion depends on an assumption that the channel is ergodic, while many real-world channels are not ergodic.  Since a non-ergodic channel's transfer function is determined by the physical scatterers in that particular channel realization, linear prediction has previously been employed to predict samples of the channel transfer function ahead in time.  In this work, we demonstrate that it is also possible to predict the channel transfer function in space, over distances larger than the correlation length.  This leads us to conclude that a more pessimistic ``safe'' eavesdropper distance for wireless fading based key generation is needed.
+\end{abstract}
+%we will have to compute the correlation length from the observed channel covariance matrix.  
 
-\textbf{Key words:} -- wireless, channel, fading, key generation, physical layer, security
+%\textbf{Key words:} -- wireless, channel, fading, key generation, physical layer, security
 
 \section{Introduction}
 %belongs to Clara
