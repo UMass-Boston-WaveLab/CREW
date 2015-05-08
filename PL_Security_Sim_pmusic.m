@@ -48,7 +48,13 @@ tSE = 2*pi*rand(S, 1);  % creates thetas for pSE
 %ASC is the Array of Scatterers Continued???
 %H is the full channel as seen by sensor array
 
-AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE));
+% knum us the wavenumber
+knum = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE));
+
+% kd will be the doppler wave number, needs a doppler shift still
+kd = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tAS)); 
+
+AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + knum;
 ASC = exp(1i*AP);
 H = sum(ASC, 1);   
 %---------------------------------------------

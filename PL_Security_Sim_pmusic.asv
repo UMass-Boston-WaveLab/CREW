@@ -1,32 +1,18 @@
+
 %%UMass Boston Physical Layer Security Channel Model
 %Authors: Eric Brown, Clara Gamboa, Dr. K.C. Kerby-Patel
 %
 %       (SECTION 1) Variables
 %       (SECTION 2) Parameters
 %       (SECTION 3) Generated Signal
-<<<<<<< HEAD
-%       (SECTION 4) LPC Estimation 
-%       (SECTION 5) ARYule Estimation
-=======
 %       (SECTION 4) Noise
-%       (SECTION 5) Test of LPC Estimation 
-%       (SECTION 6) PMusic Spectrum Analysis
+%       (SECTION 5) PMusic Spectrum Analysis
+%       (SECTION 6) 
 %       (SECTION 7) 
-%       (SECTION 8) 
->>>>>>> parent of 1d86571... End of the semester push
 %--------------------------------------------
 
 %%  (SECTION 1)
 %This is where we define the variables
-<<<<<<< HEAD
- S = 10;               % # of Scatterers
- N = 100;               % # of Eve samples
- d = 0.10;             % Spacing between eavesdropper samples in wavelengths
- q = 200;               % Number of samples ahead we attempt to predict
-Lamb = 1;             % Wavelength = 1 (distances are normalized to the wavelength)
-t = N+q;             % is the total number of readings
- P = 10;             % Number of complex sinusoids that make up the wireless channel
-=======
  S = 10;                % # of Scatterers
  N = 100;               % # of sensor array samples
  d = 0.10;              % Spacing between eavesdropper samples in wavelengths
@@ -34,21 +20,10 @@ t = N+q;             % is the total number of readings
  Lamb = 1;              % Wavelength = 1 (distances are normalized to the wavelength)
  t = N+q;               % is the total number of readings
  P = 10;                % Number of complex sinusoids that make up the wireless channel
->>>>>>> parent of 1d86571... End of the semester push
 %---------------------------------------------
 
 %% (SECTION 2)
 %In this section we define our wave characteristics. Phase angles and
-<<<<<<< HEAD
-%thetas
-
-pAS = 2*pi*rand(S, 1);    %where S is each scatterer (creates a vertical
-                          %array with unique angles for each value in the
-                          %array)
-pSE = 2*pi*rand(S, 1);
-tSE = 2*pi*rand(S, 1);    %for each angle required.
-tAS = 2*pi*rand(S, 1);
-=======
 %thetas. In general A is used to describe the source node, B the receiving
 %node, and E the sensor array.
 
@@ -60,7 +35,6 @@ pSE = 2*pi*rand(S, 1);  % pSE creates a vertical array of values representing
                         % the phase angles between S and sensor array (E)
 tSE = 2*pi*rand(S, 1);  % creates thetas for pSE
 
->>>>>>> parent of 1d86571... End of the semester push
 %---------------------------------------------
 
 %% (SECTION 3)
@@ -72,33 +46,20 @@ tSE = 2*pi*rand(S, 1);  % creates thetas for pSE
 
 %AP is the Array Phase 
 %ASC is the Array of Scatterers Continued???
-<<<<<<< HEAD
-%H is the full channel as seen by eavesdroper
-
-k = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE));
-kd = 
-
-
-AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + k;
-=======
 %H is the full channel as seen by sensor array
 
-AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE));
->>>>>>> parent of 1d86571... End of the semester push
+% knum us the wavenumber
+knum = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE));
+
+% kd will be the doppler wave number, needs a doppler shift still
+kd = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE)); 
+
+AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + knum;
 ASC = exp(1i*AP);
 H = sum(ASC, 1);   
 %---------------------------------------------
 
-<<<<<<< HEAD
-
 %% (SECTION 4)
-
-% Here we use the pmusic spectrum analysis method. 
-% k in the frequency and POW is the amplitude
-
-=======
-%% (SECTION 4)
->>>>>>> parent of 1d86571... End of the semester push
 % Here is where we define the noise added to the signal. 
 % We have chosen to use a preset Matlab function, to generate our 
 % Gaussian white noies. 
@@ -110,73 +71,19 @@ H = sum(ASC, 1);
 % ability to have the power of H in decibles relative to a watt defined
 % as well as the imp is the specifies load impedance in ohms (default is 1)
 
-<<<<<<< HEAD
 %Hn = gn[ H ,;
 %---------------------------------------------
 
-=======
-Hn = gn[ H ,;
-%---------------------------------------------
 
 %% (SECTION 5)
-% LPC Estimation for N sensors  
->>>>>>> parent of 1d86571... End of the semester push
+% Here we use the pmusic spectrum analysis method. 
+% k in the frequency and POW is the amplitude
+
 % Variables
     x = H(1:N);        %sensor readings from our listening array
     p = 10;            %p is the order of the linear preaditions(FIF filter)
                        %that predicts value of x
 
-<<<<<<< HEAD
-=======
-%a = lpc(x, p);
-%afilt = filter([0 -a(2:end)],1,x);
-%afilt = a;
-%estimates = x;
-%a = lpc(x);
-%estimates = x;
-
-%for Q = 1:q
-%    temp = predict(afilt, estimates);
-%    estimates = [estimates temp]; 
-%end
-
-
-
-%PC is the Predictor coefficients
-%est is the estimated signal
-%e is the prediction error 
-%[arcs, lags] is the autocorrelation sequence of the prediction error
-%    a = lpc(x,p);
-%    est = filter([0 -a(2:end)],1,x);
-%    err = x-est;
-%    [acs,lags] = xcorr(err,'coeff');
-    
-%R =abs(xcorr(H));
-%ind = max(find(R>R(length(H))/2)); %max of R always occurs at 0 offset 
-%clen = ind-length(H); 
-%figure;
-%plot((1:length(R))-floor(length(R)/2),R)
-%title(sprintf('Autocorrelation Function Estimate from Samples; Correlation length = %.0f samples', clen))
-
-
-% Plot of the Original signal vs Estimated signal  
-%figure;
-%    plot(1:t,abs(H(1:t)),1:t,abs(estimates),'--'), grid
-%    title 'Original Signal vs. LPC Estimate'
-%    xlabel 'Sensors 1 through N+q', ylabel 'Readings'
-%    legend('Original signal','LPC estimate')
-% Plot of the Autocorrelation Prediction error
-%    plot(lags,acs), grid
-%    title 'Autocorrelation of the Prediction Error'
-%    xlabel 'Lags', ylabel 'Normalized value'
-%---------------------------------------------
-
-
-%% (SECTION 6)
-% Here we use the pmusic spectrum analysis method. 
-% k in the frequency and POW is the amplitude
-
->>>>>>> parent of 1d86571... End of the semester push
 [k,POW] = rootmusic(x,P);
 
 % We have to make our sampling array into a matrix.(i.e 100 samples .1
