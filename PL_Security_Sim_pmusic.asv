@@ -21,9 +21,6 @@
  t    = N+q;               % is the total number of readings
  P    = 10;                % Number of complex sinusoids that make up the wireless channel
  
- %Here we define a velocity vector for A
-
- 
 %---------------------------------------------
 
 %% (SECTION 2)
@@ -40,7 +37,7 @@ pSE = 2*pi*rand(S, 1);      % pSE creates a vertical array of values representin
                             % the phase angles between S and sensor array (E)
 tSE = 2*pi*rand(S, 1);      % creates thetas for pSE
 
-
+tSVA = 
 %---------------------------------------------
 %% (SECTION 4)
 % Here is where we define the noise. 
@@ -65,8 +62,11 @@ gWN  = gnSD*randn(1,t)+gnM;        % Generatin Guassian white noise signal
 %ASC is the Array of Scatterers Continued???
 %H is the full channel as seen by sensor array
 
+% k us the wavenumber
 
-%kd = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tAS))*cos(pAS); 
+
+% kd will be the doppler wave number, needs a doppler shift still
+kd = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tAS))*cos(pAS); 
 
 AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE));
 ASC = exp(1i*AP);          
