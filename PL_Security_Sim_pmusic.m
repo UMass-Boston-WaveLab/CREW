@@ -20,6 +20,8 @@
  Lamb = 1;                 % Wavelength = 1 (distances are normalized to the wavelength)
  t    = N+q;               % is the total number of readings
  P    = 10;                % Number of complex sinusoids that make up the wireless channel
+ f_d  = 11;                 % doppler frequency
+ f_c  = 3500000;            % carrier frequency
  
  %Here we define a velocity vector for A
 
@@ -64,11 +66,11 @@ gWN  = gnSD*randn(1,t)+gnM;        % Generatin Guassian white noise signal
 %AP is the Array Phase 
 %ASC is the Array of Scatterers Continued???
 %H is the full channel as seen by sensor array
-
+k = (2*pi)/Lamb;
 
 %kd = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tAS))*cos(pAS); 
 
-AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE));
+AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + kron((k)*(1+(f_d/f_c)*cos(tAS))*d*((1:t)-(N+1)/2),cos(tSE));
 ASC = exp(1i*AP);          
 H = sum(ASC, 1);  
 Hn = H + gWN;
