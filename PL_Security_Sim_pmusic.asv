@@ -6,10 +6,12 @@
 %       (SECTION 2) Parameters
 %       (SECTION 3) Generated Signal
 %       (SECTION 4) Noise
+%       (SECTION 4) Specific Noise
 %       (SECTION 5) PMusic Spectrum Analysis
 %       (SECTION 6) 
 %       (SECTION 7) 
 %--------------------------------------------
+
 
 %%  (SECTION 1)
 %This is where we define the variables
@@ -20,42 +22,44 @@
  Lamb = 1;                 % Wavelength = 1 (distances are normalized to the wavelength)
  t    = N+q;               % is the total number of readings
  P    = 10;                % Number of complex sinusoids that make up the wireless channel
- f_d  = 11                 % doppler frequency
- f_c  = 3500000
+ f_d  = 11;                 % doppler frequency
+ f_c  = 3500000;            % carrier frequency
  
  %Here we define a velocity vector for A
 
  
 %---------------------------------------------
 
-%% (SECTION 2)
-%In this section we define our wave characteristics. Phase angles and
-%thetas. In general A is used to describe the source node, B the receiving
-%node, and E the sensor array.
+
+%% (SECTION 2) Parameters
+
+    %In this section we define our wave characteristics. Phase angles and
+    %thetas. In general A is used to describe the source node, B the receiving
+    %node, and E the sensor array.
 
 
-pAS = 2*pi*rand(S, 1);      % pAS creates a vertical array of values representing
-                            % the phase angles between S and source node (A)
-tAS = 2*pi*rand(S, 1);      % creates thetas for pAS
+    pAS = 2*pi*rand(S, 1);      % pAS creates a vertical array of values representing
+                                % the phase angles between S and source node (A)
+    tAS = 2*pi*rand(S, 1);      % creates thetas for pAS
 
-pSE = 2*pi*rand(S, 1);      % pSE creates a vertical array of values representing
-                            % the phase angles between S and sensor array (E)
-tSE = 2*pi*rand(S, 1);      % creates thetas for pSE
-
-
+    pSE = 2*pi*rand(S, 1);      % pSE creates a vertical array of values representing
+                                % the phase angles between S and sensor array (E)
+    tSE = 2*pi*rand(S, 1);      % creates thetas for pSE
 %---------------------------------------------
-%% (SECTION 4)
-% Here is where we define the noise. 
-% gWN is the function which adds the Gaussian white noise to our generated 
-% signal H. The desired mean and standard deviation can be specified with
-% gnS and gnM, while snr gives the signal to noise ratio.
 
-% Variables
- gnM  = 0;                 % Mean for noise signal
- gnSD = 1;                 % Standard deviation for noise signal
+%% (SECTION 4) Noise 
+    % Here is where we define the noise. 
+    % gWN is the function which adds the Gaussian white noise to our generated 
+    % signal H. The desired mean and standard deviation can be specified with
+    % gnS and gnM, while snr gives the signal to noise ratio.
 
-gWN  = gnSD*randn(1,t)+gnM;        % Generatin Guassian white noise signal
+    % Variables
+        gnM  = 0;                 % Mean for noise signal
+        gnSD = 1;                 % Standard deviation for noise signal
+
+    gWN  = gnSD*randn(1,t)+gnM;   % Generatin Guassian white noise signal
 %---------------------------------------------
+
 %% (SECTION 3)
 % Generated signal for testing, generate what sensors N through N+q should
 % be seeing.
@@ -68,9 +72,7 @@ gWN  = gnSD*randn(1,t)+gnM;        % Generatin Guassian white noise signal
 %H is the full channel as seen by sensor array
 k = (2*pi)/Lamb;
 
-%kd = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tAS))*cos(pAS); 
-
-AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + kron((k)(1+(f_d/f_c)*cos(tAS)*d*((1:t)-(N+1)/2),cos(tSE));
+AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + kron(k*d*((1:t)-(N+1)/2),cos(tSE))+;
 ASC = exp(1i*AP);          
 H = sum(ASC, 1);  
 Hn = H + gWN;
@@ -86,7 +88,6 @@ hAve = mean(H.');                  % Finding ave. of H
 nAve = mean(gWN);                  % Finding ave. of noise
 snr  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
 
-%---------------------------------------------
 
 %% (SECTION 5)
 % Here we use the pmusic spectrum analysis method. 
