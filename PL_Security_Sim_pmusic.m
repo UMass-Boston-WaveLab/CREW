@@ -13,13 +13,14 @@
 
 %%  (SECTION 1)
 %This is where we define the variables
- S = 10;                % # of Scatterers
- N = 100;               % # of sensor array samples
- d = 0.10;              % Spacing between eavesdropper samples in wavelengths
- q = 200;               % Number of samples ahead we attempt to predict
- Lamb = 1;              % Wavelength = 1 (distances are normalized to the wavelength)
- t = N+q;               % is the total number of readings
- P = 10;                % Number of complex sinusoids that make up the wireless channel
+ S    = 10;                % # of Scatterers
+ N    = 100;               % # of sensor array samples
+ d    = 0.10;              % Spacing between eavesdropper samples in wavelengths
+ q    = 200;               % Number of samples ahead we attempt to predict
+ Lamb = 1;                 % Wavelength = 1 (distances are normalized to the wavelength)
+ t    = N+q;               % is the total number of readings
+ P    = 10;                % Number of complex sinusoids that make up the wireless channel
+ 
 %---------------------------------------------
 
 %% (SECTION 2)
@@ -27,16 +28,28 @@
 %thetas. In general A is used to describe the source node, B the receiving
 %node, and E the sensor array.
 
-pAS = 2*pi*rand(S, 1);  % pAS creates a vertical array of values representing
-                        % the phase angles between S and source node (A)
-tAS = 2*pi*rand(S, 1);  % creates thetas for pAS
 
-pSE = 2*pi*rand(S, 1);  % pSE creates a vertical array of values representing
-                        % the phase angles between S and sensor array (E)
-tSE = 2*pi*rand(S, 1);  % creates thetas for pSE
+pAS = 2*pi*rand(S, 1);      % pAS creates a vertical array of values representing
+                            % the phase angles between S and source node (A)
+tAS = 2*pi*rand(S, 1);      % creates thetas for pAS
+
+pSE = 2*pi*rand(S, 1);      % pSE creates a vertical array of values representing
+                            % the phase angles between S and sensor array (E)
+tSE = 2*pi*rand(S, 1);      % creates thetas for pSE
 
 %---------------------------------------------
+%% (SECTION 4)
+% Here is where we define the noise. 
+% gWN is the function which adds the Gaussian white noise to our generated 
+% signal H. The desired mean and standard deviation can be specified with
+% gnS and gnM, while snr gives the signal to noise ratio.
 
+% Variables
+ gnM  = 0;                 % Mean for noise signal
+ gnSD = 1;                 % Standard deviation for noise signal
+
+gWN  = gnSD*randn(1,t)+gnM;        % Generatin Guassian white noise signal
+%---------------------------------------------
 %% (SECTION 3)
 % Generated signal for testing, generate what sensors N through N+q should
 % be seeing.
@@ -55,25 +68,22 @@ knum = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tSE));
 kd = kron(((2*pi)/Lamb)*d*((1:t)-(N+1)/2),cos(tAS)); 
 
 AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + knum;
-ASC = exp(1i*AP);
-H = sum(ASC, 1);   
+ASC = exp(1i*AP);          
+H = sum(ASC, 1);  
+Hn = H + gWN;
 %---------------------------------------------
 
 %% (SECTION 4)
-% Here is where we define the noise added to the signal. 
-% We have chosen to use a preset Matlab function, to generate our 
-% Gaussian white noies. 
-% Where gn is the function which adds white noise to our generated 
-% signal H, using the specified signal to noise ratio defined 
-% by the variable snr. 
+% Here is where we define the noise. 
+% gWN is the function which adds the Gaussian white noise to our generated 
+% signal H. The desired mean and standard deviation can be specified with
+% gnS and gnM, while snr gives the signal to noise ratio.
 
-% if more specific noise needs to be added later the function has the 
-% ability to have the power of H in decibles relative to a watt defined
-% as well as the imp is the specifies load impedance in ohms (default is 1)
+hAve = mean(H.');                  % Finding ave. of H
+nAve = mean(gWN);                  % Finding ave. of noise
+snr  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
 
-%Hn = gn[ H ,;
 %---------------------------------------------
-
 
 %% (SECTION 5)
 % Here we use the pmusic spectrum analysis method. 
@@ -112,7 +122,7 @@ a_mat = repmat(a,size(Samp));
 H_hat = sum(a_mat.*exp(1i*k_mat.*x_mat), 1);
 
 %
-plot(1:t,abs(H(1:t)),1:t,abs(H_hat),'--'), grid
+plot(1:t,abs(H(1:t)),1:t,abs(H_hat),1:t,abs(Hn(1:t)),'--'), grid
 title 'Original Signal vs. rootMUSIC Estimate'
 xlabel 'Sensors 1 through N+q', ylabel 'Readings'
 legend('Original signal','rootMUSIC Estimate')
