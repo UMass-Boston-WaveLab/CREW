@@ -6,10 +6,9 @@
 %       (SECTION 2) Parameters
 %       (SECTION 3) Generated Signal
 %       (SECTION 4) Noise
-%       (SECTION 5) Test of LPC Estimation 
-%       (SECTION 6) PMusic Spectrum Analysis
+%       (SECTION 5) PMusic Spectrum Analysis
+%       (SECTION 6) 
 %       (SECTION 7) 
-%       (SECTION 8) 
 %--------------------------------------------
 
 %%  (SECTION 1)
@@ -69,60 +68,15 @@ H = sum(ASC, 1);
 %Hn = gn[ H ,;
 %---------------------------------------------
 
+
 %% (SECTION 5)
-% LPC Estimation for N sensors  
+% Here we use the pmusic spectrum analysis method. 
+% k in the frequency and POW is the amplitude
+
 % Variables
     x = H(1:N);        %sensor readings from our listening array
     p = 10;            %p is the order of the linear preaditions(FIF filter)
                        %that predicts value of x
-
-%a = lpc(x, p);
-%afilt = filter([0 -a(2:end)],1,x);
-%afilt = a;
-%estimates = x;
-%a = lpc(x);
-%estimates = x;
-
-%for Q = 1:q
-%    temp = predict(afilt, estimates);
-%    estimates = [estimates temp]; 
-%end
-
-
-
-%PC is the Predictor coefficients
-%est is the estimated signal
-%e is the prediction error 
-%[arcs, lags] is the autocorrelation sequence of the prediction error
-%    a = lpc(x,p);
-%    est = filter([0 -a(2:end)],1,x);
-%    err = x-est;
-%    [acs,lags] = xcorr(err,'coeff');
-    
-%R =abs(xcorr(H));
-%ind = max(find(R>R(length(H))/2)); %max of R always occurs at 0 offset 
-%clen = ind-length(H); 
-%figure;
-%plot((1:length(R))-floor(length(R)/2),R)
-%title(sprintf('Autocorrelation Function Estimate from Samples; Correlation length = %.0f samples', clen))
-
-
-% Plot of the Original signal vs Estimated signal  
-%figure;
-%    plot(1:t,abs(H(1:t)),1:t,abs(estimates),'--'), grid
-%    title 'Original Signal vs. LPC Estimate'
-%    xlabel 'Sensors 1 through N+q', ylabel 'Readings'
-%    legend('Original signal','LPC estimate')
-% Plot of the Autocorrelation Prediction error
-%    plot(lags,acs), grid
-%    title 'Autocorrelation of the Prediction Error'
-%    xlabel 'Lags', ylabel 'Normalized value'
-%---------------------------------------------
-
-
-%% (SECTION 6)
-% Here we use the pmusic spectrum analysis method. 
-% k in the frequency and POW is the amplitude
 
 [k,POW] = rootmusic(x,P);
 
