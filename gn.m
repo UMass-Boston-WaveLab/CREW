@@ -19,5 +19,10 @@ Hn = (H;1)+(gnWn;1);
 %yTemp = wgn(m,n,p);            
 % y = wgn(m,n,p) generates an m-by-n matrix of white Gaussian noise. 
 %nAverage = mean (yTemp.');
+<<<<<<< HEAD
+Hn = awgn(x,snr);     
+ 
+=======
+>>>>>>> origin/Nightly-Build
 end
 
