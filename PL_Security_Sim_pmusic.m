@@ -45,7 +45,7 @@
 %---------------------------------------------
 
 %% (SECTION 4) Noise 
-    % Here is where we define the noise. 
+    % Here is where we define the noise using central Limit theorem method 
     % gWN is the function which adds the Gaussian white noise to our generated 
     % signal H. The desired mean and standard deviation can be specified with
     % gnS and gnM, while snr gives the signal to noise ratio.
