@@ -106,8 +106,9 @@ snr  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
 Samp = (1:t);
 
 x_mat = repmat(Samp, size(f));
-%a_mat = repmat(POW, size(x));
+
 f_mat = repmat(f, size(Samp));
+
 % Estimating complex amplitudes from the frequency
 z = exp(1i*f.');
 
@@ -116,9 +117,6 @@ for ii = 1:N
     A = [A; z.^ii];
 end
 
-
-
-%a = inv(A)*H(1:S).;
 a = inv(A'*A)*A'*(H(1:N).');
 a_mat = repmat(a,size(Samp));
 
