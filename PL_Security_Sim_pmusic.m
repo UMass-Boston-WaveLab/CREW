@@ -1,4 +1,4 @@
-
+function [] = PL_Security_Sim_pmusic(S, N, d,q, P, f_d, f_c, SNR)
 %%UMass Boston Physical Layer Security Channel Model
 %Authors: Eric Brown, Clara Gamboa, Dr. K.C. Kerby-Patel
 %
@@ -8,23 +8,23 @@
 %       (SECTION 4) Noise
 %       (SECTION 4) Specific Noise
 %       (SECTION 5) PMusic Spectrum Analysis
-%       (SECTION 6) 
+%       (SECTION 6) Plotting Results
 %       (SECTION 7) 
 %--------------------------------------------
 
 
 %%  (SECTION 1)
 %This is where we define the variables
- S    = 10;                % # of Scatterers
- N    = 100;               % # of sensor array samples
- d    = 0.10;              % Spacing between eavesdropper samples in wavelengths
- q    = 200;               % Number of samples ahead we attempt to predict
- Lamb = 1;                 % Wavelength = 1 (distances are normalized to the wavelength)
- t    = N+q;               % is the total number of readings
- P    = 10;                % Number of complex sinusoids that make up the wireless channel
- f_d  = 11000;                 % doppler frequency
- f_c  = 3500000;            % carrier frequency
- 
+% S    = 10;                % # of Scatterers
+% N    = 100;               % # of sensor array samples
+% d    = 0.10;              % Spacing between eavesdropper samples in wavelengths
+% q    = 200;               % Number of samples ahead we attempt to predict
+Lamb = 1;                   % Wavelength = 1 (distances are normalized to the wavelength)
+t    = N+q;                 % is the total number of readings
+% P    = 10;                % Number of complex sinusoids that make up the wireless channel
+% f_d  = 11000;             % doppler frequency
+% f_c  = 3500000;           % carrier frequency
+% SNR = 1                    % Signal to Noise Ratio.
  %Here we define a velocity vector for A
 
  
@@ -125,8 +125,10 @@ a_mat = repmat(a,size(Samp));
 
 H_hat = sum(a_mat.*exp(1i*f_mat.*x_mat), 1);
 
-%
+%% (Section 6)
+% Plotting the channel estimate vs the actual channel.
 plot(1:t,abs(H(1:t)),1:t,abs(H_hat),1:t,abs(Hn(1:t)),'--'), grid
 title 'Original Signal vs. rootMUSIC Estimate'
 xlabel 'Sensors 1 through N+q', ylabel 'Readings'
 legend('Original signal','rootMUSIC Estimate', 'Signal with Noise')
+end
