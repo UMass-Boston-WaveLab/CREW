@@ -8,12 +8,12 @@ function [] = PL_Security_Sim_pmusic(S, N, d,q, P, f_d, f_c, SNR)
 %       (SECTION 4) Noise
 %       (SECTION 4) Specific Noise
 %       (SECTION 5) PMusic Spectrum Analysis
-%       (SECTION 6) 
+%       (SECTION 6) Plotting Results
 %       (SECTION 7) 
 %--------------------------------------------
 
 
-%%  (SECTION 1)
+%%(SECTION 1)
 %This is where we define the variables
 % S    = 10;                % # of Scatterers
 % N    = 100;               % # of sensor array samples
@@ -24,7 +24,7 @@ t    = N+q;                 % is the total number of readings
 % P    = 10;                % Number of complex sinusoids that make up the wireless channel
 % f_d  = 11000;             % doppler frequency
 % f_c  = 3500000;           % carrier frequency
-% SNR = 1                    % Signal to Noise Ratio.
+% SNR = 1                   % Signal to Noise Ratio.
  %Here we define a velocity vector for A
 
  
@@ -86,7 +86,7 @@ Hn = H + gWN;
 
 hAve = mean(H.');                  % Finding ave. of H
 nAve = mean(gWN);                  % Finding ave. of noise
-snr  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
+SNR  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
 
 
 %% (SECTION 5)
@@ -106,8 +106,9 @@ snr  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
 Samp = (1:t);
 
 x_mat = repmat(Samp, size(f));
-%a_mat = repmat(POW, size(x));
+
 f_mat = repmat(f, size(Samp));
+
 % Estimating complex amplitudes from the frequency
 z = exp(1i*f.');
 
@@ -116,16 +117,14 @@ for ii = 1:N
     A = [A; z.^ii];
 end
 
-
-
-%a = inv(A)*H(1:S).;
 a = inv(A'*A)*A'*(H(1:N).');
 a_mat = repmat(a,size(Samp));
 
 
 H_hat = sum(a_mat.*exp(1i*f_mat.*x_mat), 1);
 
-%% Section 6 Plotting the channel estimate vs the actual channel.
+%% (Section 6)
+% Plotting the channel estimate vs the actual channel.
 plot(1:t,abs(H(1:t)),1:t,abs(H_hat),1:t,abs(Hn(1:t)),'--'), grid
 title 'Original Signal vs. rootMUSIC Estimate'
 xlabel 'Sensors 1 through N+q', ylabel 'Readings'

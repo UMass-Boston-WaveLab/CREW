@@ -13,7 +13,7 @@ function [] = PL_Security_Sim_pmusic(S, N, d,q, P, f_d, f_c, SNR)
 %--------------------------------------------
 
 
-%%  (SECTION 1)
+%%(SECTION 1)
 %This is where we define the variables
 % S    = 10;                % # of Scatterers
 % N    = 100;               % # of sensor array samples
@@ -24,7 +24,7 @@ t    = N+q;                 % is the total number of readings
 % P    = 10;                % Number of complex sinusoids that make up the wireless channel
 % f_d  = 11000;             % doppler frequency
 % f_c  = 3500000;           % carrier frequency
-% SNR = 1                    % Signal to Noise Ratio.
+% SNR = 1                   % Signal to Noise Ratio.
  %Here we define a velocity vector for A
 
  
@@ -86,7 +86,7 @@ Hn = H + gWN;
 
 hAve = mean(H.');                  % Finding ave. of H
 nAve = mean(gWN);                  % Finding ave. of noise
-snr  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
+SNR  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
 
 
 %% (SECTION 5)
@@ -95,7 +95,7 @@ snr  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
 
 % Variables
     x = Hn(1:N);        %sensor readings from our listening array
-    p = 10;            %p is the order of the linear preaditions(FIF filter)
+    P = 10;            %p is the order of the linear preaditions(FIF filter)
                        %that predicts value of x
 
 [f,POW] = rootmusic(x,P);
@@ -112,7 +112,7 @@ f_mat = repmat(f, size(Samp));
 % Estimating complex amplitudes from the frequency
 z = exp(1i*f.');
 
-A = [];
+double A = [];
 for ii = 1:N
     A = [A; z.^ii];
 end
