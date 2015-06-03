@@ -1,0 +1,103 @@
+\documentclass[conference]{ieeetran}
+\usepackage{cite}
+\usepackage{amsmath}
+\author{\IEEEauthorblockN{K.~C.~Kerby-Patel}
+\IEEEauthorblockA{Engineering Department\\
+University of Massachusetts Boston\\
+Boston, MA 02125\\
+kc.kerby-patel@umb.edu}
+}
+\title{Short Paper: Effect of Non-Ergodic Channels on Wireless Fading-Based Key Generation}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Physical layer key generation techniques based on wireless channel fading are generally considered to be secure as long as any eavesdroppers are separated from the terminals by a distance greater than the channel correlation length.  This short paper discusses how this definition of the minimum secure distance requires that the channel be ergodic in a spatial sense, then shows that typical practical channels are not spatially ergodic.  In this situation, the channel   is a deterministic function of unknown channel parameters, and the channel at other locations can be estimated as a function of these parameters.
+%optional: The channel   at other physical locations can be estimated based on estimates of these parameters.  The Cramer-Rao lower bound of the variance of this estimate is presented.
+\end{abstract}
+\section{Introduction}
+Symmetric encryption keying requires a common source of random information that is unique to the communicating parties. Typically, the two parties must be at the same physical location to share this information securely.  
+%This is logistically hard
+%Key exchange is computationally intensive and potentially vulnerable to quantum computing
+%It would be nice to have a way to generate keys as needed without meeting up.
+It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of wireless channel fading can be used as a common source of randomness to generate symmetric encryption keys in cases where two parties cannot pre-arrange keys.  
+
+In order for the keys thus generated to be secure, an eavesdropper's observations of the channel must have no mutual information with the communicating parties' observations.  Past work on key generation from wireless fading has often stated that the key can be considered secure as long as all eavesdroppers are separated by at least half a carrier wavelength from both of the communicating nodes \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010}, based on the fact that the channel correlation function drops off quickly as a function of distance \cite{jakes1974}.  However, low correlation does not necessarily indicate low mutual information.  
+
+%this work does something.
+\section{The Correlation Length vs. the Minimum Secure Distance}
+%correlation function is [equation, depends on ensemble average (this is clear because it's an expected value] 
+The autocorrelation function of a random process $h(\vec{r},t)$ is defined as the expected value of the product of two observations of the process at different times or locations.  In the present application we are concerned with observations at the same time but at different locations, so we will drop the time dependence.
+\begin{equation}\label{ensemblecorr}
+R_h(\vec{r},\vec{r}+\vec{\Delta r}) = E[h(\vec{r})h^*(\vec{r}+\vec{\Delta r})]
+\end{equation}
+
+If channel observations $h(\vec{r})$ and $h^*(\vec{r}+\vec{\Delta r})$ are jointly Gaussian, the mutual information $I$ between the two observations depends monotonically on the correlation function, and zero correlation implies zero mutual information.  In Equation (\ref{mutualinformation}), $\sigma_h^2$ is the average power of the channel.
+\begin{equation}\label{mutualinformation}
+I(h(\vec{r}),h(\vec{r}+\vec{\Delta r})) = -\frac{1}{2}\ln\left(1-\frac{R_h(\vec{r},\vec{r}+\vec{\Delta r})}{\sigma_h^2}\right)
+\end{equation}
+If the observations are not jointly Gaussian, the Gaussian case merely provides a lower bound on the mutual information and this relationship between correlation and mutual information does not hold. %need a stats/probability book to cite for this.
+
+Physically, the wireless channel   at a particular receiver location depends deterministically on the environment as viewed from that point.  The parameters of the physical environment may be viewed as random variables that are associated with this realization of a wireless channel.  The parameters are slowly varying spatially compared to the channel   itself \cite{jakes1974, duel-hallen2007}.  If the space between observations is small enough that the channel parameters do not change appreciably, the two observations are not jointly Gaussian random variables, but different functions of essentially the same unknown channel parameters.  In this situation, the mutual information can be large despite a low value of the correlation function.
+%this feels like a bad transition.
+\section{Spatial Ergodicity}
+ It has been shown by Isukapalli et al. \cite{isukapalli2006} that a typical wireless channel is not ergodic in the temporal sense (that is, the time average of the correlation function is not necessarily equal to its ensemble average).  In this section, we follow that derivation to show that typical wireless channels are also not spatially ergodic (that is, the spatial average of the correlation function is not necessarily equal to its ensemble average), as long as the total sampled length is short enough that all scatterers are in the far field of the sampling region.
+
+%added Doppler spatial phase variation to the channel model!!  f = fc+fd because f=(1+v/c)fc.  but k = 2pi/lambda, lambda = c/f, k = 2pi fc(1+v/c)/c.  so it's ok to write k as kc+kd, where kd = 2pi fd/c.
+Begin by assuming that the channel is represented by a sum-of-sinusoids model as shown in Equation (\ref{chan}).  The parameters $\alpha_n$, $k_d\cos\theta_n$, and $\vec{r_n}$ describe the amplitude, Doppler wavenumber, and location of the $n$th scatterer, and $\vec{r}$ represents the observation point.  Since we are interested in the correlation between samples taken at the same instant in time, we ignore the time variation due to Doppler frequency that would normally be present. Thus the narrowband channel 
+\begin{equation}\label{chan}
+h(\vec{r})= \sum_{n=1}^N \alpha_n  e^{-j(k+k_d\cos\theta_n)\left|\vec{r_n} - \vec{r}\right|}
+\end{equation}
+An observation of the channel at a new location, $\vec{r}+\vec{\Delta r}$, can be written as shown in Equation (\ref{chanloc2}) if $|\vec{\Delta r}|$ is small enough that all scatterers are in the far field of the pair of observation points.
+\begin{equation}\label{chanloc2}
+h(\vec{r}+\vec{\Delta r}) = \sum_{n=1}^N \alpha_n  e^{-j(k+k_d\cos\theta_n)(\left|\vec{r_n}-\vec{r}\right|-|\vec{\Delta r}| \cos \psi_n)}
+\end{equation}
+
+The correlation function for two spatially separated but simultaneous observations is given by Equation (\ref{ensemblecorr}), where the expected value is taken over the distributions of the channel parameters (the ensemble of possible channels). To find an expression for the correlation function, we assume that $E[|\alpha|^2]=1/N$.  If $\theta$ is uniformly distributed, $R_h(\vec{\Delta r})$ is
+%\begin{equation}
+%R_h(\vec{\Delta r})=\int_{-\pi}^{\pi}e^{-j k |\vec{\Delta r}| \cos(u)} J_0(k_d |\vec{\Delta r}| \cos(u))p_{\psi}(u) du 
+%\end{equation}
+\begin{multline}
+R_h(\vec{\Delta r})=\\\int_{-\pi}^{\pi}e^{-j k |\vec{\Delta r}| \cos(u)} J_0(k_d |\vec{\Delta r}| \cos(u))p_{\psi}(u) du 
+\end{multline}
+%the math departs from Isukapalli here because of the addition of the Doppler wavenumber. 
+
+If $\psi$ is uniformly distributed, we can use a Bessel function identity \cite{gradshteyn2007} and a plane wave expansion to evaluate the integral with respect to $u$, arriving at Equation (\ref{finalcorr}).
+% Gradshteyn, I. and Ryzhik, I., Table of Integrals, Series, and Products, 7th edition, Academic Press: Amsterdam, 2007 page 724
+\begin{multline}\label{finalcorr}
+R_h(\vec{\Delta_r}) = J_0^2(\frac{k_d |\vec{\Delta_r}|}{2})J_0(k|\vec{\Delta_r}|)\\ + 2\sum_{n=1}^{\infty}(-1)^n J_n(k|\vec{\Delta_r}|)J_{n/2}^2(\frac{k_d |\vec{\Delta_r}|}{2})
+\end{multline}
+
+In practice the correlation function may be estimated by finding the mean of $\tilde{h}(\vec{r})\tilde{h}^*(\vec{r}+\vec{\Delta_r})$ over the observation interval, where $\tilde{h}$ is a noisy observation of the true channel  . This technique is valid if the ensemble and spatial averages are equal --- that is, if the channel is spatially ergodic.  Thus, a correlation length derived from a correlation function that was estimated in this way is also valid if the channel is spatially ergodic.
+
+The spatial average of $h(\vec{r})h^*(\vec{r}+\vec{\Delta r})$, which we will denote $R_r(\vec{\Delta_r})$, may be computed by taking its volume integral and dividing by the total volume, in the limit as the volume goes to infinity.
+%\begin{multline}
+%R_r\left(\vec{\Delta r}\right) =  \lim_{D \rightarrow \infty} \frac{3}{4\pi D^3}\int_0^D\int_{-\pi}^\pi \int_{-\pi}^{\pi} \sum_{n=m=1}^N |\alpha_n|^2 e^{-j(k+k_d\cos\theta_n)|\vec{\Delta r}|\cos \psi_n}+\\ \sum_{n=1}^N\sum_{m\neq n} \alpha_n^* \alpha_m e^{j \omega_d t(\cos \theta_m - \cos \theta_n)} e^{-j(k+k_d\cos\theta_n)\left(\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|\right)}e^{-jk\left|\vec{\Delta r}\right| \cos \psi_m}r^2 \sin\theta dr d\theta d\phi
+%\end{multline}
+After evaluating the integral, the spatial average correlation is given by 
+\begin{equation}\label{spatialcorr}
+R_r(\vec{\Delta r}) =  \sum_{n=1}^N |\alpha_n|^2 e^{-jk_n|\vec{\Delta r}|\cos \psi_n}
+\end{equation}
+
+Depending on the number of scatterers $N$ and their angular distribution, Equation (\ref{spatialcorr}) may approach Equation (\ref{finalcorr}) \cite{isukapalli2006}.  However, real-world channels typically do not have sufficient scatterers to achieve this condition \cite{duel-hallen2000}.  
+
+In the absence of sufficient scatterers to cause Equation (\ref{spatialcorr}) to approach Equation (\ref{finalcorr}), spatial ergodicity can only be achieved if new channel realizations are encountered within the sampling region.  Thus, spatial non-ergodicity physically means that all spatial samples observe the same channel realization.  In this case, successive spatial samples have nonzero mutual information, and a series of spatial samples can be used to estimate the channel parameters and predict the channel   ahead spatially, using methods which have been demonstrated for temporal long-range prediction by Duel-Hallen et al. \cite{duel-hallen2000}.
+\section{A Performance Bound for Spatial Channel Prediction}%needs a better section title, might not have time to actually do this part
+By a similar method to that presented in \cite{svantesson2003} for temporal prediction of MIMO channels, the Cram\'er-Rao lower bound can be derived for spatial prediction of a channel based on spatial samples.  The parameter vector $\boldsymbol{\theta}= [\sigma^2, \Re[\boldsymbol{\alpha}], \Im[\boldsymbol{\alpha}], \mathbf{k}]$ contains the channel noise power, real and imaginary parts of multipath amplitudes, and spatial frequencies for a total of $3N+1$ parameters. 
+
+Observations of the channel form a vector $\mathbf{\tilde{h}} \sim \mathcal{CN}(\mathbf{h}, \mathbf{C})$, where $\mathbf{h}$ is the vector of actual channel values at those sample locations and $\mathbf{C}=\sigma^2\mathbf{I}$. A lower bound on the covariance matrix of an unbiased estimator $\mathbf{\hat{h}}$ at some sample number $m$ is then
+\begin{equation} \label{CRLB}
+E\left[\left(\mathbf{\hat{h}}(m)-\mathbf{h}(m)\right)\left(\mathbf{\hat{h}}(m)-\mathbf{h}(m)\right)^H\right]\geq \mathbf{H'BH'}^H
+\end{equation}
+
+In Equation (\ref{CRLB}), $\mathbf{H'}$ is the Jacobian matrix of $\mathbf{h}$ with respect to the parameter vector $\boldsymbol{\theta}$,
+%\begin{equation}
+%\mathbf{H'} = \left[ \frac{\partial h_m}{\partial\theta_1} \ \frac{\partial h_m}{\partial\theta_2} \cdots \frac{\partial h_m}{\partial\theta_{3N+1}} \right]
+%\end{equation}
+and $\mathbf{B}$ is the CRLB for $\boldsymbol{\theta}$.
+
+\section{Conclusion}
+This work has presented an argument against the use of the correlation length as the minimum safe distance for fading-based key generation.  In non-ergodic channels, mutual information can persist over greater distances than the correlation length because the channel   is a deterministic function of slowly-varying physical features.
+\bibliographystyle{ieeetran}
+\bibliography{PL-Library}{}
+\end{document}
