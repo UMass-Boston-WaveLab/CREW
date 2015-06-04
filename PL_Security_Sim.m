@@ -20,7 +20,6 @@ t = N+q;              % is the total number of readings
 
 <<<<<<< HEAD
 %input # of scatterers 
-%clara's test
 %input number of samples for E and distance
 %for each scatterer
 %% This is where we define the variables
