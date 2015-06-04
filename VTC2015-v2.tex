@@ -1,0 +1,110 @@
+\documentclass[conference]{ieeetran}
+\usepackage{cite}
+\usepackage{amsmath}
+\newcounter{MYtempeqncnt}
+\usepackage{stfloats}
+\author{\IEEEauthorblockN{K.~C.~Kerby-Patel}
+\IEEEauthorblockA{Engineering Department\\
+University of Massachusetts Boston\\
+Boston, MA 02125\\
+kc.kerby-patel@umb.edu}
+}
+\title{Short Paper: Effect of Non-Ergodic Channels on Wireless Fading-Based Key Generation}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Physical layer key generation techniques based on wireless channel fading are considered to be secure as long as any eavesdroppers are separated from the terminals by a distance greater than the channel correlation length.  This short paper discusses how this definition of the minimum secure distance requires that the channel be ergodic in a spatial sense, then shows that typical practical channels are not spatially ergodic.  In this situation, the channel   is a deterministic function of unknown channel parameters, and the channel at other locations can be estimated as a function of these parameters.
+%optional: The channel   at other physical locations can be estimated based on estimates of these parameters.  The Cramer-Rao lower bound of the variance of this estimate is presented.
+\end{abstract}
+\begin{figure*}[!bh]
+\vspace*{4pt}
+\hrulefill% ensure that we have normalsize text\normalsize% Store the current equation number.\setcounter{MYtempeqncnt}{\value{equation}}% Set the equation number to one less than the one% desired for the first equation here.% The value here will have to changed if equations% are added or removed prior to the place these% equations are referenced in the main text.
+\setcounter{equation}{8}\begin{equation}
+\label{thetaCRLB}\mathbf{B}^{-1} =  \left[\begin{matrix}
+				\frac{M}{(\sigma^2)^2}	& \mathbf{0}	& \mathbf{0} 	& \mathbf{0}\\
+				\mathbf{0}				& \frac{2}{\sigma^2}\Re\{\mathbf{D_R}^H\mathbf{D_R}\} & \frac{2}{\sigma^2}\Re\{\mathbf{D_R}^H\mathbf{D_I}\} & \frac{2}{\sigma^2}\Re\{\mathbf{D_R}^H\mathbf{D_k}\} \\
+				\mathbf{0}				& \frac{2}{\sigma^2}\Re\{\mathbf{D_I}^H\mathbf{D_R}\} & \frac{2}{\sigma^2}\Re\{\mathbf{D_I}^H\mathbf{D_I}\} & \frac{2}{\sigma^2}\Re\{\mathbf{D_I}^H\mathbf{D_k}\} \\
+				\mathbf{0}				& \frac{2}{\sigma^2}\Re\{\mathbf{D_k}^H\mathbf{D_R}\} & \frac{2}{\sigma^2}\Re\{\mathbf{D_k}^H\mathbf{D_I}\} & \frac{2}{\sigma^2}\Re\{\mathbf{D_k}^H\mathbf{D_k}\}
+				\end{matrix}\right]\end{equation}% Restore the current equation number.\setcounter{equation}{\value{MYtempeqncnt}}% IEEE uses as a separator% The spacer can be tweaked to stop underfull vboxes.\end{figure*}
+\section{Introduction}
+Symmetric encryption keying requires a common source of random information that is unique to the communicating parties. Standard key distribution techniques require that the two parties be at the same physical location to share this information securely.  
+%This is logistically hard
+%Key exchange is computationally intensive and potentially vulnerable to quantum computing
+%It would be nice to have a way to generate keys as needed without meeting up.
+It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of wireless channel fading can be used as a common source of randomness to generate symmetric encryption keys in cases where two parties cannot pre-arrange keys.  
+
+In order for the keys thus generated to be information theoretically secure, an eavesdropper's observations of the channel must have no mutual information with the communicating parties' observations.  Past work on key generation from wireless fading has often stated that the key can be considered secure as long as all eavesdroppers are separated by at least half a carrier wavelength from both of the communicating nodes \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010}, based on the fact that the channel correlation function drops off quickly as a function of distance \cite{jakes1974}.  However, low correlation does not necessarily indicate low mutual information.  This short paper discusses the difference between correlation and mutual information and points out that fading-based key generation techniques may be vulnerable to channel prediction \cite{duel-hallen2000, svantesson2003} over distances larger than the channel correlation length.
+
+\section{The Correlation Length vs. the Minimum Secure Distance}
+%correlation function is [equation, depends on ensemble average (this is clear because it's an expected value] 
+The autocorrelation function $R_h$ of a random process $h(\vec{r},t)$ is defined as the expected value of the product of two observations of the process at different times or locations.  In the present application we are concerned with observations at the same time but at different locations, so we will drop the time dependence.
+\begin{equation}\label{ensemblecorr}
+R_h(\vec{r},\vec{r}+\vec{\Delta r}) = E[h(\vec{r})h^*(\vec{r}+\vec{\Delta r})]
+\end{equation}
+
+If channel observations $\tilde{h}(\vec{r})$ and $\tilde{h}^*(\vec{r}+\vec{\Delta r})$ are jointly Gaussian, the mutual information $I$ between the two observations depends monotonically on the correlation function as shown in (\ref{mutualinformation}), and zero correlation implies zero mutual information.  In   (\ref{mutualinformation}), $\sigma_h^2$ is the average power of the channel.  In this situation of jointly Gaussian channel observations, the correlation length is an acceptable estimate of the minimum secure distance.
+\begin{equation}\label{mutualinformation}
+I(h(\vec{r}),h(\vec{r}+\vec{\Delta r})) = -\frac{1}{2}\ln\left(1-\frac{R_h(\vec{r},\vec{r}+\vec{\Delta r})}{\sigma_h^2}\right)
+\end{equation}
+However, if the observations are not jointly Gaussian, the Gaussian case merely provides a lower bound on the mutual information and this relationship between correlation and mutual information does not hold. %need a stats/probability book to cite for this.
+
+Physically, the wireless channel  at a particular receiver location depends deterministically on the environment as viewed from that point.  The parameters of the physical environment may be viewed as random variables that are associated with this realization of a wireless channel.  The parameters are slowly varying spatially compared to the channel   itself \cite{jakes1974, duel-hallen2007}.  If the space between observations is small enough that the channel parameters do not change appreciably, the channel transfer function values at those locations are not jointly Gaussian random variables, but different functions of essentially the same unknown channel parameters.  In this situation, the mutual information can be large despite a low value of the correlation function.
+
+\section{Mutual Information in Ergodic and Non-Ergodic Channels}
+A channel $h(\boldsymbol{\theta},\mathbf{r})$ is a function of random environmental parameters, $\boldsymbol{\theta}$, and of position $\mathbf{r}$.  An observation of this channel is given by $\tilde{h}(\boldsymbol{\theta},\mathbf{r})=h(\boldsymbol{\theta},\mathbf{r})+n$, where $n$ is Gaussian white noise.  In this section we examine the mutual information of two observations of this channel, both in the ergodic case where the parameter vectors $\boldsymbol{\theta_1}$ and $\boldsymbol{\theta_2}$ are jointly distributed random variables and in the non-ergodic case where $\boldsymbol{\theta_1}=\boldsymbol{\theta_2}$.  
+
+By repeatedly applying the data processing inequality, we find that the mutual information of the channel transfer function at two locations is bounded by the mutual information of the two sets of environmental parameters:
+\begin{equation}
+I(h(\boldsymbol{\theta_1},\mathbf{r_1}); h(\boldsymbol{\theta_2},\mathbf{r_2}))\leq I(\boldsymbol{\theta_1}; \boldsymbol{\theta_2})
+\end{equation}
+
+Applying the data processing inequality further indicates that the mutual information of two \emph{observations} of the channel is less than both of those quantities:
+\begin{equation}
+I(\tilde{h}(\boldsymbol{\theta_1},\mathbf{r_1}); \tilde{h}(\boldsymbol{\theta_2},\mathbf{r_2}))\leq I(h(\boldsymbol{\theta_1},\mathbf{r_1}); h(\boldsymbol{\theta_2},\mathbf{r_2}))
+\end{equation}
+
+It is reasonable to assume that the probability distribution of the channel parameters is dependent on position, so that $I(\boldsymbol{\theta_1}; \boldsymbol{\theta_2})$ decreases as one moves to a different location in the channel.  However, it has been observed that such channel parameters typically vary much more slowly than the channel correlation function \cite{jakes1974, duel-hallen2007}.  As a result, the channel correlation length is likely an inadequate requirement for the minimum eavesdropper distance for fading-based key generation.
+
+If the channel parameters at both locations are the same ($\boldsymbol{\theta_1}=\boldsymbol{\theta_2}=\boldsymbol{\theta}$), the channel is considered non-ergodic.  Then the mutual information of channel observations at the two locations is bounded by the entropy of $\boldsymbol{\theta}$ (again by the data processing inequality).
+\begin{equation}
+I(\tilde{h}(\boldsymbol{\theta},\mathbf{r_1}); \tilde{h}(\boldsymbol{\theta},\mathbf{r_2}))\leq H(\boldsymbol{\theta})
+\end{equation}
+
+\section{Performance Bound for Channel Prediction}
+
+The preceding section discusses an upper bound on the mutual information between channel observations, not a lower bound.  It is possible that at particular locations the mutual information will be low or zero.  However, if an eavesdropper has the capability to collect multiple observations, $h(\boldsymbol{\theta},\mathbf{r'})$ may be estimated from a collection of values of $\tilde{h}(\boldsymbol{\theta},\mathbf{r})$.
+
+By a similar method to that presented in \cite{svantesson2003} for temporal prediction of MIMO channels, the Cram\'er-Rao lower bound can be derived for spatial prediction of a channel based on spatial samples.  We assume a sum-of-sinusoids form for $h(\boldsymbol{\theta},\mathbf{r})$ in order to calculate the CRLB. We require that all scatterers are in the far field of the spatial sample locations, and that the sample locations are taken with spacing $d$.  The parameter vector $\boldsymbol{\theta}= [\sigma^2, \Re[\boldsymbol{\alpha}], \Im[\boldsymbol{\alpha}], \mathbf{k}]$ contains the channel noise power, real and imaginary parts of multipath amplitudes, and spatial frequencies for a total of $3N+1$ parameters. 
+\begin{equation}
+h(m) = \sum_{n=1}^N \alpha_n e^{j k_n m d}
+\end{equation}
+
+Observations of the channel form a vector $\mathbf{\tilde{h}} \sim \mathcal{CN}(\mathbf{h}, \mathbf{C})$, where $\mathbf{h}$ is the vector of actual channel values at those sample locations and $\mathbf{C}=\sigma^2\mathbf{I}$. A lower bound on the covariance matrix of an unbiased estimator $\mathbf{\hat{h}}$ at some sample number $m$ is then
+\begin{equation} \label{CRLB}
+E\left[\left(\mathbf{\hat{h}}(m)-\mathbf{h}(m)\right)\left(\mathbf{\hat{h}}(m)-\mathbf{h}(m)\right)^H\right]\geq \mathbf{H'BH'}^H
+\end{equation}
+
+In   (\ref{CRLB}), $\mathbf{H'}$ is the Jacobian matrix of $\mathbf{h}$ with respect to the parameter vector $\boldsymbol{\theta}$.
+\begin{equation}
+\mathbf{H'} = \left[ \frac{\partial h_m}{\partial\theta_1} \ \frac{\partial h_m}{\partial\theta_2} \cdots \frac{\partial h_m}{\partial\theta_{3N+1}} \right]
+\end{equation}
+
+$\mathbf{B}$, the CRLB for $\boldsymbol{\theta}$, is shown in (\ref{thetaCRLB}). The quantities $\mathbf{D_R}$, $\mathbf{D_I}$, and $\mathbf{D_k}$ used in (\ref{thetaCRLB}) are given in (\ref{drdef}-\ref{dkdef}).  The vertical index $p$ takes values from 1 to $M$, while the horizontal index $q$ takes values from 1 to $3N+1$.
+% The previous equation was number five.% Account for the double column equations here.\addtocounter{equation}{1}
+\begin{equation}\label{drdef}
+[D_R]_{pq} = e^{jk_q p d}
+\end{equation}
+\begin{equation}
+[D_I]_{pq} = je^{jk_q p d}
+\end{equation}
+\begin{equation}\label{dkdef}
+[D_k]_{pq} = j\alpha_q p d e^{jk_q p d}
+\end{equation}
+
+
+\section{Conclusion}
+This work has presented an argument against the use of the correlation length as the minimum safe distance for fading-based key generation.  In non-ergodic channels, mutual information can persist over greater distances than the correlation length because the channel is a deterministic function of slowly-varying physical features.
+\bibliographystyle{ieeetran}
+\bibliography{PL-Library}{}
+\end{document}
