@@ -21,16 +21,16 @@ alpha = (1/sqrt(2))*(randn(1,N)+1i*randn(1,N)); %randn has variance 1, so
 k = 2*pi*(1+(1e-8)*cos(theta)).*cos(psi);
 
 %since SNR = N/sigma^2, sigma^2 = N/SNR.
-sigma = sqrt(N/SNR); %we never use sigma not-squared, but be consistent w/notation
+sigma = sqrt(1/SNR); %we never use sigma not-squared, but be consistent w/notation
 
 %%create Hprime, the derivatives of h wrt parameters
-Hprime = [0 exp(1i*k*q*d) 1i*exp(1i*k*q*d) 1i*alpha.*d*q.*exp(1i*k*q*d)];
+Hprime = 1/(sqrt(N))*[0 exp(1i*k*q*d) 1i*exp(1i*k*q*d) 1i*alpha.*d*q.*exp(1i*k*q*d)];
 
 %%create B, the CRLB for the parameters
 %Binv is made of different combinations of DR, DI, and Dk except for
 %Binv(1,1).
 DR = zeros(M,N);
-DRrow = exp(1i*k*d); %k is a row vector
+DRrow = 1/(sqrt(N))*exp(1i*k*d); %k is a row vector
 for ii = 1:M
     DR(ii,:) = DRrow.^ii;
 end
