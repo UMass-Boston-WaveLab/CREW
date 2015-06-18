@@ -1,4 +1,4 @@
-function [CRLBvsM, CRLBvsN, CRLBvsd, CRLBvsq, CRLBvsSNR] = CRLBmontecarlo(reps, q)
+function [CRLBvsM, CRLBvsN, CRLBvsd, CRLBvsq, CRLBvsSNR] = CRLBmontecarlo(reps)
 %CRLBMONTECARLO Uses the Monte Carlo method to estimate the Cramer-Rao 
 %Lower Bound on the variance of an unbiased estimator of the channel 
 %transfer function at one location based on M spatial samples at other 
@@ -18,13 +18,14 @@ function [CRLBvsM, CRLBvsN, CRLBvsd, CRLBvsq, CRLBvsSNR] = CRLBmontecarlo(reps, 
 %default values
 M=100;
 N=10;
-d=0.1;
+d=0.5;
 SNR=20; %in dB: 10*log10(avg(|h|^2/|n|^2)) = 10*log10(N/sigma^2)
+q=M+2/d;
 
-testM = 10:10:300;
+testM = 85:10:300;
 testN = 1:30;
 testd = 0.05:0.05:0.5;
-testq = floor(0.25/d):floor(0.25/d):floor(10/d);
+testq = floor(M/2):1:(M+floor(5/d));
 testSNR=13:30; %in dB
 
 temp=0;
@@ -34,19 +35,21 @@ CRLBvsd = zeros(size(testd));
 CRLBvsq = zeros(size(testq));
 CRLBvsSNR = zeros(size(testSNR));
 
-for ii=1:length(testN)
-    for jj = 1:reps
-        temp=temp+chanestCRLB(testN(ii), M, d, q, 10^(SNR/10))/reps; %averaging
-    end
-    CRLBvsN(ii)=temp;
-    temp=0;
-end
+
 
 for ii=1:length(testM)
     for jj = 1:reps
         temp=temp+chanestCRLB(N, testM(ii), d, q, 10^(SNR/10))/reps;
     end
     CRLBvsM(ii)=temp;
+    temp=0;
+end
+
+for ii=1:length(testN)
+    for jj = 1:reps
+        temp=temp+chanestCRLB(testN(ii), M, d, q, 10^(SNR/10))/reps; %averaging
+    end
+    CRLBvsN(ii)=temp;
     temp=0;
 end
 
@@ -89,8 +92,8 @@ xlabel('Space Between Samples (Wavelengths)')
 ylabel('Estimator Minimum Variance')
 
 figure; 
-plot(testq, real(CRLBvsq))
-xlabel('Number of Samples Predicted Ahead (sample spacing = lambda/10)')
+plot(testq-M, real(CRLBvsq))
+xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
 ylabel('Estimator Minimum Variance')
 
 figure; 
