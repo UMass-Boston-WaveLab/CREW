@@ -1,4 +1,4 @@
-%function [] = PL_Security_Sim_pmusic(S, N, d,q, P, f_d, f_c, SNR)
+function [] = PL_Security_Sim_pmusic(S, N, d,q, P, f_d, f_c)
 %%UMass Boston Physical Layer Security Channel Model
 %Authors: Eric Brown, Clara Gamboa, Dr. K.C. Kerby-Patel
 %
@@ -15,16 +15,16 @@
 
 %%(SECTION 1)
 %This is where we define the variables
- S    = 10;                % # of Scatterers
- N    = 200;               % # of sensor array samples
- d    = 0.1;              % Spacing between eavesdropper samples in wavelengths
- q    = 100;               % Number of samples ahead we attempt to predict
- Lamb = 1;                   % Wavelength = 1 (distances are normalized to the wavelength)
- t    = N+q;                 % is the total number of readings
- P    = 30;                % Number of complex sinusoids that make up the wireless channel
- f_d  = 11000;             % doppler frequency
- f_c  = 2400000;           % carrier frequency
- SNR = 13;                   % Signal to Noise Ratio.
+% S    = 10;                % # of Scatterers
+% N    = 100;               % # of sensor array samples
+% d    = 0.10;              % Spacing between eavesdropper samples in wavelengths
+% q    = 200;               % Number of samples ahead we attempt to predict
+Lamb = 1;                   % Wavelength = 1 (distances are normalized to the wavelength)
+t    = N+q;                 % is the total number of readings
+% P    = 10;                % Number of complex sinusoids that make up the wireless channel
+% f_d  = 11000;             % doppler frequency
+% f_c  = 3500000;           % carrier frequency
+% SNR = 1                   % Signal to Noise Ratio.
  %Here we define a velocity vector for A
 
  
@@ -47,6 +47,18 @@
     tSE = 2*pi*rand(S, 1);      % creates thetas for pSE
 %---------------------------------------------
 
+%% (SECTION 4) Noise 
+    % Here is where we define the noise using central Limit theorem method 
+    % gWN is the function which adds the Gaussian white noise to our generated 
+    % signal H. The desired mean and standard deviation can be specified with
+    % gnS and gnM, while snr gives the signal to noise ratio.
+
+    % Variables
+        gnM  = 0;                 % Mean for noise signal
+        gnSD = 1;                 % Standard deviation for noise signal
+
+    gWN  = gnSD*randn(1,t)+gnM;   % Generatin Guassian white noise signal
+%---------------------------------------------
 
 %% (SECTION 3)
 % Generated signal for testing, generate what sensors N through N+q should
@@ -63,18 +75,20 @@ k = (2*pi)/Lamb;
 AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + kron(k*d*((1:t)-(N+1)/2),cos(tSE))+kron(k*(f_d/f_c)*d*((1:t)-(N+1)/2),(cos(tAS).*cos(tSE)));
 ASC = exp(1i*AP);          
 H = sum(ASC, 1);  
-
+Hn = H;
 %---------------------------------------------
 
-%% (SECTION 4) Noise 
-% We use the pre-built matlab Gaussian White Noise
-%Function to add AWGN to a given signal
+%% (SECTION 4)
+% Here is where we define the noise. 
+% gWN is the function which adds the Gaussian white noise to our generated 
+% signal H. The desired mean and standard deviation can be specified with
+% gnS and gnM, while snr gives the signal to noise ratio.
 
-gWN = addgwn(H,SNR);
+hAve = mean(H.');                  % Finding ave. of H
+nAve = mean(gWN);                  % Finding ave. of noise
+SNR  = ((hAve*hAve)/(nAve*nAve));  % Finding signal to noise ratio
+%SNR = 13;
 
-Hn = gWN;
-
-%---------------------------------------------
 
 %% (SECTION 5)
 % Here we use the pmusic spectrum analysis method. 
@@ -82,7 +96,7 @@ Hn = gWN;
 
 % Variables
     x = Hn(1:N);        %sensor readings from our listening array
-                        %p is the order of the linear preaditions(FIF filter)
+ %   P = 10;            %p is the order of the linear preaditions(FIF filter)
                        %that predicts value of x
 
 [f,POW] = rootmusic(x,P);
@@ -116,4 +130,4 @@ plot(1:t,abs(H(1:t)),1:t,abs(H_hat),1:t,abs(Hn(1:t)),'--'), grid
 title 'Original Signal vs. rootMUSIC Estimate'
 xlabel 'Sensors 1 through N+q', ylabel 'Readings'
 legend('Original signal','rootMUSIC Estimate', 'Signal with Noise')
-%end
+end
