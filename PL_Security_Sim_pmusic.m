@@ -104,7 +104,7 @@ for ii = 1:N
     A = [A; z.^ii];
 end
 
-a = inv(A'*A)*A'*(H(1:N).');
+a = inv(A'*A)*A'*(Hn(1:N).');
 a_mat = repmat(a,size(Samp));
 
 
