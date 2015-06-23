@@ -1,0 +1,101 @@
+function [PLSIMvsS, PLSIMvsN, PLSIMvsd, PLSIMvsP, PLSIMvsSNR,PLSIMvsf_d,PLSIMvsf_c] = PLSIMmontecarlo(reps)
+
+%PLSIMMONTECARLO. This is built off of the CRLBMONTECARLO built by Prof.
+%Kirby-Patel. I have used a fairly g base version of the channel 
+%default values
+S    = 6;                % # of Scatterers
+N    = 200;               % # of sensor array samples
+d    = 0.1;              % Spacing between eavesdropper samples in wavelengths
+q    = 100;               % Number of samples ahead we attempt to predict
+Lamb = 1;                   % Wavelength = 1 (distances are normalized to the wavelength)
+t    = N+q;                 % is the total number of readings
+P    = 30;                % Number of complex sinusoids that make up the wireless channel
+f_d  = 11000;             % doppler frequency
+f_c  = 2400000;           % carrier frequency
+SNR = 13;                   % Signal to Noise Ratio.
+
+%test ranges
+testS = 1:20;
+testN = 20:400;
+testd = 0.05:0.05:0.5;
+testP = 5:30;
+testSNR = 5:30; %in dB
+testf_d = 5000:4000:200000;
+testf_c = 1200000:5000:3600000;
+
+temp=0;
+
+PLSIMvsS = zeros(size(testS));
+PLSIMvsN = zeros(sizer(testN));
+PLSIMvsd = zeros(size(testd));
+PLSIMvsP = zeros(size(testP));
+PLSIMvsSNR = zeros(size(testSNR));
+PLSIMvsf_d = zeros(size(testf_d));
+PLSIMvsf_c = zeros(size(testf_c));
+
+
+for ii=1:length(testS)
+    for jj = 1:reps
+        temp=temp+chanestCRLB(N, testM(ii), d, q, 10^(SNR/10))/reps;
+    end
+    CRLBvsM(ii)=temp;
+    temp=0;
+end
+
+for ii=1:length(testN)
+    for jj = 1:reps
+        temp=temp+chanestCRLB(testN(ii), M, d, q, 10^(SNR/10))/reps; %averaging
+    end
+    CRLBvsN(ii)=temp;
+    temp=0;
+end
+
+for ii=1:length(testd)
+    for jj = 1:reps
+        temp=temp+chanestCRLB(N, M, testd(ii), q, 10^(SNR/10))/reps;
+    end
+    CRLBvsd(ii)=temp;
+    temp=0;
+end
+
+for ii=1:length(testq)
+    for jj = 1:reps
+        temp=temp+chanestCRLB(N, M, d, testq(ii), 10^(SNR/10))/reps;
+    end
+    CRLBvsq(ii)=temp;
+    temp=0;
+end
+
+for ii=1:length(testSNR)
+    for jj = 1:reps
+        temp=temp+chanestCRLB(N, M, d, q, 10^(testSNR(ii)/10))/reps; 
+    end
+    CRLBvsSNR(ii)=temp;
+    temp=0;
+end
+figure; 
+plot(testM, real(CRLBvsM))
+xlabel('Number of Measurements')
+ylabel('Estimator Minimum Variance')
+
+figure; 
+plot(testN, real(CRLBvsN))
+xlabel('Number of Scatterers')
+ylabel('Estimator Minimum Variance')
+
+figure; 
+plot(testd, real(CRLBvsd))
+xlabel('Space Between Samples (Wavelengths)')
+ylabel('Estimator Minimum Variance')
+
+figure; 
+plot(testq-M, real(CRLBvsq))
+xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
+ylabel('Estimator Minimum Variance')
+
+figure; 
+plot(testSNR, real(CRLBvsSNR))
+xlabel('Signal to Noise Ratio (dB)')
+ylabel('Estimator Minimum Variance')
+
+end
