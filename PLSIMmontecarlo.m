@@ -11,8 +11,6 @@ S    = 6;                % # of Scatterers
 N    = 200;               % # of sensor array samples
 d    = 0.1;              % Spacing between eavesdropper samples in wavelengths
 q    = 100;               % Number of samples ahead we attempt to predict
-Lamb = 1;                   % Wavelength = 1 (distances are normalized to the wavelength)
-t    = N+q;                 % is the total number of readings
 P    = 30;                % Number of complex sinusoids that make up the wireless channel
 f_d  = 11000;             % doppler frequency
 f_c  = 2400000;           % carrier frequency
@@ -30,7 +28,7 @@ testf_c = 1200000:5000:3600000;
 temp=0;
 
 PLSIMvsS = zeros(size(testS));
-PLSIMvsN = zeros(sizer(testN));
+PLSIMvsN = zeros(size(testN));
 PLSIMvsd = zeros(size(testd));
 PLSIMvsP = zeros(size(testP));
 PLSIMvsSNR = zeros(size(testSNR));
@@ -109,17 +107,17 @@ xlabel('Space Between Samples (Wavelengths)')
 ylabel('Estimator Minimum Variance')
 
 figure; 
-plot(testq-M, real(PLSIMvsP))
+plot(testP, real(PLSIMvsP))
 xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
 ylabel('Estimator Minimum Variance')
 
 figure; 
-plot(testq-M, real(PLSIMvsf_d))
+plot(testf_d, real(PLSIMvsf_d))
 xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
 ylabel('Estimator Minimum Variance')
 
 figure; 
-plot(testq-M, real(PLSIMvsf_c))
+plot(testf_c, real(PLSIMvsf_c))
 xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
 ylabel('Estimator Minimum Variance')
 
