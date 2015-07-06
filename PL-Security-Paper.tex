@@ -43,11 +43,7 @@ Physical layer key generation techniques based on wireless channel fading are ge
 %\textbf{Key words:} -- wireless, channel, fading, key generation, physical layer, security
 
 \section{Introduction}
-%belongs to Clara
-To be able to connect two parties in an encrypted channel without relying on predetermined keys is crucial for safe communication, but require a common source of random information that is unique to communicating parties. It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of wireless channel fading can be used as a common source of randomness to generate symmetric encryption keys quickly in cases where two parties cannot pre-arrange keys.  
-%this sentence is weird
-Meaning that if you have a known waveform to measure a channel, the transmitting party can send the receiving party an encoded message that uses as a decryption key the reciprocity of the signals and the superposition of many corresponding scattered which will destructively or constructively, depending on location, and interfere with the known waveform.
-%end weird sentence
+It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of a fading wireless channel can be used as a common source of randomness to generate symmetric encryption keys in cases where two parties cannot pre-arrange or securely exchange keys.  Each party transmits a predetermined waveform, which the other party uses to determine the channel transfer function.  These measurements are assumed to be the same in both directions if completed within a short period of time, because of the channel's reciprocity.  The channel transfer function is also position dependent, so eavesdroppers at other locations observe a different channel transfer function.  This work examines how (and under what circumstances) an eavesdropper could predict the channel observations of the communicating parties.
 
 Recently proposed fading-based encryption methods \cite{some of them} assume that if an eavesdropper is located farther than a correlation length from the communicating parties, it will have essentially no information about the symmetric key generated from their reciprocal channel measurements.
  
