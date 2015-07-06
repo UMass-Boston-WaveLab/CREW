@@ -18,20 +18,37 @@ Physical layer key generation techniques based on wireless channel fading are wi
 \end{abstract}
 \begin{figure*}[!bh]
 \vspace*{4pt}
-\hrulefill% ensure that we have normalsize text\normalsize% Store the current equation number.\setcounter{MYtempeqncnt}{\value{equation}}% Set the equation number to one less than the one% desired for the first equation here.% The value here will have to changed if equations% are added or removed prior to the place these% equations are referenced in the main text.
-\setcounter{equation}{8}\begin{equation}
-\label{thetaCRLB}\mathbf{B}^{-1} =  \left[\begin{matrix}
+\hrulefill
+% ensure that we have normalsize text
+\normalsize
+% Store the current equation number.
+\setcounter{MYtempeqncnt}{\value{equation}}
+% Set the equation number to one less than the one
+% desired for the first equation here.
+% The value here will have to changed if equations
+% are added or removed prior to the place these
+% equations are referenced in the main text.
+\setcounter{equation}{8}
+\begin{equation}
+\label{thetaCRLB}
+\mathbf{B}^{-1} =  \left[\begin{matrix}
 				\frac{M}{(\sigma^2)^2}	& \mathbf{0}	& \mathbf{0} 	& \mathbf{0}\\
 				\mathbf{0}				& \frac{2}{\sigma^2} \mathrm{Re}\{\mathbf{D_R}^H\mathbf{D_R}\} & \frac{2}{\sigma^2} \mathrm{Re}\{\mathbf{D_R}^H\mathbf{D_I}\} & \frac{2}{\sigma^2} \mathrm{Re}\{\mathbf{D_R}^H\mathbf{D_k}\} \\
 				\mathbf{0}				& \frac{2}{\sigma^2} \mathrm{Re}\{\mathbf{D_I}^H\mathbf{D_R}\} & \frac{2}{\sigma^2} \mathrm{Re}\{\mathbf{D_I}^H\mathbf{D_I}\} & \frac{2}{\sigma^2} \mathrm{Re}\{\mathbf{D_I}^H\mathbf{D_k}\} \\
 				\mathbf{0}				& \frac{2}{\sigma^2} \mathrm{Re}\{\mathbf{D_k}^H\mathbf{D_R}\} & \frac{2}{\sigma^2} \mathrm{Re}\{\mathbf{D_k}^H\mathbf{D_I}\} & \frac{2}{\sigma^2} \mathrm{Re}\{\mathbf{D_k}^H\mathbf{D_k}\}
-				\end{matrix}\right]\end{equation}% Restore the current equation number.\setcounter{equation}{\value{MYtempeqncnt}}% IEEE uses as a separator% The spacer can be tweaked to stop underfull vboxes.\end{figure*}
+				\end{matrix}\right]
+\end{equation}
+% Restore the current equation number.
+\setcounter{equation}{\value{MYtempeqncnt}}
+% IEEE uses as a separator
+
+% The spacer can be tweaked to stop underfull vboxes.
+\end{figure*}
 \section{Introduction}
 Symmetric encryption keying requires a common source of random information that is unique to the communicating parties. Standard key distribution techniques require that the two parties be at the same physical location to share this information securely.  
-%This is logistically hard
-%Key exchange is computationally intensive and potentially vulnerable to quantum computing
+%Key _exchange_ is computationally intensive and potentially vulnerable to quantum computing
 %It would be nice to have a way to generate keys as needed without meeting up.
-It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of wireless channel fading can be used as a common source of randomness to generate symmetric encryption keys in cases where two parties cannot pre-arrange keys.  
+It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of wireless channel fading can be used as a common source of randomness to generate symmetric encryption keys in cases where two parties cannot securely exchange or pre-arrange keys.  
 
 In order for the keys thus generated to be information theoretically secure, an eavesdropper's observations of the channel must have no mutual information with the communicating parties' observations.  Past work on key generation from wireless fading has often stated that the key can be considered secure as long as all eavesdroppers are separated by at least half a carrier wavelength from both of the communicating nodes \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010}, based on the fact that the channel correlation function drops off quickly as a function of distance \cite{jakes1974}.  However, low correlation does not necessarily indicate low mutual information.  This short paper discusses the difference between correlation and mutual information and points out that fading-based key generation techniques may be vulnerable to channel prediction \cite{duel-hallen2000, svantesson2003} over distances larger than the channel correlation length.
 
@@ -42,7 +59,7 @@ The autocorrelation function $R_h$ of a random process $h(\vec{r},t)$ is defined
 R_h(\vec{r},\vec{r}+\vec{\Delta r}) = E[h(\vec{r})h^*(\vec{r}+\vec{\Delta r})]
 \end{equation}
 
-If channel observations $\tilde{h}(\vec{r})$ and $\tilde{h}^*(\vec{r}+\vec{\Delta r})$ are jointly Gaussian, the mutual information $I$ between the two observations depends monotonically on the correlation function as shown in (\ref{mutualinformation}), and zero correlation implies zero mutual information.  In   (\ref{mutualinformation}), $\sigma_h^2$ is the average power of the channel.  In the situation of jointly Gaussian channel observations, the correlation length is an acceptable estimate of the minimum secure distance.
+If channel observations $\tilde{h}(\vec{r})$ and $\tilde{h}(\vec{r}+\vec{\Delta r})$ are jointly Gaussian, the mutual information $I$ between the two observations depends monotonically on the correlation function as shown in (\ref{mutualinformation}), and zero correlation implies zero mutual information.  In   (\ref{mutualinformation}), $\sigma_h^2$ is the average power of the channel.  In the situation of jointly Gaussian channel observations, the correlation length is an acceptable estimate of the minimum secure distance.
 \begin{equation}\label{mutualinformation}
 I(h(\vec{r}),h(\vec{r}+\vec{\Delta r})) = -\frac{1}{2}\ln\left(1-\frac{R_h(\vec{r},\vec{r}+\vec{\Delta r})}{\sigma_h^2}\right)
 \end{equation}
@@ -89,7 +106,9 @@ In   (\ref{CRLB}), $\mathbf{H'}$ is the Jacobian matrix of $h(m)$ with respect t
 \end{equation}
 
 $\mathbf{B}$, the CRLB for $\boldsymbol{\theta}$, is shown in (\ref{thetaCRLB}). The matrices $\mathbf{D_R}$, $\mathbf{D_I}$, and $\mathbf{D_k}$ used in (\ref{thetaCRLB}) are given in (\ref{drdef})-(\ref{dkdef}).  The vertical index $p$ takes values from 1 to the total number of observations $M$, while the horizontal index $q$ takes values from 1 to $N$.
-% The previous equation was number five.% Account for the double column equations here.\addtocounter{equation}{1}
+% The previous equation was number five.
+% Account for the double column equations here.
+\addtocounter{equation}{1}
 \begin{equation}\label{drdef}
 [\mathbf{D_R}]_{pq} = e^{jk_q p d}
 \end{equation}
@@ -102,7 +121,7 @@ $\mathbf{B}$, the CRLB for $\boldsymbol{\theta}$, is shown in (\ref{thetaCRLB}).
 
 
 \section{Conclusion}
-This work has presented an argument against the use of the correlation length as the minimum safe distance for fading-based key generation.  In non-ergodic channels, mutual information can persist over greater distances than the correlation length because the channel is a deterministic function of slowly-varying physical features.  
+This work has presented an argument against the use of the correlation length as the minimum safe distance for fading-based key generation.  In non-ergodic channels, mutual information can persist and enable eavesdropping over greater distances than the correlation length, because the channel is a deterministic function of slowly-varying physical features.  
 \bibliographystyle{ieeetran}
 \bibliography{PL-Library}{}
 \end{document}
