@@ -36,7 +36,7 @@
 
 \begin{abstract}
 
-Physical layer key generation techniques based on wireless channel fading are generally considered to be secure as long as any eavesdroppers are separated from the terminals by a distance greater than the channel correlation length.  In fact, this is true only if the channel observations are jointly Gaussian random variables.  However, a non-ergodic channel's transfer function is determined by the physical scatterers in that particular channel realization, and information about the communicating parties' channel may persist over significantly longer distances than the correlation length if the physical parameters of the channel are slowly varying.  Linear prediction has previously been employed to predict samples of the channel transfer function ahead in time.  In this work, we demonstrate that it is also possible to predict the channel transfer function in space, over distances larger than the correlation length.  This leads us to conclude that a more pessimistic ``safe'' eavesdropper distance for wireless fading based key generation is needed.
+Physical layer key generation techniques based on wireless channel fading are generally considered to be secure as long as any eavesdroppers are separated from the terminals by a distance greater than the channel correlation length.  In fact, this is true only if the channel observations are jointly Gaussian random variables.  A channel's transfer function is determined by the physical scatterers in that particular channel realization, and information about the communicating parties' channel may persist over significantly longer distances than the correlation length if the physical parameters of the channel are slowly varying.  Linear prediction has previously been employed to predict samples of the channel transfer function ahead in time.  In this work, we demonstrate that it is also possible to predict the channel transfer function in space, over distances larger than the correlation length.  This leads us to conclude that a more pessimistic ``safe'' eavesdropper distance for wireless fading based key generation is needed.
 \end{abstract}
 %we will have to compute the correlation length from the observed channel covariance matrix.  
 
@@ -45,73 +45,32 @@ Physical layer key generation techniques based on wireless channel fading are ge
 \section{Introduction}
 It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} that two parties' reciprocal observations of a fading wireless channel can be used as a common source of randomness to generate symmetric encryption keys in cases where two parties cannot pre-arrange or securely exchange keys.  Each party transmits a predetermined waveform, which the other party uses to determine the channel transfer function.  These measurements are assumed to be the same in both directions if completed within a short period of time, because of the channel's reciprocity.  The channel transfer function is also position dependent, so eavesdroppers at other locations observe a different channel transfer function.  This work examines how (and under what circumstances) an eavesdropper could predict the channel observations of the communicating parties.
 
-Recently proposed fading-based encryption methods \cite{some of them} assume that if an eavesdropper is located farther than a correlation length from the communicating parties, it will have essentially no information about the symmetric key generated from their reciprocal channel measurements.
- 
- While it is often useful to use Gaussian random variables to generate a model channel for simulation purposes, channels in the real world depend deterministically on the physical environment, even if the environmental parameters are unknown.
-%Meaning that the correlation length depends on an ensemble average of the channel correlation function. Other wise stated, $E$ could calculate the parameters of the channel between $A$ and $B$ because the wireless channel is not ergodic vs. time \cite{isukapalli2006} which can than be shown to not be ergodic vs. position as well. 
-If the channel is ergodic, it is reasonable to assume that two observations of the channel separated in time or space are jointly Gaussian random variables, and the correlation length is an acceptable estimate for the minimum secure distance.
-However, it has been shown that real-world wireless channels are typically not ergodic vs. time \cite{isukapalli2006}.  In this work, we show that the spatial average of such a channel's correlation function is not equal to the ensemble average, meaning that the channel is also not ergodic vs. space.  This indicates that security claims based on the correlation length are inappropriate.  To develop a more practical estimate of the minimum distance from a node to an eavesdropper, we apply channel prediction techniques \cite{duel-hallen2007} to investigate the distance over which it is possible to predict the channel transfer function.
+The security of this key generation method is based on the assumption that if an eavesdropper is located farther than a correlation length from the communicating parties, it will have essentially no information about the symmetric key generated from their reciprocal channel measurements \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010}.  This assumption is based on the fact that the channel correlation function falls off quickly with distance \cite{jakes1974}.  However, mutual information between two channel observation locations may be high even if the channel correlation function is low or has a minimum.  The channel transfer function is a deterministic function of the physical environment.  Although the environmental parameters may be unknown, in they often vary quite slowly with distance compared to the correlation function of the channel \cite{jakes1974, duel-hallen2007}.  An upper bound on the mutual information between channel observations at two locations is the mutual information between the channel parameters at those locations \cite{kckpVTC2015}.  Such information may persist over distances longer than the correlation length, so security claims based on the correlation length are inappropriate.  In this work, we apply channel prediction techniques \cite{duel-hallen2007} to investigate the distance over which it is possible to predict the channel transfer function.
 
+Section \ref{mutualinfo} briefly summarizes the argument for a mutual information based minimum secure distance that was presented in \ref{kckpVTC2015}.
+%% Should the summary include the CRLB stuff?  If it does, it's a good way to lead in to how we chose the "default" prediction & channel parameters in the simulation.
+  Next, in Section \ref{prediction}, we apply long-range prediction techniques to a series of spatial samples in order to predict the channel transfer function over distances greater than the correlation length.  In Section \ref{simresults}, we apply this technique to a simple simulated channel to examine the dependence of prediction length on the properties of the channel and the eavesdropper array. 
 
-Instead of describing the setup here, describe the topics that will be discussed in the rest of the paper.
-%In this case the observation points of the eavesdropper are placed in far-field of both transmitter and scatterers;, with stationary observation points; all observation occur at the same moment in time; and are predicted at the same instant in time. The far-field assumption allows us to say that the channel observations from those points are not specially ergodic, and having the channel be non-ergodic lets us know that that channel transfer function varies in an known but deterministic way.  This can be said since we don't see a change in the channel realization within the collection of observation points. Allowing $E$, a passive listener to obtain meaningful information about the channel key. 
-
-
-Section \ref{ergodicity} applies the method of \cite{isukapalli2006} to show that the spatial average of a channel's correlation function is not generally equal to the ensemble average, indicating that the channel is not spatially ergodic. Next, in Section \ref{prediction}, we apply long-range prediction techniques to a series of spatial samples in order to predict the channel transfer function over distances greater than the correlation length.  In Section \ref{simresults}, we apply this technique to a simple simulated channel to examine the dependence of prediction length on the properties of the channel and the eavesdropper array. %these are: number of scatterers; eavesdropper element spacing; and number of eavesdropper elements.
-
-
-\section{Spatial Ergodicity}\label{ergodicity}
-Past work on key generation from wireless fading has often stated that the key thus generated can be considered secure as long as all eavesdroppers are separated by at least half a carrier wavelength from both of the communicating nodes \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010}.  This is based on the fact that the channel correlation function drops off quickly as a function of distance \cite{jakes1974}.  However, low correlation does not necessarily indicate low mutual information.  The correlation function is proportional to the mutual information if the two observations are jointly Gaussian \cite{li1990}; however, this is only the case if the channel is ergodic.  It has been shown by Isukapalli et al. \cite{isukapalli2006} that a typical wireless channel is not ergodic in the temporal sense (that is, the time average of the correlation function is not necessarily equal to its ensemble average).  In this section, we will follow the derivation from \cite{isukapalli2006} to show that typical wireless channels are also not spatially ergodic (that is, the spatial average of the correlation function is not necessarily equal to its ensemble average), as long as the total sampled length is sufficiently short.
-
-%added Doppler spatial phase variation to the channel model!!  f = fc+fd because f=(1+v/c)fc.  but k = 2pi/lambda, lambda = c/f, k = 2pi fc(1+v/c)/c.  so it's ok to write k as kc+kd, where kd = 2pi fd/c.
-Begin by assuming that the channel is represented by a sum-of-sinusoids model as shown in Equation \ref{chan}.  The parameters $\alpha_n$, $\omega_d\cos\theta_n$, $k_d\cos\theta_n$, and $\vec{r_n}$ describe the amplitude, Doppler frequency shift, Doppler wavenumber, and location of the $n$th scatterer, and $\vec{r}$ represents the observation point.
-\begin{equation}\label{chan}
-h(\vec{r},t)= \sum_{n=1}^N \alpha_n e^{j \omega_d t \cos \theta_n} e^{-j(k+k_d\cos\theta_n)\left|\vec{r_n} - \vec{r}\right|}
-\end{equation}
-An observation of the channel impulse response at a new location, $\vec{r}+\vec{\Delta r}$, can be written as shown in Equation \ref{chanloc2} if $|\vec{\Delta r}|$ is small enough that all scatterers are in the far field of the pair of observation points.
-\begin{equation}\label{chanloc2}
-h(\vec{r}+\vec{\Delta r},t) = \sum_{n=1}^N \alpha_n e^{j \omega_d t \cos \theta_n} e^{-j(k+k_d\cos\theta_n)\left|\vec{r_n}-\vec{r}\right|}e^{-jk\left|\vec{\Delta r}\right| \cos \psi_n}
+\section{Mutual Information vs.~Correlation}\label{mutualinfo} %this needs a better section heading
+%correlation function
+\begin{equation}\label{ensemblecorr}
+R_h(\vec{r},\vec{r}+\vec{\Delta r}) = E[h(\vec{r})h^*(\vec{r}+\vec{\Delta r})]
 \end{equation}
 
-The correlation function (based on the ensemble average) for two spatially separated but simultaneous observations can be separated into a single sum of squared terms from the same scatterer (the first term in Equation \ref{ensemblecorr}) and a double sum of contributions from two different scatterers (the second term).
-\begin{multline}\label{ensemblecorr}
-R_e(\vec{\Delta r})= E\left[\sum_{n=m=1}^N |\alpha_n|^2 e^{-j(k+k_d\cos\theta_n)|\vec{\Delta r}|\cos \psi_n}\right] +\\ E\left[\sum_{n=1}^N\sum_{m\neq n} \alpha_n^* \alpha_m e^{j \omega_d (\cos \theta_m - \cos \theta_n)} e^{-j(k+k_d\cos\theta_n)\left(\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|\right)}e^{-jk\left|\vec{\Delta r}\right| \cos \psi_m}\right]
-\end{multline}
-The second expected value term in Equation \ref{ensemblecorr} is eliminated by the integration of the complex exponential containing $\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|$ during calculation of the expected value.  
-
-To simplify further, we assume that $E[|\alpha|^2]=1/N$.  Now the correlation function depends on the distributions of $\theta$ and $\psi$:
-\begin{equation}\label{generalcorr}
-R_e(\vec{\Delta r})=\iint_{-\pi, -\pi}^{\pi,\pi}e^{-j k |\vec{\Delta r}| \cos(u)} e^{-j k_d |\vec{\Delta r}| \cos (v) \cos(u)} p_{\theta}(v) p_{\psi}(u) du dv
+%mutual information IF GAUSSIAN
+\begin{equation}\label{mutualinformation}
+I(h(\vec{r}),h(\vec{r}+\vec{\Delta r})) = -\frac{1}{2}\ln\left(1-\frac{R_h(\vec{r},\vec{r}+\vec{\Delta r})}{\sigma_h^2}\right)
 \end{equation}
 
-Equation \ref{generalcorr} is simplified as much as is possible without making any assumptions about the probability distributions of $\theta$ and $\psi$.  However, if $\theta$ is uniformly distributed, this can be simplified to 
+%mutual information in general - channel @ 2 locations
 \begin{equation}
-R_e(\vec{\Delta r})=\int_{-\pi}^{\pi}e^{-j k |\vec{\Delta r}| \cos(u)} J_0(k_d |\vec{\Delta r}| \cos(u))p_{\psi}(u) du 
-\end{equation}
-%the math departs from Isukapalli here because of the addition of the Doppler wavenumber. 
-
-If $\psi$ is uniformly distributed, we can use the identity in Equation \ref{identity} \cite{gradshteyn2007} and a plane wave expansion to evaluate the integral with respect to $u$, arriving at Equation \ref{finalcorr}.
-\begin{equation}\label{identity}
-\int_0^{\pi} J_0(2z\cos(x))cox(2nx)dx = (-1)^n \pi J_n^2(z)
-\end{equation}
-% Gradshteyn, I. and Ryzhik, I., Table of Integrals, Series, and Products, 7th edition, Academic Press: Amsterdam, 2007 page 724
-\begin{equation}\label{finalcorr}
-R_e(\vec{\Delta_r}) = J_0^2(\frac{k_d |\vec{\Delta_r}|}{2})J_0(k|\vec{\Delta_r}|) + 2\sum_{n=1}^{\infty}(-1)^n J_n(k|\vec{\Delta_r}|)J_{n/2}^2(\frac{k_d |\vec{\Delta_r}|}{2})
+I(h(\boldsymbol{\theta_1},\mathbf{r_1}); h(\boldsymbol{\theta_2},\mathbf{r_2}))\leq I(\boldsymbol{\theta_1}; \boldsymbol{\theta_2})
 \end{equation}
 
-On the other hand, the spatial average of $h(\vec{r}+\vec{\Delta_r},t)h^*(\vec{r},t)$ is given by
-\begin{multline}
-R_r\left(\vec{\Delta r}\right) =  \lim_{D \rightarrow \infty} \frac{3}{4\pi D^3}\int_0^D\int_{-\pi}^\pi \int_{-\pi}^{\pi} \sum_{n=m=1}^N |\alpha_n|^2 e^{-j(k+k_d\cos\theta_n)|\vec{\Delta r}|\cos \psi_n}+\\ \sum_{n=1}^N\sum_{m\neq n} \alpha_n^* \alpha_m e^{j \omega_d t(\cos \theta_m - \cos \theta_n)} e^{-j(k+k_d\cos\theta_n)\left(\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|\right)}e^{-jk\left|\vec{\Delta r}\right| \cos \psi_m}r^2 \sin\theta dr d\theta d\phi
-\end{multline}
-Again the second term is eliminated by the integration of the complex exponential containing $\left|\vec{r_m} - \vec{r}\right|-\left|\vec{r_n} - \vec{r}\right|$.  What remains in the integrand does not depend on position, so the spatial average correlation is given by 
-\begin{equation}\label{spatialcorr}
-R_r\left(\vec{\Delta r}\right) =  \sum_{n=1}^N |\alpha_n|^2 e^{-j(k+k_d\cos\theta_n)|\vec{\Delta r}|\cos \psi_n}
+%mutual information - observations at 2 locations
+\begin{equation}
+I(\tilde{h}(\boldsymbol{\theta_1},\mathbf{r_1}); \tilde{h}(\boldsymbol{\theta_2},\mathbf{r_2}))\leq I(h(\boldsymbol{\theta_1},\mathbf{r_1}); h(\boldsymbol{\theta_2},\mathbf{r_2}))
 \end{equation}
-
-Depending on the number of scatterers $N$ and their angular distribution, Equation \ref{spatialcorr} may approach Equation \ref{finalcorr} \cite{isukapalli2006}.  However, real-world channels typically do not have sufficient scatterers to achieve this condition \cite{duel-hallen2000}.  
-
-Spatial non-ergodicity physically means that all spatial samples observe the same channel realization.  The scatterer angles and amplitudes do not change appreciably within the collection of viewpoints.  In this case, successive spatial samples do have some mutual information, and a series of spatial samples can be used to predict the channel transfer function ahead spatially, using methods which have already been demonstrated for temporal long-range prediction \cite{duel-hallen2000}.
-%this section might need some graphs in it, demonstrating how the correlation function and the spatial sample covariance are different for different situations - that might make it too long, though, and I want to focus on the other bits.
 
 \section{Spatial Long-Range Channel Prediction Method}\label{prediction}
 %belongs to Eric
