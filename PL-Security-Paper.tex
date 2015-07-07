@@ -63,18 +63,20 @@ R_h(\mathbf{r},\mathbf{r}+\mathbf{\Delta r}) = E[h(\mathbf{r})h^*(\mathbf{r}+\ma
 
 If the two observations are not jointly Gaussian, the expression given in (\ref{mutualinformationgauss}) is merely a lower bound on the mutual information.  In general, the channel transfer function at a particular location is a deterministic function of a set of environmental parameters $\boldsymbol{\theta}$ at that location. The environmental parameters may be considered to be a random variable. The data processing inequality can be applied to find that the mutual information of channel transfer function values at two locations with environmental parameters $\boldsymbol{\theta_1}$ and $\boldsymbol{\theta_2}$ is bounded by the mutual information of the environmental parameters.
 \begin{equation}
-I(h(\boldsymbol{\theta_1}); h(\boldsymbol{\theta_2}))\leq I(\boldsymbol{\theta_1}; \boldsymbol{\theta_2})
+I(h(\boldsymbol{\theta_1},\mathbf{r_1}); h(\boldsymbol{\theta_2},\mathbf{r_2}))\leq I(\boldsymbol{\theta_1}; \boldsymbol{\theta_2})
 \end{equation}
 
-mutual information - observations at 2 locations
+Observations of the channel are given by $\tilde{h}(\boldsymbol{\theta})=h(\boldsymbol{\theta})+n$, where $n$ is additive white Gaussian noise.  The mutual information between two observations is limited by the mutual information between the channel transfer function itself at those two locations, again by the data processing inequality.
 \begin{equation}
 I(\tilde{h}(\boldsymbol{\theta_1},\mathbf{r_1}); \tilde{h}(\boldsymbol{\theta_2},\mathbf{r_2}))\leq I(h(\boldsymbol{\theta_1},\mathbf{r_1}); h(\boldsymbol{\theta_2},\mathbf{r_2}))
 \end{equation}
 
-mutual information - if theta didn't change
+If the observations are close enough to each other spatially that the environmental parameter vector $\boldsymbol{\theta}$ does not change appreciably, the upper bound on the mutual information between two observations is the entropy of $\boldsymbol{\theta}$.
 \begin{equation}
 I(\tilde{h}(\boldsymbol{\theta},\mathbf{r_1}); \tilde{h}(\boldsymbol{\theta},\mathbf{r_2}))\leq H(\boldsymbol{\theta})
 \end{equation}
+
+This discussion has provided a lower bound and an upper bound on the mutual information between two observations of a wireless channel.  Clearly, there is significant room for variation between the two bounds.  However, it has been observed that environmental parameters are slowly varying spatially compared to the channel transfer function itself \cite{jakes1974, duel-hallen2007}.  This indicates that information about the legitimate nodes' channel may be available to the eavesdropper even if it is separated from them by more than a correlation length.
 
 \section{Spatial Long-Range Channel Prediction Method}\label{prediction}
 %belongs to Eric
