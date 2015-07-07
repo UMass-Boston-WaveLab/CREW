@@ -52,24 +52,31 @@ Section \ref{mutualinfo} briefly summarizes the argument for a mutual informatio
   Next, in Section \ref{prediction}, we apply long-range prediction techniques to a series of spatial samples in order to predict the channel transfer function over distances greater than the correlation length.  In Section \ref{simresults}, we apply this technique to a simple simulated channel to examine the dependence of prediction length on the properties of the channel and the eavesdropper array. 
 
 \section{Mutual Information vs.~Correlation}\label{mutualinfo} %this needs a better section heading
-%correlation function
+The ability of an eavesdropper to estimate the communicating parties' encryption key depends on the mutual information between the eavesdropper's channel observations and the legitimate nodes' observations.  
+
+
+mutual information IF GAUSSIAN
+\begin{equation}\label{mutualinformationgauss}
+I(h(\vec{r}),h(\vec{r}+\vec{\Delta r})) = -\frac{1}{2}\ln\left(1-\frac{R_h(\vec{r},\vec{r}+\vec{\Delta r})}{\sigma_h^2}\right)
+\end{equation}
+where the correlation function is defined as usual:
 \begin{equation}\label{ensemblecorr}
 R_h(\vec{r},\vec{r}+\vec{\Delta r}) = E[h(\vec{r})h^*(\vec{r}+\vec{\Delta r})]
 \end{equation}
 
-%mutual information IF GAUSSIAN
-\begin{equation}\label{mutualinformation}
-I(h(\vec{r}),h(\vec{r}+\vec{\Delta r})) = -\frac{1}{2}\ln\left(1-\frac{R_h(\vec{r},\vec{r}+\vec{\Delta r})}{\sigma_h^2}\right)
-\end{equation}
-
-%mutual information in general - channel @ 2 locations
+However, if the two observations are not jointly Guassian (\ref{mutualinformationgauss}) is merely a lower bound on the mutual information.  In the general case, mutual information between channel transfer function at two locations is bounded by the mutual information between the environmental parameters $\boldsymbol{\theta_1}$ and $\boldsymbol{\theta_2}$ (due to the data processing inequality)
 \begin{equation}
 I(h(\boldsymbol{\theta_1},\mathbf{r_1}); h(\boldsymbol{\theta_2},\mathbf{r_2}))\leq I(\boldsymbol{\theta_1}; \boldsymbol{\theta_2})
 \end{equation}
 
-%mutual information - observations at 2 locations
+mutual information - observations at 2 locations
 \begin{equation}
 I(\tilde{h}(\boldsymbol{\theta_1},\mathbf{r_1}); \tilde{h}(\boldsymbol{\theta_2},\mathbf{r_2}))\leq I(h(\boldsymbol{\theta_1},\mathbf{r_1}); h(\boldsymbol{\theta_2},\mathbf{r_2}))
+\end{equation}
+
+mutual information - if theta didn't change
+\begin{equation}
+I(\tilde{h}(\boldsymbol{\theta},\mathbf{r_1}); \tilde{h}(\boldsymbol{\theta},\mathbf{r_2}))\leq H(\boldsymbol{\theta})
 \end{equation}
 
 \section{Spatial Long-Range Channel Prediction Method}\label{prediction}
