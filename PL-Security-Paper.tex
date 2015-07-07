@@ -47,26 +47,23 @@ It has been demonstrated \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010} 
 
 The security of this key generation method is based on the assumption that if an eavesdropper is located farther than a correlation length from the communicating parties, it will have essentially no information about the symmetric key generated from their reciprocal channel measurements \cite{azimisadjadi2007, bloch2008, mathur2008, ye2010}.  This assumption is based on the fact that the channel correlation function falls off quickly with distance \cite{jakes1974}.  However, mutual information between two channel observation locations may be high even if the channel correlation function is low or has a minimum.  The channel transfer function is a deterministic function of the physical environment.  Although the environmental parameters may be unknown, in they often vary quite slowly with distance compared to the correlation function of the channel \cite{jakes1974, duel-hallen2007}.  An upper bound on the mutual information between channel observations at two locations is the mutual information between the channel parameters at those locations \cite{kckpVTC2015}.  Such information may persist over distances longer than the correlation length, so security claims based on the correlation length are inappropriate.  In this work, we apply channel prediction techniques \cite{duel-hallen2007} to investigate the distance over which it is possible to predict the channel transfer function.
 
-Section \ref{mutualinfo} briefly summarizes the argument for a mutual information based minimum secure distance that was presented in \ref{kckpVTC2015}.
-%% Should the summary include the CRLB stuff?  If it does, it's a good way to lead in to how we chose the "default" prediction & channel parameters in the simulation.
-  Next, in Section \ref{prediction}, we apply long-range prediction techniques to a series of spatial samples in order to predict the channel transfer function over distances greater than the correlation length.  In Section \ref{simresults}, we apply this technique to a simple simulated channel to examine the dependence of prediction length on the properties of the channel and the eavesdropper array. 
+Section \ref{mutualinfo} briefly summarizes the argument for a mutual information based minimum secure distance that was presented in \ref{kckpVTC2015}.  Next, in Section \ref{prediction}, we apply long-range prediction techniques to a series of spatial samples in order to predict the channel transfer function over distances greater than the correlation length.  In Section \ref{simresults}, we apply this technique to a simple simulated channel to examine the dependence of prediction length on the properties of the channel and the eavesdropper array. 
 
-\section{Mutual Information vs.~Correlation}\label{mutualinfo} %this needs a better section heading
-The ability of an eavesdropper to estimate the communicating parties' encryption key depends on the mutual information between the eavesdropper's channel observations and the legitimate nodes' observations.  
+\section{Mutual Information vs.~Correlation}\label{mutualinfo} %this needs a better section heading?
+The ability of an eavesdropper to estimate the communicating parties' encryption key depends on the mutual information between the eavesdropper's channel observations and the legitimate nodes' observations.  In the literature, the channel correlation function is usually used as a proxy for the mutual information.  In \cite{kckpVTC2015} it was argued that this leads to an inappropriately optimistic minimum secure eavesdropper distance, and an eavesdropper may be able to predict the legitimate nodes' channel observations despite being more than a correlation length away.  This section briefly summarizes that argument, which is the motivation for the channel prediction simulation that follows.
 
-
-mutual information IF GAUSSIAN
+If two random variables are jointly Gaussian, their mutual information is a monotonic function of their correlation function.  Thus, observations of a wireless channel at two locations, $h(\mathbf{r})$ and $h(\mathbf{r}+\mathbf{\Delta r})$, have mutual information given by 
 \begin{equation}\label{mutualinformationgauss}
-I(h(\vec{r}),h(\vec{r}+\vec{\Delta r})) = -\frac{1}{2}\ln\left(1-\frac{R_h(\vec{r},\vec{r}+\vec{\Delta r})}{\sigma_h^2}\right)
+I(h(\mathbf{r}),h(\mathbf{r}+\mathbf{\Delta r})) = -\frac{1}{2}\ln\left(1-\frac{R_h(\mathbf{r},\mathbf{r}+\mathbf{\Delta r})}{\sigma_h^2}\right)
 \end{equation}
-where the correlation function is defined as usual:
-\begin{equation}\label{ensemblecorr}
-R_h(\vec{r},\vec{r}+\vec{\Delta r}) = E[h(\vec{r})h^*(\vec{r}+\vec{\Delta r})]
+where $R_h$ is the correlation function, defined as usual, and $\sigma_h^2$ is the average power.
+\begin{equation}
+R_h(\mathbf{r},\mathbf{r}+\mathbf{\Delta r}) = E[h(\mathbf{r})h^*(\mathbf{r}+\mathbf{\Delta r})]
 \end{equation}
 
-However, if the two observations are not jointly Guassian (\ref{mutualinformationgauss}) is merely a lower bound on the mutual information.  In the general case, mutual information between channel transfer function at two locations is bounded by the mutual information between the environmental parameters $\boldsymbol{\theta_1}$ and $\boldsymbol{\theta_2}$ (due to the data processing inequality)
+If the two observations are not jointly Gaussian, the expression given in (\ref{mutualinformationgauss}) is merely a lower bound on the mutual information.  In general, the channel transfer function at a particular location is a deterministic function of a set of environmental parameters $\boldsymbol{\theta}$ at that location. The environmental parameters may be considered to be a random variable. The data processing inequality can be applied to find that the mutual information of channel transfer function values at two locations with environmental parameters $\boldsymbol{\theta_1}$ and $\boldsymbol{\theta_2}$ is bounded by the mutual information of the environmental parameters.
 \begin{equation}
-I(h(\boldsymbol{\theta_1},\mathbf{r_1}); h(\boldsymbol{\theta_2},\mathbf{r_2}))\leq I(\boldsymbol{\theta_1}; \boldsymbol{\theta_2})
+I(h(\boldsymbol{\theta_1}); h(\boldsymbol{\theta_2}))\leq I(\boldsymbol{\theta_1}; \boldsymbol{\theta_2})
 \end{equation}
 
 mutual information - observations at 2 locations
@@ -81,7 +78,7 @@ I(\tilde{h}(\boldsymbol{\theta},\mathbf{r_1}); \tilde{h}(\boldsymbol{\theta},\ma
 
 \section{Spatial Long-Range Channel Prediction Method}\label{prediction}
 %belongs to Eric
-As discussed in Section 3, the channel's spatial variation is not ergodic, therefore it is well suited to long-range prediction techniques \cite{(someone, perhaps a duel-hallen paper, said this)}. Rather than using long-range prediction to predict the channel transfer function ahead temporally, we predict it spatially. 
+As discussed in Section \ref{mutualinfo}, channel information may persist over distances greater than the correlation length. Thus, long-range prediction techniques \cite{a long range prediction paper} may be applied to predict the channel from spatial samples. Rather than using long-range prediction to predict the channel transfer function ahead temporally, as in \cite{whatevs}, we predict it spatially.  The structure of the problem is essentially the same, except for the dimensionality... (maybe also draw analogy to direction finding and describe how we're going to estimate theta and then reconstruct the channel)
 
 Previous literature(CITE) has shown that this problem is conducive to a spectral estimation approach. This is due tot he fact that we are only attempting to predict a small number of wavelengths forward in space. (DUEL-HALLEN PAPER) States that channel can be very accurately estimated within a signle doppler wavelength, which encompasses several carrier wavelengths. In temporal prediction applications, it has been observed that time variation of the amplitudes and frequencies in the sum-of-sinusoids model is on the order of 0.1 seconds \cite{duel-hallen2007} \emph{This may depend on how fast they assume the receiver is moving?} (WHY Do we need this?).  In order to assemble an acceptable set of data to solve a spectral estimation problem, we simulate array of spatial samples with regular spacing to collect information on the wireless channel.
 
@@ -108,6 +105,10 @@ The solution to the estimation problem can be broken into two parts. Estimating 
 
 
 \section{Spatial Long-Range Channel Prediction Simulated Results}\label{simresults}
+%%%REFER TO VTC PAPER: "The CRLB expressions presented in \cite{**vtc**} were used to identify suitable parameters for a default simulation scenario.   ...more details and maybe graphs if we feel like it.  Putting this in its own subsection might be a good idea.
+
+
+
 %belongs to Eric
 %where is a good place for this sentence.
 The channel model is shown in Figure (insert). Point A is the transmitter, several scatterers S, and a desired estimation location B. E is an array of sample readings taken in line with the listener. The model uses 10 scatterers, as it has been shown in (DUAL HALLEN citation) most real world channels contain less than 10 large scatterers. In our simulation we assume the sender A and all the scatterers reside in the far field. 
