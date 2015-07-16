@@ -31,23 +31,36 @@ Hprime = 1/(sqrt(N))*[0 exp(1i*k*q*d) 1i*exp(1i*k*q*d) 1i*alpha.*d*q.*exp(1i*k*q
 %Binv is made of different combinations of DR, DI, and Dk except for
 %Binv(1,1).
 M=floor(L/d);
-DR = zeros(M,N);
-DRrow = exp(1i*k*d); %k is a row vector
-for ii = 1:M
-    DR(ii,:) = 1/(sqrt(N))*DRrow.^ii;
+DRR = zeros(N,N);
+for ii = 1:N
+    for jj=1:N
+        if ii==jj
+            DRR(ii,jj) = M;
+        else
+            DRR(ii,jj) = dot(exp(j*k(ii)*((1:M)-(M-1)/2)*d), exp(-j*k(jj)*((1:M)-(M-1)/2)*d));
+        end
+    end
 end
 
-DI = 1i*DR;
+DRI = 1i*DRR;
+DIR = conj(DRI);
+DRk=zeros(size(DRR));
+DIk = DRk;
+DkR = DRk;
+DkI = DRk;
 
-Dk = zeros(M,N);
-for ii=1:M
-    Dk(ii,:) = (1/sqrt(N))*1i*ii*d*alpha.*DRrow.^ii;
+Dkk = zeros(N,N);
+for ii=1:N
+    for jj = 1:N
+    Dkk(ii,jj) = dot(d*(((1:M)-(M-1)/2).^2)*conj(alpha(ii)).*exp(j*k(ii)*((1:M)-(M-1)/2)*d),...
+        d*(((1:M)-(M-1)/2).^2)*alpha(jj).*exp(-j*k(jj)*((1:M)-(M-1)/2)*d));
+    end
 end
 
 Binv = [M/sigma^4 zeros(1, 3*N);
-        zeros(N,1) 2/(sigma^2)*real(DR'*DR) 2/(sigma^2)*real(DR'*DI) 2/(sigma^2)*real(DR'*Dk);
-        zeros(N,1) 2/(sigma^2)*real(DI'*DR) 2/(sigma^2)*real(DI'*DI) 2/(sigma^2)*real(DI'*Dk);
-        zeros(N,1) 2/(sigma^2)*real(Dk'*DR) 2/(sigma^2)*real(Dk'*DI) 2/(sigma^2)*real(Dk'*Dk)];
+        zeros(N,1) 2/(sigma^2)*real(DRR) 2/(sigma^2)*real(DRI) DRk;
+        zeros(N,1) 2/(sigma^2)*real(DIR) 2/(sigma^2)*real(DRR) DIk;
+        zeros(N,1) DkR DkI 2/(sigma^2)*real(Dkk)];
 if cond(Binv)>10^10
     sprintf('oh noes');
 end
