@@ -13,20 +13,26 @@ function [ r, CRLB ] = chanestCRLB( N, M, d, q, SNR)
 
 %%generate random values that we can use to construct the channel: alpha_n,
 %theta_n, psi_n, k_n
-theta = 2*pi*rand(1, N);
-psi = 2*pi*rand(1,N);
+
 alpha = (1/sqrt(2))*(randn(1,N)+1i*randn(1,N)); %randn has variance 1, so 
                         %E(alpha^2) is 1 if alpha is constructed this way
 
 dk=0;
-while any(dk<(2*pi/(2*M*d)))
+tries=0;
+while any(abs(dk)<(pi/(2*M*d))) && tries<10000
+    theta = 2*pi*rand(1, N);
+    psi = 2*pi*rand(1,N);
     k = 2*pi*(1+(1e-8)*cos(theta)).*cos(psi);
     dk = diff(sort(k));  %reject k vectors where some k are too close together
+    tries=tries+1;
+end
+if any(dk<(pi/(2*M*d)))
+    error(sprintf('Found no good k vector after %.0f tries, Md = %.2f, N= %.0f\n', tries, M*d, N))
 end
 
 %since SNR = N/sigma^2, sigma^2 = N/SNR.  But we normalize h to make
 %|h|^2=1, so...
-sigma = sqrt(N/SNR); %we never use sigma not-squared, but be consistent w/notation
+sigma = sqrt(1/SNR); %we never use sigma not-squared, but be consistent w/notation
 
 %%create Hprime, the derivatives of h wrt parameters
 Hprime = [0 exp(1i*k*q*d) 1i*exp(1i*k*q*d) 1i*alpha.*d*q.*exp(1i*k*q*d)];
@@ -87,14 +93,8 @@ if cond(Binv)>10^10
 end
 r = rank(Binv);
 
-%might need to reduce Binv using SVD
-%look into how many k values are identified vs. exist, as num samples and
-%measurement length increase
-
-[~,S,~] = svd(Binv);
-
     
-CRLB=Hprime*(Binv\Hprime');  %having a lot of trouble with B being singular here
-% CRLB=0;
+CRLB=Hprime*(Binv\Hprime')/N^2;  
+
 end
 

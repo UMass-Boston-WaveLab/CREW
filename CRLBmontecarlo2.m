@@ -16,17 +16,17 @@ function [CRLBvsM, CRLBvsN, CRLBvsd, CRLBvsq, CRLBvsSNR] = CRLBmontecarlo2(reps)
 %   parameters.
 
 %default values
-M=51; %in general, make M be odd so CRLB calculation is simplified
-N=10;
+M=31; %in general, make M be odd so CRLB calculation is simplified
+N=5;
 d=0.5;
-SNR=13; %in dB: 10*log10(avg(|h|^2/|n|^2)) = 10*log10(N/sigma^2)
-q=floor(M/d)+2/d; %2 wavelengths beyond sample region is default
+SNR=10; %in dB: 10*log10(avg(|h|^2/|n|^2)) = 10*log10(N/sigma^2)
+q=M+2/d; %2 wavelengths beyond sample region is default
 
 testM = 11:4:200;
-testN = 1:30;
+testN = 1:20;
 testd = 0.1:0.05:0.5;
-testq = floor(M/d)+(floor(1/d):floor(10/d));
-testSNR=7:30; %in dB
+testq = (M+1):(M+10/d);
+testSNR=1:30; %in dB
 
 temp=0;
 CRLBvsM = zeros(size(testM));
@@ -96,50 +96,51 @@ for ii=1:length(testSNR)
     
 end
 
-figure;
-plot(testM, rvsM)
-xlabel('Measurement Length (wavelengths)')
-ylabel('Info Matrix Avg Rank')
-
-figure;
-plot(testd, rvsd)
-xlabel('Space Between Samples')
-ylabel('Info Matrix Avg Rank')
-
-figure;
-plot(testq, rvsq)
-xlabel('Number of Samples Predicted Ahead')
-ylabel('Info Matrix Avg Rank')
-
-
-% figure; 
-% plot(testM, real(CRLBvsM))
+%these are for debugging the default parameter choices
+% figure;
+% plot(testM, rvsM)
 % xlabel('Measurement Length (wavelengths)')
-% ylabel('Estimator Minimum Variance')
-% ylim([0,1])
+% ylabel('Info Matrix Avg Rank')
 % 
-% figure; 
-% plot(testN, real(CRLBvsN))
-% xlabel('Number of Scatterers')
-% ylabel('Estimator Minimum Variance')
-% ylim([0,1])
+% figure;
+% plot(testd, rvsd)
+% xlabel('Space Between Samples')
+% ylabel('Info Matrix Avg Rank')
 % 
-% figure; 
-% plot(testd, real(CRLBvsd))
-% xlabel('Space Between Samples (Wavelengths)')
-% ylabel('Estimator Minimum Variance')
-% ylim([0,1])
-% 
-% figure; 
-% plot(testq-floor(M/d), real(CRLBvsq))
-% xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
-% ylabel('Estimator Minimum Variance')
-% ylim([0,1])
-% 
-% figure; 
-% plot(testSNR, real(CRLBvsSNR))
-% xlabel('Signal to Noise Ratio (dB)')
-% ylabel('Estimator Minimum Variance')
-% ylim([0,1])
+% figure;
+% plot(testq, rvsq)
+% xlabel('Number of Samples Predicted Ahead')
+% ylabel('Info Matrix Avg Rank')
+
+
+figure; 
+plot(testM, real(CRLBvsM))
+xlabel('Measurement Length (wavelengths)')
+ylabel('Estimator Minimum Variance')
+ylim([0,1])
+
+figure; 
+plot(testN, real(CRLBvsN))
+xlabel('Number of Scatterers')
+ylabel('Estimator Minimum Variance')
+ylim([0,1])
+
+figure; 
+plot(testd, real(CRLBvsd))
+xlabel('Space Between Samples (Wavelengths)')
+ylabel('Estimator Minimum Variance')
+ylim([0,1])
+
+figure; 
+plot(testq-M, real(CRLBvsq))
+xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
+ylabel('Estimator Minimum Variance')
+ylim([0,1])
+
+figure; 
+plot(testSNR, real(CRLBvsSNR))
+xlabel('Signal to Noise Ratio (dB)')
+ylabel('Estimator Minimum Variance')
+ylim([0,1])
 
 end
