@@ -1,4 +1,4 @@
-function [ CRLB ] = chanestCRLB( N, L, d, q, SNR)
+function [ cnum, CRLB ] = chanestCRLB( N, L, d, q, SNR)
 %CHANESTCRLB Computes the Cramer-Rao Lower Bound on the variance of an
 %unbiased estimator of the channel transfer function at one location based on
 %M spatial samples.
@@ -22,10 +22,11 @@ k = 2*pi*(1+(1e-8)*cos(theta)).*cos(psi);
 
 %since SNR = N/sigma^2, sigma^2 = N/SNR.  But we normalize h to make
 %|h|^2=1, so...
-sigma = sqrt(1/SNR); %we never use sigma not-squared, but be consistent w/notation
+sigma = sqrt(N/SNR); %we never use sigma not-squared, but be consistent w/notation
 
-%%create Hprime, the derivatives of h wrt parameters
-Hprime = 1/(sqrt(N))*[0 exp(1i*k*q*d) 1i*exp(1i*k*q*d) 1i*alpha.*d*q.*exp(1i*k*q*d)];
+%%create Hprime, the derivatives of h(q) wrt parameters sigma, re(alpha),
+%%im(alpha), k
+Hprime = [0 exp(1i*k*q*d) 1i*exp(1i*k*q*d) 1i*alpha.*d*q.*exp(1i*k*q*d)];
 
 %%create B, the CRLB for the parameters
 %Binv is made of different combinations of DR, DI, and Dk except for
@@ -37,12 +38,12 @@ for ii = 1:N
         if ii==jj
             DRR(ii,jj) = M;
         else
-            DRR(ii,jj) = dot(exp(j*k(ii)*((1:M)-(M-1)/2)*d), exp(-j*k(jj)*((1:M)-(M-1)/2)*d));
+            DRR(ii,jj) = dot(exp(-j*k(ii)*((1:M)-(M-1)/2)*d), exp(j*k(jj)*((1:M)-(M-1)/2)*d));
         end
     end
 end
 
-DRI = 1i*DRR;
+DRI = 1i*DRR; %check sign
 DIR = conj(DRI);
 DRk=zeros(size(DRR));
 DIk = DRk;
@@ -52,8 +53,8 @@ DkI = DRk;
 Dkk = zeros(N,N);
 for ii=1:N
     for jj = 1:N
-    Dkk(ii,jj) = dot(d*(((1:M)-(M-1)/2).^2)*conj(alpha(ii)).*exp(j*k(ii)*((1:M)-(M-1)/2)*d),...
-        d*(((1:M)-(M-1)/2).^2)*alpha(jj).*exp(-j*k(jj)*((1:M)-(M-1)/2)*d));
+    Dkk(ii,jj) = dot(d*(((1:M)-(M-1)/2).^2)*conj(alpha(ii)).*exp(-j*k(ii)*((1:M)-(M-1)/2)*d),...
+        d*(((1:M)-(M-1)/2).^2)*alpha(jj).*exp(j*k(jj)*((1:M)-(M-1)/2)*d));
     end
 end
 
@@ -61,12 +62,9 @@ Binv = [M/sigma^4 zeros(1, 3*N);
         zeros(N,1) 2/(sigma^2)*real(DRR) 2/(sigma^2)*real(DRI) DRk;
         zeros(N,1) 2/(sigma^2)*real(DIR) 2/(sigma^2)*real(DRR) DIk;
         zeros(N,1) DkR DkI 2/(sigma^2)*real(Dkk)];
-if cond(Binv)>10^10
-    sprintf('oh noes');
-end
-    
-    
-    
+    cnum = cond(Binv);
+
+
 CRLB=Hprime*(Binv\Hprime');  %having a lot of trouble with B being "nearly singular" here
     
 end

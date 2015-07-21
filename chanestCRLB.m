@@ -1,4 +1,4 @@
-function [ CRLB ] = chanestCRLB( N, L, d, q, SNR)
+function [ r, CRLB ] = chanestCRLB( N, M, d, q, SNR)
 %CHANESTCRLB Computes the Cramer-Rao Lower Bound on the variance of an
 %unbiased estimator of the channel transfer function at one location based on
 %M spatial samples.
@@ -18,43 +18,83 @@ psi = 2*pi*rand(1,N);
 alpha = (1/sqrt(2))*(randn(1,N)+1i*randn(1,N)); %randn has variance 1, so 
                         %E(alpha^2) is 1 if alpha is constructed this way
 
-k = 2*pi*(1+(1e-8)*cos(theta)).*cos(psi);  
+dk=0;
+while any(dk<(2*pi/(2*M*d)))
+    k = 2*pi*(1+(1e-8)*cos(theta)).*cos(psi);
+    dk = diff(sort(k));  %reject k vectors where some k are too close together
+end
 
 %since SNR = N/sigma^2, sigma^2 = N/SNR.  But we normalize h to make
 %|h|^2=1, so...
-sigma = sqrt(1/SNR); %we never use sigma not-squared, but be consistent w/notation
+sigma = sqrt(N/SNR); %we never use sigma not-squared, but be consistent w/notation
 
 %%create Hprime, the derivatives of h wrt parameters
-Hprime = 1/(sqrt(N))*[0 exp(1i*k*q*d) 1i*exp(1i*k*q*d) 1i*alpha.*d*q.*exp(1i*k*q*d)];
+Hprime = [0 exp(1i*k*q*d) 1i*exp(1i*k*q*d) 1i*alpha.*d*q.*exp(1i*k*q*d)];
 
 %%create B, the CRLB for the parameters
-%Binv is made of different combinations of DR, DI, and Dk except for
-%Binv(1,1).
-M=floor(L/d);
-DR = zeros(M,N);
-DRrow = exp(1i*k*d); %k is a row vector
-for ii = 1:M
-    DR(ii,:) = 1/(sqrt(N))*DRrow.^ii;
+
+%Xaa(i,j)=dh'/d(alpha_i)*dh/d(alpha_j)
+Xaa = zeros(N);
+for ii = 1:N
+    for jj=1:N
+        Xaa(ii,jj)=sum((exp(-j*k(ii)*d*(-(M-1)/2:(M-1)/2))).*( exp(j*k(jj)*d*(-(M-1)/2:(M-1)/2))));
+    end
 end
 
-DI = 1i*DR;
+Xab = j*Xaa;
+Xba = -j*Xaa;
+Xbb = Xaa;
 
-Dk = zeros(M,N);
-for ii=1:M
-    Dk(ii,:) = (1/sqrt(N))*1i*ii*d*alpha.*DRrow.^ii;
+Xak = zeros(N);
+for ii = 1:N
+    for jj = 1:N
+        Xak(ii,jj) = sum(alpha(jj)*j*d*(-(M-1)/2:(M-1)/2).*exp(j*(k(jj)-k(ii))*d*(-(M-1)/2:(M-1)/2)));
+        if ii==jj 
+            Xak(ii,jj)= 0;
+        end
+    end
 end
 
-Binv = [M/sigma^4 zeros(1, 3*N);
-        zeros(N,1) 2/(sigma^2)*real(DR'*DR) 2/(sigma^2)*real(DR'*DI) 2/(sigma^2)*real(DR'*Dk);
-        zeros(N,1) 2/(sigma^2)*real(DI'*DR) 2/(sigma^2)*real(DI'*DI) 2/(sigma^2)*real(DI'*Dk);
-        zeros(N,1) 2/(sigma^2)*real(Dk'*DR) 2/(sigma^2)*real(Dk'*DI) 2/(sigma^2)*real(Dk'*Dk)];
+Xbk = -j*Xak;
+
+Xka = zeros(N);
+for ii = 1:N
+    for jj = 1:N
+        Xka(ii,jj) = sum(conj(alpha(ii))*(-j)*d*(-(M-1)/2:(M-1)/2).*exp(j*(k(jj)-k(ii))*d*(-(M-1)/2:(M-1)/2)));
+        if ii==jj
+            Xka(ii,jj)= 0;
+        end
+    end
+end
+
+Xkb = -j*Xka;
+
+Xkk = zeros(N);
+for ii=1:N
+    for jj=1:N
+        Xkk(ii,jj)=sum(d^2*conj(alpha(ii))*alpha(jj)*(-(M-1)/2:(M-1)/2).^2.*exp(j*d*(-(M-1)/2:(M-1)/2)*(k(jj)-k(ii))));
+    end
+end
+
+
+
+Binv = [M/sigma^4 zeros(1, 3*N); %should this be M^2?
+        zeros(N,1) 2/(sigma^2)*real(Xaa) 2/(sigma^2)*real(Xab) 2/(sigma^2)*real(Xak);
+        zeros(N,1) 2/(sigma^2)*real(Xba) 2/(sigma^2)*real(Xbb) 2/(sigma^2)*real(Xbk);
+        zeros(N,1) 2/(sigma^2)*real(Xka) 2/(sigma^2)*real(Xkb) 2/(sigma^2)*real(Xkk)];
 if cond(Binv)>10^10
     sprintf('oh noes');
 end
+r = rank(Binv);
+
+%might need to reduce Binv using SVD
+%look into how many k values are identified vs. exist, as num samples and
+%measurement length increase
+
+[~,S,~] = svd(Binv);
+
     
-    
-    
-CRLB=Hprime*(Binv\Hprime');  %having a lot of trouble with B being "nearly singular" here
-    
+CRLB=Hprime*(Binv\Hprime');  %having a lot of trouble with B being singular here
+% CRLB=0;
 end
 
