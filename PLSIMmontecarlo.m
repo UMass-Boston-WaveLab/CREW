@@ -7,21 +7,21 @@ function [PLSIMvsS, PLSIMvsN, PLSIMvsd, PLSIMvsP, PLSIMvsSNR,PLSIMvsf_d,PLSIMvsf
 %parallel. -Eric 
 
 %default values
-S    = 6;                % # of Scatterers
-N    = 100;               % # of sensor array samples
+S    = 8;                % # of Scatterers
+N    = 200;               % # of sensor array samples
 d    = 0.1;              % Spacing between eavesdropper samples in wavelengths
 q    = 50;               % Number of samples ahead we attempt to predict
 P    = 30;                % Number of complex sinusoids that make up the wireless channel
 f_d  = 11000;             % doppler frequency
 f_c  = 2400000;           % carrier frequency
-SNR = 200;                   % Signal to Noise Ratio in dB.
+SNR = 20;                   % Signal to Noise Ratio in dB.
 
 %test ranges
 testS = 1:20;
 testN = 50:10:400;
 testd = 0.1:0.1:0.5;
 testP = 7:30;
-testSNR = 10:30; %in dB
+testSNR = 10:10:200; %in dB
 %testf_d = 5000:4000:200000;
 %testf_c = 1200000:5000:3600000;
 
