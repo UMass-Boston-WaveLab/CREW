@@ -40,9 +40,8 @@ for kk = 1:reps
   
         [H, H_hat] = PL_Security_Sim_pmusic(testS(ii), N, d, P,SNR); %tests the scenario
         err = abs((H-H_hat)/rms(H)); % finds error percentage
-        try
-            temp=find(err>0.05, 1);
-        catch
+        temp=find(err>0.05, 1);
+        if isempty(temp)
             temp=length(H);
         end
         q_maxS(ii) = q_maxS(ii)+temp/reps;
@@ -51,9 +50,8 @@ for kk = 1:reps
     for ii=1:length(testN)
         [H, H_hat] = PL_Security_Sim_pmusic(S, testN(ii), d, P,SNR); %tests the scenario
         err = abs((H-H_hat)/rms(H)); % finds error percentage
-        try
-            temp=find(err>0.05, 1);
-        catch
+        temp=find(err>0.05, 1);
+        if isempty(temp)
             temp=length(H);
         end
         q_maxN(ii) = q_maxN(ii) + temp/reps;
@@ -62,9 +60,8 @@ for kk = 1:reps
     for ii=1:length(testd)
         [H, H_hat] = PL_Security_Sim_pmusic(S, N, testd(ii), P,SNR); %tests the scenario
         err = abs((H-H_hat)/rms(H)); % finds error percentage
-        try
-            temp=find(err>0.05, 1);
-        catch
+        temp=find(err>0.05, 1);
+        if isempty(temp)
             temp=length(H);
         end
         q_maxd(ii) = q_maxd(ii) + temp/reps;
@@ -79,9 +76,8 @@ for kk = 1:reps
     for ii=1:length(testP)
         [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, testP(ii),SNR); %tests the scenario
         err = abs((H-H_hat)/rms(H)); % finds error percentage
-        try
-            temp=find(err>0.05, 1);
-        catch
+        temp=find(err>0.05, 1);
+        if isempty(temp)
             temp=length(H);
         end
         q_maxP(ii) = q_maxP(ii) + temp/reps;
@@ -101,9 +97,8 @@ for kk = 1:reps
     for ii=1:length(testSNR)
         [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, P,testSNR(ii)); %tests the scenario
         err = abs((H-H_hat)/rms(H)); % finds error percentage
-        try
-            temp=find(err>0.05, 1);
-        catch
+        temp=find(err>0.05, 1);
+        if isempty(temp)
             temp=length(H);
         end
         q_maxSNR(ii) = q_maxSNR(ii) + temp/reps;
