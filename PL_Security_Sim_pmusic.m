@@ -1,4 +1,4 @@
-function [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, P, SNR)
+function [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P, SNR)
 %%UMass Boston Physical Layer Security Channel Model
 %Authors: Eric Brown, Clara Gamboa, Dr. K.C. Kerby-Patel
 %
@@ -18,7 +18,7 @@ function [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, P, SNR)
  %S    = 7;                % # of Scatterers
  %N    = 200;               % # of sensor array samples
  %d    = 0.1;              % Spacing between eavesdropper samples in wavelengths
- q    = 200;               % Number of samples ahead we attempt to predict
+ %q    = 200;               % Number of samples ahead we attempt to predict
  Lamb = 1;                   % Wavelength = 1 (distances are normalized to the wavelength)
  t    = N+q;                 % is the total number of readings
  %P    = 60;                % Number of complex sinusoids that make up the wireless channel
