@@ -10,7 +10,7 @@ function [PLSIMvsS, PLSIMvsN, PLSIMvsd, PLSIMvsP, PLSIMvsSNR,PLSIMvsf_d,PLSIMvsf
 S    = 6;                % # of Scatterers
 N    = 200;               % # of sensor array samples
 d    = 0.1;              % Spacing between eavesdropper samples in wavelengths
-q    = 100;               % Number of samples ahead we attempt to predict
+q    = 200;               % Number of samples ahead we attempt to predict
 P    = 30;                % Number of complex sinusoids that make up the wireless channel
 f_d  = 11000;             % doppler frequency
 f_c  = 2400000;           % carrier frequency
@@ -18,166 +18,103 @@ SNR = 13;                   % Signal to Noise Ratio in dB.
 
 %test ranges
 testS = 1:20;
-testN = 20:400;
-testd = 0.05:0.05:0.5;
-testP = 5:30;
+testN = 50:10:400;
+testd = 0.1:0.1:0.5;
+testP = 7:30;
 testSNR = 5:30; %in dB
-testf_d = 5000:4000:200000;
-testf_c = 1200000:5000:3600000;
+%testf_d = 5000:4000:200000;
+%testf_c = 1200000:5000:3600000;
 
-temp=0;
-
-PLSIMvsS = zeros(size(testS));
-PLSIMvsN = zeros(size(testN));
-PLSIMvsd = zeros(size(testd));
-PLSIMvsP = zeros(size(testP));
-PLSIMvsSNR = zeros(size(testSNR));
-PLSIMvsf_d = zeros(size(testf_d));
-PLSIMvsf_c = zeros(size(testf_c));
-
-PL_Sim = PL_Security_Sim_pmusic();
-E_testS = [];
-pred_Len_testS = [];
-E_testN = [];
-temp_length = []
-
-for ii=1:length(testS)   
-    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
-    int jj = N;
-    while err < 0.05 
-        jj += 1;
-        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
-        
-        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
-        E_testS(end+1)=err;
-    end
-   temp_length = length(E_testS);
-   pred_Len_testS(end+1)=temp_length; 
+%PL_Sim = PL_Security_Sim_pmusic();
+q_maxS = zeros(size(testS));
+q_maxN = zeros(size(testN));
+q_maxd = zeros(size(testd));
+% q_maxq = zeros(size(testq));
+q_maxP = zeros(size(testP));
+q_maxSNR = zeros(size(testSNR));
+% q_maxf_c = zeros(size(testf_c));
+% q_maxf_d = zeros(size(testf_d));
+for kk = 1:reps   
     
-end
-
-for ii=1:length(testN)   
-    PL_Sim(S, testN(ii), d, q, P,f_d,f_c,SNR); %tests the scenario 
-    int jj = N;
-    while err < 0.05 
-        jj += 1;
-        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
-        
-        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
-        E_testN(end+1)=err;
+    for ii=1:length(testS)
+  
+        [H, H_hat] = PL_Security_Sim_pmusic(testS(ii), N, d, P,SNR); %tests the scenario
+        err = abs((H-H_hat)/rms(H)); % finds error percentage
+        q_maxS(ii) = q_maxS(ii)+find(err>0.05, 1)/reps;
     end
-   temp_length = length(E_testS);
-   pred_Len_testS(end+1)=temp_length; 
     
-end
-
-for ii=1:length(testS)   
-    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
-    int jj = N;
-    while err < 0.05 
-        jj += 1;
-        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
-        
-        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
-        E_testS(end+1)=err;
+    for ii=1:length(testN)
+        [H, H_hat] = PL_Security_Sim_pmusic(S, testN(ii), d, P,SNR); %tests the scenario
+        err = abs((H-H_hat)/rms(H)); % finds error percentage
+        q_maxN(ii) = q_maxN(ii) + find(err>0.05, 1)/reps;
     end
-   temp_length = length(E_testS);
-   pred_Len_testS(end+1)=temp_length; 
     
-end
-
-for ii=1:length(testS)   
-    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
-    int jj = N;
-    while err < 0.05 
-        jj += 1;
-        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
-        
-        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
-        E_testS(end+1)=err;
+    for ii=1:length(testd)
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, testd(ii), P,SNR); %tests the scenario
+        err = abs((H-H_hat)/rms(H)); % finds error percentage
+        q_maxd(ii) = q_maxd(ii) + find(err>0.05, 1)/reps;
     end
-   temp_length = length(E_testS);
-   pred_Len_testS(end+1)=temp_length; 
     
-end
-
-for ii=1:length(testS)   
-    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
-    int jj = N;
-    while err < 0.05 
-        jj += 1;
-        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
-        
-        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
-        E_testS(end+1)=err;
+%    for ii=1:length(testq)
+%         [H, H_hat] = PL_Sim(S, N, d, testq(ii), P,f_d,f_c,SNR); %tests the scenario
+%         err = abs((H-H_hat)/rms(H)); % finds error percentage
+%         q_maxq(ii) = find(err>0.05, 'first');
+%     end
+    
+    for ii=1:length(testP)
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, testP(ii),SNR); %tests the scenario
+        err = abs((H-H_hat)/rms(H)); % finds error percentage
+        q_maxP(ii) = q_maxP(ii) + find(err>0.05, 1)/reps;
     end
-   temp_length = length(E_testS);
-   pred_Len_testS(end+1)=temp_length; 
     
-end
-
-for ii=1:length(testS)   
-    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
-    int jj = N;
-    while err < 0.05 
-        jj += 1;
-        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
-        
-        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
-        E_testS(end+1)=err;
+%     for ii=1:length(testf_d)
+%         [H, H_hat] = PL_Sim(testS(ii), N, d, q, P,testf_d(ii),f_c,SNR); %tests the scenario
+%         err = abs((H-H_hat)/rms(H)); % finds error percentage
+%         q_maxf_d(ii) = find(err>0.05, 'first');
+%     end
+%     
+%     for ii=1:length(testf_c)
+%         [H, H_hat] = PL_Sim(testS(ii), N, d, q, P,f_d,testf_c(ii),SNR); %tests the scenario
+%         err = abs((H-H_hat)/rms(H)); % finds error percentage
+%         q_maxf_c(ii) = find(err>0.05, 'first');
+%     end
+    for ii=1:length(testSNR)
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, P,testSNR(ii)); %tests the scenario
+        err = abs((H-H_hat)/rms(H)); % finds error percentage
+        q_maxSNR(ii) = q_maxSNR(ii) + find(err>0.05, 1)/reps;
     end
-   temp_length = length(E_testS);
-   pred_Len_testS(end+1)=temp_length; 
-    
-end
-
-for ii=1:length(testS)   
-    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
-    int jj = N;
-    while err < 0.05 
-        jj += 1;
-        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
-        
-        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
-        E_testS(end+1)=err;
-    end
-   temp_length = length(E_testS);
-   pred_Len_testS(end+1)=temp_length; 
-    
 end
 figure; 
-plot(testS, real(PLSIMvsS))
-xlabel('Number of Measurements')
-ylabel('Estimator Minimum Variance')
-
-figure; 
-plot(testN, real(PLSIMvsN))
+plot(testS, q_maxS)
 xlabel('Number of Scatterers')
-ylabel('Estimator Minimum Variance')
+ylabel('Average Max Prediction Length')
 
 figure; 
-plot(testd, real(PLSIMvsd))
+plot(testN, q_maxN)
+xlabel('Number of Measurements')
+ylabel('Average Max Prediction Length')
+
+figure; 
+plot(testd, q_maxd)
 xlabel('Space Between Samples (Wavelengths)')
-ylabel('Estimator Minimum Variance')
+ylabel('Average Max Prediction Length')
 
 figure; 
-plot(testP, real(PLSIMvsP))
-xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
-ylabel('Estimator Minimum Variance')
+plot(testP, q_maxP)
+xlabel('Number of component Sinusoids in rootMUSIC Estimate')
+ylabel('Average Max Prediction Length')
+
+% figure; 
+% plot(testf_d, real(PLSIMvsf_d))
+% xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
+% ylabel('Estimator Minimum Variance')
+% 
+% figure; 
+% plot(testf_c, real(PLSIMvsf_c))
+% xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
+% ylabel('Estimator Minimum Variance')
 
 figure; 
-plot(testf_d, real(PLSIMvsf_d))
-xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
-ylabel('Estimator Minimum Variance')
-
-figure; 
-plot(testf_c, real(PLSIMvsf_c))
-xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
-ylabel('Estimator Minimum Variance')
-
-figure; 
-plot(testSNR, real(PLSIMvsSNR))
+plot(testSNR, q_maxSNR)
 xlabel('Signal to Noise Ratio (dB)')
-ylabel('Estimator Minimum Variance')
-
-end
+ylabel('Average Max Prediction Length')
