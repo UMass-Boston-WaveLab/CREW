@@ -18,7 +18,7 @@ SNR = 200;                   % Signal to Noise Ratio in dB.
 
 %test ranges
 testS = 1:20;
-testN = 50:10:400;
+testN = 90:10:400;
 testd = 0.1:0.1:0.5;
 testP = 7:30;
 testSNR = 10:30; %in dB
@@ -38,7 +38,7 @@ for kk = 1:reps
     
     for ii=1:length(testS)
   
-        [H, H_hat] = PL_Security_Sim_pmusic(testS(ii), N, d, P,SNR); %tests the scenario
+        [H, H_hat] = PL_Security_Sim_pmusic(testS(ii), N, d,q, P,SNR); %tests the scenario
         err = abs((H-H_hat)/rms(H)); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
@@ -48,7 +48,7 @@ for kk = 1:reps
     end
     
     for ii=1:length(testN)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, testN(ii), d, P,SNR); %tests the scenario
+        [H, H_hat] = PL_Security_Sim_pmusic(S, testN(ii), d,q, P,SNR); %tests the scenario
         err = abs((H-H_hat)/rms(H)); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
@@ -58,7 +58,7 @@ for kk = 1:reps
     end
     
     for ii=1:length(testd)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, N, testd(ii), P,SNR); %tests the scenario
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, testd(ii),q, P,SNR); %tests the scenario
         err = abs((H-H_hat)/rms(H)); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
@@ -74,7 +74,7 @@ for kk = 1:reps
 %     end
     
     for ii=1:length(testP)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, testP(ii),SNR); %tests the scenario
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, testP(ii),SNR); %tests the scenario
         err = abs((H-H_hat)/rms(H)); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
@@ -95,7 +95,7 @@ for kk = 1:reps
 %         q_maxf_c(ii) = find(err>0.05, 'first');
 %     end
     for ii=1:length(testSNR)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, P,testSNR(ii)); %tests the scenario
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P,testSNR(ii)); %tests the scenario
         err = abs((H-H_hat)/rms(H)); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
