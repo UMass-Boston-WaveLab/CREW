@@ -82,9 +82,9 @@ This discussion has provided a lower bound and an upper bound on the mutual info
 
 \section{Spatial Long-Range Channel Prediction Method}\label{prediction}
 %belongs to Eric
-As discussed in Section \ref{mutualinfo}, channel information may persist over distances greater than the correlation length. Thus, long-range prediction techniques \cite{a long range prediction paper} may be applied to predict the channel from spatial samples. Rather than using long-range prediction to predict the channel transfer function ahead temporally, as in \cite{duel-hallen2007}, we predict it spatially.  The structure of the problem is essentially the same, except for the dimensionality... (maybe also draw analogy to direction finding and describe how we're going to estimate theta and then reconstruct the channel)
+As discussed in Section \ref{mutualinfo}, channel information may persist over distances greater than the correlation length. Thus, long-range prediction techniques \cite{a long range prediction paper} may be applied to predict the channel from spatial samples. Rather than using long-range prediction to predict the channel transfer function ahead temporally, as in \cite{duel-hallen2007}, we predict it spatially. The method used is similar to direction finding, by taking the phase angle, $\theta$ of the signal along our sampling array we are able to draw conclusions about that signal. 
 
-Previous literature(CITE) has shown that this problem is conducive to a spectral estimation approach. This is due tot he fact that we are only attempting to predict a small number of wavelengths forward in space. (DUEL-HALLEN PAPER) States that channel can be very accurately estimated within a single doppler wavelength, which encompasses several carrier wavelengths. In temporal prediction applications, it has been observed that time variation of the amplitudes and frequencies in the sum-of-sinusoids model is on the order of 0.1 seconds \cite{duel-hallen2007} \emph{This may depend on how fast they assume the receiver is moving?} (WHY Do we need this?).  In order to assemble an acceptable set of data to solve a spectral estimation problem, we simulate array of spatial samples with regular spacing to collect information on the wireless channel.
+Previous literature(DUEL HALLEN PAPER) has shown that this problem is conducive to a spectral estimation approach. This is due to the fact that we are only attempting to predict a small number of wavelengths forward in space. (DUEL-HALLEN PAPER) States that channel can be very accurately estimated within a single doppler wavelength, which encompasses several carrier wavelengths. In temporal prediction applications, it has been observed that time variation of the amplitudes and frequencies in the sum-of-sinusoids model is on the order of 0.1 seconds \cite{duel-hallen2007}. In order to assemble an acceptable set of data to solve a spectral estimation problem, we simulate an array of spatial samples with regular spacing to collect information on the wireless channel.
 
 We simulate the listener as a series of recievers along a line that points in the direction of the point we'd like to simulate. Since we assume that all sampling occurs simultaneously our equation is simplified. The Equation \ref{chan} describes a transfer function along a line.
 
@@ -97,18 +97,13 @@ We simulate the listener as a series of recievers along a line that points in th
 
 Our unknowns in this system are the amplitude and the wave numbers. We make the assumption that the angle of arrival for all the listening samples is the same because they are all in the far field. This array of samples is of length $Nd+qd$, where $q$ is the number of sample lengths ahead we'd like to predict. With this channel prediction model we obtain a set of data points for the channel in each location, then use spectral estimation to project this sample out to the location of B.
 
-The solution to the estimation problem can be broken into two parts. Estimating the amplitudes, then estimation the wave number $k$ from the resultant amplitude array. We used the rootMUSIC algorithm supplied in MATLAB to determine the amplitudes. RootMUSIC uses eigenvalue analysis of the channel's correlation matrix to estimate the signals frequency content. The specific command used estimates the discrete frequency spectrum, and provides the signal power.  In order to determine wavenumber we used the method described in (CITE paper cant find it)(Describe method we used, took a covariance matrix did stuff, least mean squares blah blah) 
-
-  %say what we do and why (spectral estimation is ok because  parameters don't change very fast)
-
-
-%describe the problem setup: channel, eavesdropper
-
-
-%summary of math - MUSIC (cite MATLAB) and how to estimate the coefficients (cite paper where we got that technique)
+The solution to the estimation problem can be broken into two parts. Estimating the amplitudes, then estimation the wave number $k$ from the resultant amplitude array. We used the rootMUSIC algorithm supplied in MATLAB to determine the amplitudes. RootMUSIC uses eigenvalue analysis of the channel's correlation matrix to estimate the signals frequency content. The specific command used estimates the discrete frequency spectrum, and provides the signal power.  In order to determine complex amplitude we used the method described in (CITE paper cant find it). The spectral estimation algorithm determines the frequency of the signal, we then take the frequency and insert it into a matrix the size of our sample array. By taking the inverse of that matrix and multiplying it's conjugate by our original sample we arrive at the complex amplitude. %This needs to be clarified a little. Maybe add some math into it. I need to find the paper I took the method from.
 
 
 \section{Spatial Long-Range Channel Prediction Simulated Results}\label{simresults}
+Section 3 described the signal estimation process. In this section we run several permutations of the simulation searching for the max estimation distance. In \cite{kckpVTC2015} suitable parameters are identified for a default simulation scenario.  %insert graphs and refer to them 
+
+From the default we take each value over a reasonable span to determine the estimation's sensitivity to each variable. 
 %%%REFER TO VTC PAPER: "The CRLB expressions presented in \cite{**vtc**} were used to identify suitable parameters for a default simulation scenario.   ...more details and maybe graphs if we feel like it.  Putting this in its own subsection might be a good idea.
 
 

@@ -56,15 +56,15 @@ for ii=1:length(testS)
     
 end
 
-for ii=1:length(testS)   
-    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
+for ii=1:length(testN)   
+    PL_Sim(S, testN(ii), d, q, P,f_d,f_c,SNR); %tests the scenario 
     int jj = N;
     while err < 0.05 
         jj += 1;
         err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
         
         % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
-        E_testS(end+1)=err;
+        E_testN(end+1)=err;
     end
    temp_length = length(E_testS);
    pred_Len_testS(end+1)=temp_length; 
