@@ -1,4 +1,4 @@
-function [H_hat] = PL_Security_Sim_pmusic(S, N, d,q, P, f_d, f_c, SNR)
+function [H, H_hat] = PL_Security_Sim_pmusic(S, N, d,q, P, f_d, f_c, SNR)
 %%UMass Boston Physical Layer Security Channel Model
 %Authors: Eric Brown, Clara Gamboa, Dr. K.C. Kerby-Patel
 %

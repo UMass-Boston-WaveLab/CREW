@@ -35,61 +35,115 @@ PLSIMvsSNR = zeros(size(testSNR));
 PLSIMvsf_d = zeros(size(testf_d));
 PLSIMvsf_c = zeros(size(testf_c));
 
+PL_Sim = PL_Security_Sim_pmusic();
+E_testS = [];
+pred_Len_testS = [];
+E_testN = [];
+temp_length = []
 
-for ii=1:length(testS)
-    for jj = 1:reps
-        temp=temp+PL_Security_Sim_pmusic(testS(ii), N, d, q, P,f_d,f_c,SNR)/reps;
+for ii=1:length(testS)   
+    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
+    int jj = N;
+    while err < 0.05 
+        jj += 1;
+        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
+        
+        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
+        E_testS(end+1)=err;
     end
-    PLSIMvsS(ii)=temp;
-    temp=0;
+   temp_length = length(E_testS);
+   pred_Len_testS(end+1)=temp_length; 
+    
 end
 
-for ii=1:length(testN)
-    for jj = 1:reps
-        temp=temp+PL_Security_Sim_pmusic(S, testN(ii), d, q, P,f_d,f_c,SNR)/reps; %averaging
+for ii=1:length(testS)   
+    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
+    int jj = N;
+    while err < 0.05 
+        jj += 1;
+        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
+        
+        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
+        E_testS(end+1)=err;
     end
-    PLSIMvsN(ii)=temp;
-    temp=0;
+   temp_length = length(E_testS);
+   pred_Len_testS(end+1)=temp_length; 
+    
 end
 
-for ii=1:length(testd)
-    for jj = 1:reps
-        temp=temp+PL_Security_Sim_pmusic(S, N, testd(ii), q, P,f_d,f_c,SNR)/reps;
+for ii=1:length(testS)   
+    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
+    int jj = N;
+    while err < 0.05 
+        jj += 1;
+        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
+        
+        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
+        E_testS(end+1)=err;
     end
-    PLSIMvsd(ii)=temp;
-    temp=0;
+   temp_length = length(E_testS);
+   pred_Len_testS(end+1)=temp_length; 
+    
 end
 
-for ii=1:length(testP)
-    for jj = 1:reps
-        temp=temp+PL_Security_Sim_pmusic(S, N, d, q, testP(ii),f_d,f_c,SNR)/reps;
+for ii=1:length(testS)   
+    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
+    int jj = N;
+    while err < 0.05 
+        jj += 1;
+        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
+        
+        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
+        E_testS(end+1)=err;
     end
-    PLSIMvsP(ii)=temp;
-    temp=0;
+   temp_length = length(E_testS);
+   pred_Len_testS(end+1)=temp_length; 
+    
 end
 
-for ii=1:length(testf_d)
-    for jj = 1:reps
-        temp=temp+PL_Security_Sim_pmusic(S, N, d, q, P,testf_d(ii),f_c,SNR)/reps;
+for ii=1:length(testS)   
+    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
+    int jj = N;
+    while err < 0.05 
+        jj += 1;
+        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
+        
+        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
+        E_testS(end+1)=err;
     end
-    PLSIMvsf_d(ii)=temp;
-    temp=0;
+   temp_length = length(E_testS);
+   pred_Len_testS(end+1)=temp_length; 
+    
 end
 
-for ii=1:length(testf_c)
-    for jj = 1:reps
-        temp=temp+PL_Security_Sim_pmusic(S, N, d, q, P,f_d,testf_c(ii),SNR)/reps;
+for ii=1:length(testS)   
+    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
+    int jj = N;
+    while err < 0.05 
+        jj += 1;
+        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
+        
+        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
+        E_testS(end+1)=err;
     end
-    PLSIMvsf_c(ii)=temp;
-    temp=0;
+   temp_length = length(E_testS);
+   pred_Len_testS(end+1)=temp_length; 
+    
 end
 
-for ii=1:length(testSNR)
-    for jj = 1:reps
-        temp=temp+PL_Security_Sim_pmusic(S, N, d, q, P,f_d,f_c,testSNR(ii))/reps;
+for ii=1:length(testS)   
+    PL_Sim(testS(ii), N, d, q, P,f_d,f_c,SNR); %tests the scenario 
+    int jj = N;
+    while err < 0.05 
+        jj += 1;
+        err = abs((H(jj)-H_hat(jj))/H(jj)); % finds error percentage
+        
+        % adds value of error to a vector. The length of this vector is the amount of samples out it can estimate
+        E_testS(end+1)=err;
     end
-    PLSIMvsSNR(ii)=temp;
-    temp=0;
+   temp_length = length(E_testS);
+   pred_Len_testS(end+1)=temp_length; 
+    
 end
 figure; 
 plot(testS, real(PLSIMvsS))
