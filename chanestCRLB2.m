@@ -20,13 +20,12 @@ alpha = (1/sqrt(2))*(randn(1,N)+1i*randn(1,N)); %randn has variance 1, so
 
 k = 2*pi*(1+(1e-8)*cos(theta)).*cos(psi);  
 
-%since SNR = N/sigma^2, sigma^2 = N/SNR.  But we normalize h to make
-%|h|^2=1, so...
-sigma = sqrt(N/SNR); %we never use sigma not-squared, but be consistent w/notation
+%since SNR = N/sigma^2, sigma^2 = N/SNR.  
+sigma = sqrt(1/SNR); %we never use sigma not-squared, but be consistent w/notation
 
 %%create Hprime, the derivatives of h(q) wrt parameters sigma, re(alpha),
 %%im(alpha), k
-Hprime = [0 exp(1i*k*q*d) 1i*exp(1i*k*q*d) 1i*alpha.*d*q.*exp(1i*k*q*d)];
+Hprime = (1/sqrt(N))*[0 exp(1i*k*q*d) 1i*exp(1i*k*q*d) 1i*alpha.*d*q.*exp(1i*k*q*d)];
 
 %%create B, the CRLB for the parameters
 %Binv is made of different combinations of DR, DI, and Dk except for
@@ -38,7 +37,7 @@ for ii = 1:N
         if ii==jj
             DRR(ii,jj) = M;
         else
-            DRR(ii,jj) = dot(exp(-j*k(ii)*((1:M)-(M-1)/2)*d), exp(j*k(jj)*((1:M)-(M-1)/2)*d));
+            DRR(ii,jj) = dot((1/sqrt(N))*exp(-j*k(ii)*((1:M)-(M-1)/2)*d), (1/sqrt(N))*exp(j*k(jj)*((1:M)-(M-1)/2)*d));
         end
     end
 end
@@ -53,8 +52,8 @@ DkI = DRk;
 Dkk = zeros(N,N);
 for ii=1:N
     for jj = 1:N
-    Dkk(ii,jj) = dot(d*(((1:M)-(M-1)/2).^2)*conj(alpha(ii)).*exp(-j*k(ii)*((1:M)-(M-1)/2)*d),...
-        d*(((1:M)-(M-1)/2).^2)*alpha(jj).*exp(j*k(jj)*((1:M)-(M-1)/2)*d));
+    Dkk(ii,jj) = dot((1/sqrt(N))*d*(((1:M)-(M-1)/2).^2)*conj(alpha(ii)).*exp(-j*k(ii)*((1:M)-(M-1)/2)*d),...
+        (1/sqrt(N))*d*(((1:M)-(M-1)/2).^2)*alpha(jj).*exp(j*k(jj)*((1:M)-(M-1)/2)*d));
     end
 end
 

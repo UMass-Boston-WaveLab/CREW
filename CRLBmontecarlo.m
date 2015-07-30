@@ -19,7 +19,7 @@ function [CRLBvsL, CRLBvsN, CRLBvsd, CRLBvsq, CRLBvsSNR] = CRLBmontecarlo(reps)
 L=10;
 N=10;
 d=0.1;
-SNR=13; %in dB: 10*log10(avg(|h|^2/|n|^2)) = 10*log10(N/sigma^2)
+SNR=13; %in dB: 10*log10(avg(|h|^2/|n|^2)) = 10*log10(N/sigma^2) unless h is normalized to 1 of course
 q=floor(L/d)+2/d; %2 wavelengths beyond sample region is default
 
 testL = 2:20;
