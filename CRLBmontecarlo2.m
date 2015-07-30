@@ -19,14 +19,14 @@ function [CRLBvsM, CRLBvsN, CRLBvsd, CRLBvsq, CRLBvsSNR] = CRLBmontecarlo2(reps)
 M=31; %in general, make M be odd so CRLB calculation is simplified
 N=5;
 d=0.5;
-SNR=10; %in dB: 10*log10(avg(|h|^2/|n|^2)) = 10*log10(N/sigma^2)
+SNR=20; %in dB: 10*log10(avg(|h|^2/|n|^2)) = 10*log10(N/sigma^2)
 q=M+2/d; %2 wavelengths beyond sample region is default
 
 testM = 11:4:200;
 testN = 1:20;
 testd = 0.1:0.05:0.5;
 testq = (M+1):(M+10/d);
-testSNR=1:30; %in dB
+testSNR = 1:30; %in dB
 
 temp=0;
 CRLBvsM = zeros(size(testM));

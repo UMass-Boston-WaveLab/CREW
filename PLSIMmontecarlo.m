@@ -38,7 +38,7 @@ for kk = 1:reps
     
     for ii=1:length(testS)
   
-        [H, H_hat] = PL_Security_Sim_pmusic(testS(ii), N, d, P,SNR); %tests the scenario
+        [H, H_hat] = PL_Security_Sim_pmusic(testS(ii), N, d, P, SNR); %tests the scenario
         err = abs((H-H_hat)/rms(H)); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
