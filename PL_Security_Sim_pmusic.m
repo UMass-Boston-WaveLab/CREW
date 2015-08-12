@@ -1,4 +1,4 @@
-function [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P, SNR)
+function [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P, SNR, smoo, Reps)
 %%UMass Boston Physical Layer Security Channel Model
 %Authors: Eric Brown, Clara Gamboa, Dr. K.C. Kerby-Patel
 %
@@ -69,10 +69,13 @@ H = sum(ASC, 1);
 %% (SECTION 4) Noise 
 % We use the pre-built matlab Gaussian White Noise
 %Function to add AWGN to a given signal
+Hn = zeros(size(H));
+for hh = 1:Reps
+    gWN = addgwn(H,SNR);
+    Hn = (gWN/Reps)+Hn; 
+end
 
-gWN = addgwn(H,SNR);
-
-Hn = gWN;
+%Hn = smoothing(Hn, smoo);
 
 %---------------------------------------------
 
@@ -115,7 +118,8 @@ H_hat = sum(a_mat.*exp(1i*f_mat.*x_mat), 1);
 
 %% (Section 6)
 %Plotting the channel estimate vs the actual channel.
-plot(1:t,abs(H(1:t)),1:t,abs(H_hat),1:t,abs(Hn(1:t)),'--'), grid
+figure;
+plot(1:t-smoo,abs(H(1:t-smoo)),1:t-smoo,abs(H_hat(1:t-smoo)),1:t-smoo,abs(Hn(1:t-smoo)),'--'), grid
 title 'Original Signal vs. rootMUSIC Estimate'
 xlabel 'Sensors 1 through N+q', ylabel 'Readings'
 legend('Original signal','rootMUSIC Estimate', 'Signal with Noise')

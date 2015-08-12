@@ -7,7 +7,7 @@
 function y = addgwn(x,SNR_dB)
     %y=awgn_noise(x,SNR) adds AWGN noise vector to signal 'x' to generate a
     %resulting signal vector y of specified SNR in dB
-    rng('default');%set the random generator seed to default (for comparison only)
+    %rng('default');%set the random generator seed to default (for comparison only)
     L=length(x);
     SNR = 10^(SNR_dB/10); %SNR to linear scale
     Esym=sum(abs(x).^2)/(L); %Calculate actual symbol energy
