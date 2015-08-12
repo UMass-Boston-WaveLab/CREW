@@ -119,8 +119,13 @@ H_hat = sum(a_mat.*exp(1i*f_mat.*x_mat), 1);
 %% (Section 6)
 %Plotting the channel estimate vs the actual channel.
 figure;
+subplot(2,1,1)
 plot(1:t-smoo,abs(H(1:t-smoo)),1:t-smoo,abs(H_hat(1:t-smoo)),1:t-smoo,abs(Hn(1:t-smoo)),'--'), grid
 title 'Original Signal vs. rootMUSIC Estimate'
-xlabel 'Sensors 1 through N+q', ylabel 'Readings'
+ylabel 'Amplitude (Linear)'
 legend('Original signal','rootMUSIC Estimate', 'Signal with Noise')
+subplot(2,1,2)
+plot(1:t-smoo, 100*abs(H(1:t-smoo)-H_hat(1:t-smoo))/mean(abs(H(1:t-smoo)).^2)), grid
+ylabel('Percent Error')
+xlabel 'Sensors 1 through N+q' 
 end
