@@ -7,23 +7,28 @@ function [PLSIMvsS, PLSIMvsN, PLSIMvsd, PLSIMvsP, PLSIMvsSNR,PLSIMvsf_d,PLSIMvsf
 %parallel. -Eric 
 
 %default values
-S    = 8;                % # of Scatterers
-N    = 200;               % # of sensor array samples
+L=20;
+S    = 7;                % # of Scatterers
 d    = 0.1;              % Spacing between eavesdropper samples in wavelengths
-q    = 50;               % Number of samples ahead we attempt to predict
+N    = floor(L/d);               % # of sensor array samples
+q    = 200;               % Number of samples ahead we attempt to predict
 P    = 30;                % Number of complex sinusoids that make up the wireless channel
 f_d  = 11000;             % doppler frequency
 f_c  = 2400000;           % carrier frequency
-SNR = 20;                   % Signal to Noise Ratio in dB.
+SNR = 13;                   % Signal to Noise Ratio in dB.
+averaging=100;              %effective SNR will be dB(averaging)+SNR
+thresh=100;                  %threshold for signal vs. noise space in the MUSIC algorithm
 
 %test ranges
 testS = 1:20;
-testN = 50:10:400;
-testd = 0.1:0.1:0.5;
-testP = 7:30;
-testSNR = 10:10:200; %in dB
+testN = 60:20:400;
+testd = 0.1:0.05:0.5;
+testP = 5:2:35;
+testSNR = 10:5:40; %in dB
 %testf_d = 5000:4000:200000;
 %testf_c = 1200000:5000:3600000;
+testthresh=1:50;
+testaveraging=1:10:1000;
 
 %PL_Sim = PL_Security_Sim_pmusic();
 q_maxS = zeros(size(testS));
@@ -34,12 +39,14 @@ q_maxP = zeros(size(testP));
 q_maxSNR = zeros(size(testSNR));
 % q_maxf_c = zeros(size(testf_c));
 % q_maxf_d = zeros(size(testf_d));
+q_maxthresh=zeros(size(testthresh));
+q_maxaveraging=zeros(size(testaveraging));
 for kk = 1:reps   
     
     for ii=1:length(testS)
   
-        [H, H_hat] = PL_Security_Sim_pmusic(testS(ii), N, d, P, SNR); %tests the scenario
-        err = abs((H-H_hat)/rms(H)); % finds error percentage
+        [H, H_hat] = PL_Security_Sim_pmusic(testS(ii), N, d, q, P, SNR, thresh, 1, 0); %tests the scenario
+        err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
             temp=length(H);
@@ -48,8 +55,8 @@ for kk = 1:reps
     end
     
     for ii=1:length(testN)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, testN(ii), d, P,SNR); %tests the scenario
-        err = abs((H-H_hat)/rms(H)); % finds error percentage
+        [H, H_hat] = PL_Security_Sim_pmusic(S, testN(ii), d, q, P,SNR, thresh, 1,0); %tests the scenario
+        err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
             temp=length(H);
@@ -58,8 +65,8 @@ for kk = 1:reps
     end
     
     for ii=1:length(testd)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, N, testd(ii), P,SNR); %tests the scenario
-        err = abs((H-H_hat)/rms(H)); % finds error percentage
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, testd(ii), q, P,SNR, thresh, 1,0); %tests the scenario
+        err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
             temp=length(H);
@@ -69,13 +76,13 @@ for kk = 1:reps
     
 %    for ii=1:length(testq)
 %         [H, H_hat] = PL_Sim(S, N, d, testq(ii), P,f_d,f_c,SNR); %tests the scenario
-%         err = abs((H-H_hat)/rms(H)); % finds error percentage
+%         err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
 %         q_maxq(ii) = find(err>0.05, 'first');
 %     end
     
     for ii=1:length(testP)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, testP(ii),SNR); %tests the scenario
-        err = abs((H-H_hat)/rms(H)); % finds error percentage
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, testP(ii),SNR, thresh, 1,0); %tests the scenario
+        err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
             temp=length(H);
@@ -85,44 +92,62 @@ for kk = 1:reps
     
 %     for ii=1:length(testf_d)
 %         [H, H_hat] = PL_Sim(testS(ii), N, d, q, P,testf_d(ii),f_c,SNR); %tests the scenario
-%         err = abs((H-H_hat)/rms(H)); % finds error percentage
+%         err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
 %         q_maxf_d(ii) = find(err>0.05, 'first');
 %     end
 %     
 %     for ii=1:length(testf_c)
 %         [H, H_hat] = PL_Sim(testS(ii), N, d, q, P,f_d,testf_c(ii),SNR); %tests the scenario
-%         err = abs((H-H_hat)/rms(H)); % finds error percentage
+%         err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
 %         q_maxf_c(ii) = find(err>0.05, 'first');
 %     end
     for ii=1:length(testSNR)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, P,testSNR(ii)); %tests the scenario
-        err = abs((H-H_hat)/rms(H)); % finds error percentage
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P,testSNR(ii), thresh, 1,0); %tests the scenario
+        err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
             temp=length(H);
         end
         q_maxSNR(ii) = q_maxSNR(ii) + temp/reps;
     end
+    for ii=1:length(testthresh)
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P,SNR, testthresh(ii), 1,0); %tests the scenario
+        err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
+        temp=find(err>0.05, 1);
+        if isempty(temp)
+            temp=length(H);
+        end
+        q_maxthresh(ii) = q_maxthresh(ii) + temp/reps;
+    end
+    for ii=1:length(testaveraging)
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P,SNR, thresh, testaveraging(ii),0); %tests the scenario
+        err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
+        temp=find(err>0.05, 1);
+        if isempty(temp)
+            temp=length(H);
+        end
+        q_maxaveraging(ii) = q_maxaveraging(ii) + temp/reps;
+    end
 end
 figure; 
-plot(testS, q_maxS)
+plot(testS, q_maxS-N)
 xlabel('Number of Scatterers')
-ylabel('Average Max Prediction Length')
+ylabel('Average Max Prediction Past Array') %changed 'prediction' to 'agreement' because it starts at sample 1, not at end of measurement array
 
 figure; 
-plot(testN, q_maxN)
+plot(testN, q_maxN-testN)
 xlabel('Number of Measurements')
-ylabel('Average Max Prediction Length')
+ylabel('Average Max Prediction Length Past Array') %note that q_maxN has to have testN subtracted from it so that positive values indicate actual prediction (not estimation)
 
 figure; 
-plot(testd, q_maxd)
+plot(testd, q_maxd-N)
 xlabel('Space Between Samples (Wavelengths)')
-ylabel('Average Max Prediction Length')
+ylabel('Average Max Prediction Past Array')
 
 figure; 
-plot(testP, q_maxP)
+plot(testP, q_maxP-N)
 xlabel('Number of component Sinusoids in rootMUSIC Estimate')
-ylabel('Average Max Prediction Length')
+ylabel('Average Max Prediction Past Array')
 
 % figure; 
 % plot(testf_d, real(PLSIMvsf_d))
@@ -135,6 +160,16 @@ ylabel('Average Max Prediction Length')
 % ylabel('Estimator Minimum Variance')
 
 figure; 
-plot(testSNR, q_maxSNR)
+plot(testSNR, q_maxSNR-N)
 xlabel('Signal to Noise Ratio (dB)')
-ylabel('Average Max Prediction Length')
+ylabel('Average Max Prediction Past Array')
+
+figure; 
+plot(testthresh, q_maxthresh-N)
+xlabel('MUSIC Noise Subspace Threshold')
+ylabel('Average Max Prediction Past Array')
+
+figure; 
+plot(testaveraging, q_maxaveraging-N)
+xlabel('Number of Snapshots Averaged')
+ylabel('Average Max Prediction Past Array')

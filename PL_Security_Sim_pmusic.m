@@ -1,4 +1,4 @@
-function [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P, SNR, smoo, Reps)
+function [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P, SNR, thresh, Reps, figs)
 %%UMass Boston Physical Layer Security Channel Model
 %Authors: Eric Brown, Clara Gamboa, Dr. K.C. Kerby-Patel
 %
@@ -26,7 +26,7 @@ function [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P, SNR, smoo, Reps)
  f_c  = 2400000;           % carrier frequency
  %SNR = 13;                   % Signal to Noise Ratio.
  %Here we define a velocity vector for A
-
+smoo=0; %we have found that smoothing doesn't seem to help much
  
 %---------------------------------------------
 
@@ -59,6 +59,9 @@ function [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P, SNR, smoo, Reps)
 %ASC is the Array of Scatterers Continued???
 %H is the full channel as seen by sensor array
 k = (2*pi)/Lamb;
+kvals = k*cos(tSE)+k*(f_d/f_c)*(cos(tAS).*cos(tSE));
+%we could disqualify the problem if the spacing between k values is too
+%small here.
 
 AP = repmat(pSE, [1,t]) + repmat(pAS, [1,t]) + kron(k*d*((1:t)-(N+1)/2),cos(tSE))+kron(k*(f_d/f_c)*d*((1:t)-(N+1)/2),(cos(tAS).*cos(tSE)));
 ASC = exp(1i*AP);          
@@ -75,7 +78,7 @@ for hh = 1:Reps
     Hn = (gWN/Reps)+Hn; 
 end
 
-%Hn = smoothing(Hn, smoo);
+Hn = smoothing(Hn, smoo);
 
 %---------------------------------------------
 
@@ -88,7 +91,7 @@ end
                         %p is the order of the linear preaditions(FIF filter)
                        %that predicts value of x
 try
-    [f,POW] = rootmusic(x,P);
+    [f,POW] = rootmusic(x,[P thresh]);  %the second argument is a threshold that assigns eigenvalues to the noise subspace if they are smaller than lambda_min*threshold
 catch
     f = zeros(P, 1);
     fprintf('root music has failed, P = %.0f S = %.0f  N = %.0f d= %.2f SNR = %.0f \n ', P, S, N, d, SNR ) 
@@ -118,6 +121,7 @@ H_hat = sum(a_mat.*exp(1i*f_mat.*x_mat), 1);
 
 %% (Section 6)
 %Plotting the channel estimate vs the actual channel.
+if figs
 figure;
 subplot(2,1,1)
 plot(1:t-smoo,abs(H(1:t-smoo)),1:t-smoo,abs(H_hat(1:t-smoo)),1:t-smoo,abs(Hn(1:t-smoo)),'--'), grid
@@ -125,7 +129,8 @@ title 'Original Signal vs. rootMUSIC Estimate'
 ylabel 'Amplitude (Linear)'
 legend('Original signal','rootMUSIC Estimate', 'Signal with Noise')
 subplot(2,1,2)
-plot(1:t-smoo, 100*abs(H(1:t-smoo)-H_hat(1:t-smoo))/mean(abs(H(1:t-smoo)).^2)), grid
+plot(1:t-smoo, 100*abs(H(1:t-smoo)-H_hat(1:t-smoo))/sqrt(mean(abs((H(1:t-smoo))).^2))), grid
 ylabel('Percent Error')
-xlabel 'Sensors 1 through N+q' 
+xlabel 'Sensors 1 through N+q'
+end
 end
