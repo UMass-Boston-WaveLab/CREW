@@ -26,7 +26,7 @@ while any(abs(dk)<(pi/(2*M*d))) && tries<10000
     dk = diff(sort(k));  %reject k vectors where some k are too close together
     tries=tries+1;
 end
-if any(dk<(pi/(2*M*d)))
+if any(dk<(pi/(4*M*d)))
     error(sprintf('Found no good k vector after %.0f tries, Md = %.2f, N= %.0f\n', tries, M*d, N))
 end
 
