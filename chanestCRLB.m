@@ -1,4 +1,4 @@
-function [ r, CRLB ] = chanestCRLB( N, M, d, q, SNR)
+function [ r, CRLB ] = chanestCRLB( N, M, d, q, SNR,mindk)
 %CHANESTCRLB Computes the Cramer-Rao Lower Bound on the variance of an
 %unbiased estimator of the channel transfer function at one location based on
 %M spatial samples.
@@ -19,14 +19,14 @@ alpha = (1/sqrt(2))*(randn(1,N)+1i*randn(1,N)); %randn has variance 1, so
 
 dk=0;
 tries=0;
-while any(abs(dk)<(pi/(2*M*d))) && tries<10000
+while any(abs(dk)<mindk) && tries<10000
     theta = 2*pi*rand(1, N);
     psi = 2*pi*rand(1,N);
     k = 2*pi*(1+(1e-8)*cos(theta)).*cos(psi);
     dk = diff(sort(k));  %reject k vectors where some k are too close together
     tries=tries+1;
 end
-if any(dk<(pi/(4*M*d)))
+if any(dk<mindk)
     error(sprintf('Found no good k vector after %.0f tries, Md = %.2f, N= %.0f\n', tries, M*d, N))
 end
 
