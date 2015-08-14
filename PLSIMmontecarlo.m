@@ -8,27 +8,27 @@ function [PLSIMvsS, PLSIMvsN, PLSIMvsd, PLSIMvsP, PLSIMvsSNR,PLSIMvsf_d,PLSIMvsf
 
 %default values
 L=20;
-S    = 7;                % # of Scatterers
-d    = 0.1;              % Spacing between eavesdropper samples in wavelengths
-N    = floor(L/d);               % # of sensor array samples
+S    = 7;                 % # of Scatterers
+d    = 0.1;               % Spacing between eavesdropper samples in wavelengths
+N    = floor(L/d);        % # of sensor array samples
 q    = 200;               % Number of samples ahead we attempt to predict
-P    = 30;                % Number of complex sinusoids that make up the wireless channel
+P    = 33;                % Number of complex sinusoids that make up the wireless channel
 f_d  = 11000;             % doppler frequency
 f_c  = 2400000;           % carrier frequency
 SNR = 13;                   % Signal to Noise Ratio in dB.
-averaging=100;              %effective SNR will be dB(averaging)+SNR
-thresh=100;                  %threshold for signal vs. noise space in the MUSIC algorithm
+averaging=1000;              %effective SNR will be dB(averaging)+SNR
+thresh= 150;                  %threshold for signal vs. noise space in the MUSIC algorithm
 
 %test ranges
 testS = 1:20;
-testN = 60:20:400;
+testN = 100:20:400;
 testd = 0.1:0.05:0.5;
-testP = 5:2:35;
-testSNR = 10:5:40; %in dB
+testP = 5:2:50;
+testSNR = 10:5:50; %in dB
 %testf_d = 5000:4000:200000;
 %testf_c = 1200000:5000:3600000;
-testthresh=1:50;
-testaveraging=1:10:1000;
+testthresh=1:500;
+testaveraging=1:10:5000;
 
 %PL_Sim = PL_Security_Sim_pmusic();
 q_maxS = zeros(size(testS));
@@ -45,7 +45,7 @@ for kk = 1:reps
     
     for ii=1:length(testS)
   
-        [H, H_hat] = PL_Security_Sim_pmusic(testS(ii), N, d, q, P, SNR, thresh, 1, 0); %tests the scenario
+        [H, H_hat] = PL_Security_Sim_pmusic(testS(ii), N, d, q, P, SNR, thresh, averaging, 0); %tests the scenario
         err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
@@ -55,7 +55,7 @@ for kk = 1:reps
     end
     
     for ii=1:length(testN)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, testN(ii), d, q, P,SNR, thresh, 1,0); %tests the scenario
+        [H, H_hat] = PL_Security_Sim_pmusic(S, testN(ii), d, q, P,SNR, thresh, averaging,0); %tests the scenario
         err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
@@ -65,7 +65,8 @@ for kk = 1:reps
     end
     
     for ii=1:length(testd)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, N, testd(ii), q, P,SNR, thresh, 1,0); %tests the scenario
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, testd(ii), q, P,SNR, thresh, averaging,0); %tests the scenario
+        
         err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
@@ -81,7 +82,7 @@ for kk = 1:reps
 %     end
     
     for ii=1:length(testP)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, testP(ii),SNR, thresh, 1,0); %tests the scenario
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, testP(ii),SNR, thresh, averaging,0); %tests the scenario
         err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
@@ -102,7 +103,7 @@ for kk = 1:reps
 %         q_maxf_c(ii) = find(err>0.05, 'first');
 %     end
     for ii=1:length(testSNR)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P,testSNR(ii), thresh, 1,0); %tests the scenario
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P,testSNR(ii), thresh, averaging,0); %tests the scenario
         err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
@@ -111,7 +112,7 @@ for kk = 1:reps
         q_maxSNR(ii) = q_maxSNR(ii) + temp/reps;
     end
     for ii=1:length(testthresh)
-        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P,SNR, testthresh(ii), 1,0); %tests the scenario
+        [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P,SNR, testthresh(ii), averaging,0); %tests the scenario
         err = abs((H-H_hat)/sqrt(mean(abs(H).^2))); % finds error percentage
         temp=find(err>0.05, 1);
         if isempty(temp)
