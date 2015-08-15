@@ -1,4 +1,4 @@
-function [ r, CRLB ] = chanestCRLB( N, M, d, q, SNR,mindk)
+function [ r, CRLB ] = chanestCRLB( N, M, d, q, SNR, mindk)
 %CHANESTCRLB Computes the Cramer-Rao Lower Bound on the variance of an
 %unbiased estimator of the channel transfer function at one location based on
 %M spatial samples.
@@ -22,7 +22,7 @@ tries=0;
 while any(abs(dk)<mindk) && tries<10000
     theta = 2*pi*rand(1, N);
     psi = 2*pi*rand(1,N);
-    k = 2*pi*(1+(1e-8)*cos(theta)).*cos(psi);
+    k = 2*pi*(1+(1e-8)*cos(theta)).*cos(psi); %built-in Doppler just for funsies - it doesn't actually make a diff to the sim
     dk = diff(sort(k));  %reject k vectors where some k are too close together
     tries=tries+1;
 end
@@ -30,9 +30,8 @@ if any(dk<mindk)
     error(sprintf('Found no good k vector after %.0f tries, Md = %.2f, N= %.0f\n', tries, M*d, N))
 end
 
-%since SNR = N/sigma^2, sigma^2 = N/SNR.  But we normalize h to make
-%|h|^2=1, so...
-sigma = sqrt(1/SNR); %we never use sigma not-squared, but be consistent w/notation
+%since SNR = N/sigma^2, sigma^2 = N/SNR.  
+sigma = sqrt(N/SNR); %we never use sigma not-squared, but be consistent w/notation
 
 %%create Hprime, the derivatives of h wrt parameters
 Hprime = [0 exp(1i*k*q*d) 1i*exp(1i*k*q*d) 1i*alpha.*d*q.*exp(1i*k*q*d)];
