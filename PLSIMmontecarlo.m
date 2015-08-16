@@ -7,17 +7,17 @@ function [PLSIMvsS, PLSIMvsN, PLSIMvsd, PLSIMvsP, PLSIMvsSNR,PLSIMvsf_d,PLSIMvsf
 %parallel. -Eric 
 
 %default values
-L=20;
+L=40;
 S    = 7;                 % # of Scatterers
-d    = 0.1;               % Spacing between eavesdropper samples in wavelengths
+d    = 0.3;               % Spacing between eavesdropper samples in wavelengths
 N    = floor(L/d);        % # of sensor array samples
 q    = 200;               % Number of samples ahead we attempt to predict
 P    = 33;                % Number of complex sinusoids that make up the wireless channel
 f_d  = 11000;             % doppler frequency
 f_c  = 2400000;           % carrier frequency
-SNR = 13;                   % Signal to Noise Ratio in dB.
-averaging=1000;              %effective SNR will be dB(averaging)+SNR
-thresh= 150;                  %threshold for signal vs. noise space in the MUSIC algorithm
+SNR = 16;                   % Signal to Noise Ratio in dB.
+averaging=100;              %effective SNR will be dB(averaging)+SNR
+thresh= 100;                  %threshold for signal vs. noise space in the MUSIC algorithm
 
 %test ranges
 testS = 1:20;
@@ -27,8 +27,8 @@ testP = 5:2:50;
 testSNR = 10:5:50; %in dB
 %testf_d = 5000:4000:200000;
 %testf_c = 1200000:5000:3600000;
-testthresh=1:500;
-testaveraging=1:10:5000;
+testthresh=1:10:500;
+testaveraging=1:10:1000;
 
 %PL_Sim = PL_Security_Sim_pmusic();
 q_maxS = zeros(size(testS));
