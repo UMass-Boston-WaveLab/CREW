@@ -15,7 +15,7 @@ q    = 200;               % Number of samples ahead we attempt to predict
 P    = 33;                % Number of complex sinusoids that make up the wireless channel
 f_d  = 11000;             % doppler frequency
 f_c  = 2400000;           % carrier frequency
-SNR = 16;                   % Signal to Noise Ratio in dB.
+SNR = 15;                   % Signal to Noise Ratio in dB.
 averaging=100;              %effective SNR will be dB(averaging)+SNR
 thresh= 100;                  %threshold for signal vs. noise space in the MUSIC algorithm
 
@@ -41,7 +41,16 @@ q_maxSNR = zeros(size(testSNR));
 % q_maxf_d = zeros(size(testf_d));
 q_maxthresh=zeros(size(testthresh));
 q_maxaveraging=zeros(size(testaveraging));
+q_def = zeros(size(reps));
 for kk = 1:reps   
+    
+    [H, H_hat] = PL_Security_Sim_pmusic(S, N, d, q, P, SNR, thresh, averaging, 0);
+    def_err = abs((H-H_hat)/sqrt(mean(abs(H).^2)));
+    def_temp = find(def_err>0.05, 1);
+        if isempty(def_temp)
+            def_temp = length(H);
+        end
+    q_def = q_def+def_temp/reps;
     
     for ii=1:length(testS)
   
@@ -130,6 +139,8 @@ for kk = 1:reps
         q_maxaveraging(ii) = q_maxaveraging(ii) + temp/reps;
     end
 end
+fprintf('The prediction length in the default scenario is, %.0f out of  %.0f samples in array and q of %.0f \n', q_def, N, q )
+
 figure; 
 plot(testS, q_maxS-N)
 xlabel('Number of Scatterers')
@@ -159,6 +170,7 @@ ylabel('Average Max Prediction Past Array')
 % plot(testf_c, real(PLSIMvsf_c))
 % xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
 % ylabel('Estimator Minimum Variance')
+
 
 figure; 
 plot(testSNR, q_maxSNR-N)
