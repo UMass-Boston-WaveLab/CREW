@@ -144,30 +144,27 @@ Section \ref{prediction} described the signal estimation process. In this sectio
 
 %How do I introduce the defaults of the scenario without explaining line by line what the code is?
 
-Each chosen variable is tested individually against the default scenario. The figures to follow show the model's sensitivity to these variables. Fig 1 show the number of measurements taken. This is actually a function of the length of the array over the spacing, $N = L/d$. It is shown that the minimum useful number of measurement points on the array is approximately 150 samples. Interestingly more than 300 samples begins to be detrimental to the estimation process.
+Each variable is tested individually against the default scenario. The figures to follow show the model's sensitivity to these variables. Figure ? show the number of samples in the eavesdropper's sampling array. This is actually a function of the length of the array over the spacing, $N = L/d$. It is shown that the minimum useful number of measurement points on the array is approximately 150 samples. Values over 300 begin to deteriorate, this is due to the default spacing $d = 0.3$. The sample points become too close compared to the length of the array and the quality of the estimation suffers. 
 %insert figure 1
 
-Fig 2 is the spacing between measurements, there is a steady increase in the estimation quality of the array as the spacing increases. As explained before, the number of samples in a function of the length of the eavesdropper array and the spacing, so increased spacing reduces the number of samples taken.
+Figure 2 is the spacing between measurements. There is a steady increase in the estimation quality of the array as the spacing increases. As explained before, the number of samples in a function of the length of the eavesdropper array and the spacing, so increased spacing reduces the number of samples taken.
 %insert fig 2
 
-Fig 3 shows the number of scatterers in the channel space. Predictably, additional scattering paths increase the complexity of the estimation problem. In this scenario, around 7 scatterers there is a steep drop off in the quality of the estimation. This is consistant with the behavior predicted in \cite{kckpVTC2015}. 
+Figure 3 shows the number of scatterers in the scenario. Predictably, additional scattering paths increase the complexity of the estimation problem. With this eavesdropper configuration, there is a steep drop off in the quality of the estimation at 7 scatterers. This is consistent with the behavior predicted in \cite{kckpVTC2015}. 
 
-
-%%%still working past this point, need sleep. Running a 1000 run simulation overnight%%%
-
-
-Fig 4 and 5 show efforts to increase the effective SNR of the signal. The threshhold modifier for the rootMUSIC algorithm is of limited use, there can be a strongth impact at several points, thought the correct value would need to be predetermined adding to the complexity of the problem. Averaging however, has a great impact on signal quality. Given the ability to take multiple samples the resultant estimation is very accurate. 
-
-Finally, Fig 6 shows the number of component sinusoids that make up the MUSIC estimate. This variable is very sensitive to being far more or less than the actual number of sinusoids that make up a signal space. %What can I say about this? Any more than 5 times the number of scatterers and the prediction falls sharply?
+Figure 4 show an effort to increase the effective SNR of the signal. Averaging has a great impact on signal quality. Given the ability to take multiple samples the resultant estimation is very accurate. This figure shows that for the default scenario 100 samples is sufficient to significantly improve estimation performance. 
+Figure 5 is a modifier used by the rootMUSIC algorith to separate the signal subspace of the correlation matric from the noise subspace. 
+Figure 6 shows the number of component sinusoids that make up the MUSIC estimate. This variable is very sensitive to being far more or less than the actual number of sinusoids that make up a signal space. %What can I say about this? Any more than 5 times the number of scatterers and the prediction falls sharply?
 %describe the channel simulation (very similar to problem setup from previous section) - what did we assume about the problem geometry - how are the angles distributed? (uniformly) what is f_doppler/f_c?
 
 %find average prediction length and how it varies for different values of $d$ (element spacing in E), $N$ (number of elements in E), and $S$ (number of scatterers) - include figures 
 
 \section{Conclusion}
 
+It can be concluded that by applying long-range prediction to estimate the channel transfer function that an eavesdropper could reconstruct a signal more than a correlation lenth away from the receiver's position.  This indicates that the minimum safe distance for secure key generation based on wireless fading must be reexamined.
 
-%belongs to Clara
-%we applied long-range prediction to estimate the channel transfer function at a location in space that is separated from the eavesdropper by more than a correlation length.  This indicates that the minimum safe distance for secure key generation based on wireless fading must be reexamined.
+In order to achieve this in the scenario constructed here the eavesdropper must know details about the environment, specifically the location of a transmission node. Besides knowledge, an array of sufficient complexity to conduct this work would have to have a certain degree of complexity. 
+
 
 %our analysis is potentially pessimistic because we assume the channel parameters don't change within the sampling interval - however, it may be possible to extend the estimation to include both the channel parameters and their first derivatives.  CRLB will increase because it usually increases with additional parameters.
 
