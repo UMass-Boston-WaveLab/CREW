@@ -140,21 +140,64 @@ The weakness of using spectral estimation, and rootMUSIC in particular, is the s
 
 Section \ref{prediction} described the signal estimation process. In this section a Monte Carlo simulation is run to evaluate the maximum estimation distance for the scenario with varying channel parameters. Each variable which shows impact on the estimation outcome is simulated 1000 times. An average is assembled for each swept variable in the Monte Carlo. During each of the 1000 runs the sample number at which the error of the estimation exceeds 5\% is recorded. From a default scenario each parameter is taken over a reasonable span to determine the estimation's sensitivity to that parameter. The resultant average sample values are plotted against each swept parameter. The cramer-rao lower bound presented in \cite{kckpVTC2015} was used to identify suitable parameters for a default simulation scenario.  %insert graphs and refer to them 
 
+For the Monte Carlo simulation tests 7 different variables. $N$, the number of samples taken, $d$ sample spacing in terms of wavelength, $S$ the number of scatterers, $O$ the number of observation snapshots, $P$ the maximum number of sinusoids that make up the rootMUSIC estimate, $T$ the threshhold value used in the rootMUSIC algorithm to seperate the signal and noise subspaces, and the signal-to-noise ratio $SNR$.
+
 %%%REFER TO VTC PAPER: "The CRLB expressions presented in \cite{**vtc**} were used to identify suitable parameters for a default simulation scenario.   ...more details and maybe graphs if we feel like it.  Putting this in its own subsection might be a good idea.
 
 %How do I introduce the defaults of the scenario without explaining line by line what the code is?
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[height=2in]{numMeasurements}
+\caption{Data showing the increase of sample desity improving estimation quality, then deteriorating past 300 samples. $L=40$ is the default length for this simulation and $d = 0.3\lambda$ as the default spacing interval}\label{N}
+\end{center}
+\end{figure}
 
-Each variable is tested individually against the default scenario. The figures to follow show the model's sensitivity to these variables. Figure ? show the number of samples in the eavesdropper's sampling array. This is actually a function of the length of the array over the spacing, $N = L/d$. It is shown that the minimum useful number of measurement points on the array is approximately 150 samples. Values over 300 begin to deteriorate, this is due to the default spacing $d = 0.3$. The sample points become too close compared to the length of the array and the quality of the estimation suffers. 
+Each variable is tested individually against the default scenario. The figures to follow show the model's sensitivity to these variables. Figure \ref{N} show the number of samples in the eavesdropper's sampling array. This is actually a function of the length of the array over the spacing, $N = L/d$. It is shown that the minimum useful number of measurement points on the array is approximately 150 samples. Values over 300 begin to deteriorate, this is due to the default spacing $d = 0.3$. The sample points become too close compared to the length of the array and the quality of the estimation suffers slightly. 
 %insert figure 1
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[height=2in]{wavelengths}
+\caption{Data showing the increased samples spacing with a constant array length. $L=40$ is the default length for this simulation and $N = L/d$ so the number of measurements decreases as the value of $d$ gets larger.}\label{spacing}
+\end{center}
+\end{figure}
 
-Figure 2 is the spacing between measurements. There is a steady increase in the estimation quality of the array as the spacing increases. As explained before, the number of samples in a function of the length of the eavesdropper array and the spacing, so increased spacing reduces the number of samples taken.
+Figure \ref{spacing} is the spacing between measurements. There is a steady increase in the estimation quality of the array as the spacing increases. As explained before, the number of samples in a function of the length of the eavesdropper array and the spacing, so increased spacing reduces the number of samples taken. Reducing the number of samples appears to have little effect on the estimation quality as long as the array length remains constant.
 %insert fig 2
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[height=2in]{numScatterers}
+\caption{}\label{Scatter}
+\end{center}
+\end{figure}
 
-Figure 3 shows the number of scatterers in the scenario. Predictably, additional scattering paths increase the complexity of the estimation problem. With this eavesdropper configuration, there is a steep drop off in the quality of the estimation at 7 scatterers. This is consistent with the behavior predicted in \cite{kckpVTC2015}. 
+Figure \ref{Scatter} shows the number of scatterers in the scenario. Predictably, additional scattering paths increase the complexity of the estimation problem. With this eavesdropper configuration, there is a steep drop off in the quality of the estimation at 7 scatterers. This is consistent with the behavior predicted in \cite{kckpVTC2015}. 
 
-Figure 4 show an effort to increase the effective SNR of the signal. Averaging has a great impact on signal quality. Given the ability to take multiple samples the resultant estimation is very accurate. This figure shows that for the default scenario 100 samples is sufficient to significantly improve estimation performance. 
-Figure 5 is a modifier used by the rootMUSIC algorith to separate the signal subspace of the correlation matric from the noise subspace. 
-Figure 6 shows the number of component sinusoids that make up the MUSIC estimate. This variable is very sensitive to being far more or less than the actual number of sinusoids that make up a signal space. %What can I say about this? Any more than 5 times the number of scatterers and the prediction falls sharply?
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[height=2in]{wavelengths}
+\caption{}\label{SNR}
+\end{center}
+\end{figure}
+
+Figure \ref{SNR} show an effort to increase the effective SNR of the signal. Averaging multiple observation snapshots of the same channel realization has a great impact on signal quality. Given the ability to take multiple observations the resultant estimation is very accurate. This figure shows that for the default scenario 100 snapshots is sufficient to significantly improve estimation performance. 
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[height=2in]{wavelengths}
+\caption{}\label{thresh}
+\end{center}
+\end{figure}
+
+Figure \ref{thresh} is a modifier used by the rootMUSIC algorith to separate the signal subspace of the correlation matrix from the noise subspace. 
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[height=2in]{wavelengths}
+\caption{}\label{sinusoid}
+\end{center}
+\end{figure}
+
+Figure \ref{sinusoid} shows the number of component sinusoids that make up the MUSIC estimate. This variable is very sensitive to being far more or less than the actual number of sinusoids that make up a signal space. %What can I say about this? Any more than 5 times the number of scatterers and the prediction falls sharply?
 %describe the channel simulation (very similar to problem setup from previous section) - what did we assume about the problem geometry - how are the angles distributed? (uniformly) what is f_doppler/f_c?
 
 %find average prediction length and how it varies for different values of $d$ (element spacing in E), $N$ (number of elements in E), and $S$ (number of scatterers) - include figures 
