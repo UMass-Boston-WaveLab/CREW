@@ -82,12 +82,22 @@ This discussion has provided a lower bound and an upper bound on the mutual info
 
 \section{Spatial Long-Range Channel Prediction Method}\label{prediction}
 %belongs to Eric
-As discussed in Section \ref{mutualinfo}, channel information may persist over distances greater than the correlation length. Therefore, long-range prediction techniques may be applied to predict the channel from spatial samples. Rather than using long-range prediction to predict the channel transfer function ahead temporally, as in \cite{duel-hallen2007}, it is predicted spatially.
+As discussed in Section \ref{mutualinfo}, channel information may persist over distances greater than the correlation length. Therefore, long-range prediction techniques as in \cite{duel-hallen2007} may be applied to predict the channel from spatial samples. Rather than using long-range prediction to predict the channel transfer function ahead temporally as is the typical usage, it is predicted spatially.
 
-It is assumed that the eavesdropper has knowledge of the location of one of the legitimate nodes, and has the ability to take a number of spatial samples along a line in the direction of that node.  Previous literature \cite{duel-hallen2007} has shown that spectral estimation can be applied to a temporal prediction scenario and is accurate within a doppler wavelength. Since a doppler wavelength is several carrier wavelengths, it is expected that spatial sampling and spectral estimation is a reasonable approach for an eavesdropper to take in estimating the channel at a distance. 
+It is assumed that the eavesdropper has knowledge of the location of one of the legitimate nodes, and has the ability to take a number of spatial samples along a line in the direction of that node.  Previous literature \cite{duel-hallen2007} has shown that spectral estimation can be applied to a temporal prediction scenario by estimating channel parameters and predicting the channel by constructing a new model of it. In that literature it is shown to be accurate within a Doppler wavelength as long as the channel parameters varied slowly. It is expected that spatial sampling and spectral estimation is a reasonable approach for an eavesdropper to take in estimating the channel at a distance. 
+
 %In temporal prediction applications, it has been observed that time variation of the amplitudes and frequencies in the sum-of-sinusoids model is on the order of 0.1 seconds \cite{duel-hallen2007}. 
 
-The channel model is shown in Figure (insert). Point A is the transmitter, several scatterers S, and a desired estimation location B. E is an array of sample readings taken in line with the listener. The default model uses 7 scatterers, as it has been observed that most real world channels contain less than 10 large scatterers \cite{duel-hallen2000}. In the simulation it is assumed that the sender "A" and all the scatterers reside in the far field of the eavesdropper array as well as the desired estimation location. The eavesdropper uses direction of arrival techniques to estimate the amplitudes and spatial frequencies of the scattering paths. Once the eavesdropper estimates the channel parameters, it uses them to reconstruct the channel transfer function. To achieve this an array of samples of length $Md+qd$ is constructed, where $d$ is the spacing between measurements, $M$ is the number of spatial samples, and $q$ is the number of sample lengths ahead the eavesdropper would like to predict. 
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[height=2.5in]{Scenario}
+\caption{Depiction of an outdoor environment with two transmitters (Alice and Bob) and an eavesdropper (Eve).}\label{scene}
+\end{center}
+\end{figure}
+
+The channel model is shown in Figure \ref{scene}. Alice is the transmitter, and the desired estimation location at Bob. Eve is an array of sample readings taken in line with the listener. Scatterers are represented by the objects between Alice and Bob. It has been observed that most real world channels contain less than 10 large scatterers \cite{duel-hallen2000}. 
+
+In the simulation it is assumed that the sender Alice and all the scatterers reside in the far field of the eavesdropper array as well as the desired estimation location. The eavesdropper uses direction of arrival techniques to estimate the amplitudes and spatial frequencies of the scattering paths. Once the eavesdropper estimates the channel parameters, it uses them to reconstruct the channel transfer function. To achieve this an array of samples of length $Md+qd$ is constructed, where $d$ is the spacing between measurements, $M$ is the number of spatial samples, and $q$ is the number of sample lengths ahead the eavesdropper would like to predict. 
 
 Equation \ref{chan} describes the channel transfer function along the line of eavesdropper samples.
 
@@ -95,11 +105,11 @@ Equation \ref{chan} describes the channel transfer function along the line of ea
 H_m= \sum_{n=1}^N \alpha_n e^{-j(k_n)md}
 \end{equation}
 
- Where $H_m$ is the channel transfer function at the $m^{th}$ location, $\alpha_n$ is the $n^{th}$ complex amplitude, $N$ is the number of scatterers, $k_n$ is the spatial frequency of that scatterer along the sampling array.  
+ $H_m$ is the channel transfer function at the $m^{\mathrm{th}}$ location, $N$ is the number of scatterers, $\alpha_n$ is the $n^{\mathrm{th}}$ complex amplitude, and $k_n$ is the spatial frequency of that scatterer along the sampling array.  
 
-The solution to the parameter estimation problem can be broken into two parts: estimating the wave numbers $k_n$ , then estimating the complex amplitudes $\alpha_n$. We used the rootMUSIC algorithm supplied in MATLAB to determine the spatial frequencies of the scattering paths. RootMUSIC uses eigenvalue analysis of the channel's correlation matrix to estimate the signals frequency content. The specific command used takes the sampling results as well as a threshhold value which serves to seperate the noise subspace from the signal subspace, and estimates the discrete frequency spectrum, as well as providing the signal power. In order to determine complex amplitude we used the method described in \cite{andersen1999}.
+The solution to the parameter estimation problem can be broken into two parts: estimating the wave numbers $k_n$ , then estimating the complex amplitudes $\alpha_n$. The simulated eavesdropper uses the rootMUSIC algorithm supplied in MATLAB to determine the spatial frequencies of the scattering paths \cite{matlab}. RootMUSIC uses eigenvalue analysis of the channel's correlation matrix to estimate the signal's frequency content. The specific command used takes the sampling results as well as a threshold value which serves to separate the noise subspace from the signal subspace. It then estimates the discrete frequency spectrum, as well as providing the signal power. 
 
-The spectral estimation algorithm determines the spatial frequency of each scattering path. Constant spatial sampling is used, so (\ref{chan}) is simplified to determine this signal poles $z_n$.
+In order to determine complex amplitude we used the method described in \cite{andersen1999}. The spectral estimation algorithm determines the spatial frequency of each scattering path. Constant spatial sampling is used, so (\ref{chan}) is simplified to determine the signal poles $z_n$.
 
 \begin{equation}\label{complexamp}
 H_m = \sum_{n=1}^N \alpha_n e^{-j(k_n)md} = \sum_{n=1}^N \alpha_n z_n^m
@@ -121,14 +131,14 @@ which is a system of linear equations of complex amplitude $\alpha^T = [\alpha_1
 
 %direction of arrival applications typically take many snapshots of
 
-The weakness of using spectral estimation, and rootMUSIC in particular is the sensitivity to noise in the signal. Direction of arrival applications typically take many snapshots over a span of time and average them to mitigate noise. The eavesdropper can use this same procedure. The result is an effective signal-to-noise ratio (SNR) increase by a factor of the number of averaged snapshots. 
+The weakness of using spectral estimation, and rootMUSIC in particular, is the sensitivity to noise in the signal. Direction of arrival applications typically take many snapshots over a span of time and average them to mitigate noise. The simulated eavesdropper is assumed to use this same procedure. The result is an effective signal-to-noise ratio (SNR) increase by a factor of the number of averaged snapshots. 
 
 
 
 \section{Spatial Long-Range Channel Prediction Simulated Results}\label{simresults}
 %Should we take a baseline average prediction length at default values?
 
-Section 3 described the signal estimation process. In this section several permutations of the simulation are run searching for the max estimation distance. Each variable which shows impact on the estimation outcome is simulated 1000 times. During this run the distance along the array towards point B that remains below 5\% error is recorded and averaged. From the default each value is taken over a reasonable span to determine the estimation's sensitivity to each variable. The resultant values are plotted against each swept parameter. In \cite{kckpVTC2015} suitable parameters are identified for a default simulation scenario.  %insert graphs and refer to them 
+Section \ref{prediction} described the signal estimation process. In this section a Monte Carlo simulation is run to evaluate the maximum estimation distance for the scenario with varying channel parameters. Each variable which shows impact on the estimation outcome is simulated 1000 times. An average is assembled for each swept variable in the Monte Carlo. During each of the 1000 runs the sample number at which the error of the estimation exceeds 5\% is recorded. From a default scenario each parameter is taken over a reasonable span to determine the estimation's sensitivity to that parameter. The resultant average sample values are plotted against each swept parameter. The cramer-rao lower bound presented in \cite{kckpVTC2015} was used to identify suitable parameters for a default simulation scenario.  %insert graphs and refer to them 
 
 %%%REFER TO VTC PAPER: "The CRLB expressions presented in \cite{**vtc**} were used to identify suitable parameters for a default simulation scenario.   ...more details and maybe graphs if we feel like it.  Putting this in its own subsection might be a good idea.
 
