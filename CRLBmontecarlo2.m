@@ -17,7 +17,7 @@ function [CRLBvsM, CRLBvsN, CRLBvsd, CRLBvsq, CRLBvsSNR] = CRLBmontecarlo2(reps)
 
 %default values
 tic
-M=80; %in general, make M be odd so CRLB calculation is simplified
+M=81; %in general, make M be odd so CRLB calculation is simplified
 N=7;
 d=0.45;
 SNR=23; %in dB: 10*log10(avg(|h|^2/|n|^2)) = 10*log10(N/sigma^2)
