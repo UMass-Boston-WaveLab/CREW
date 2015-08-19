@@ -162,7 +162,7 @@ Each variable is tested individually against the default scenario. The figures s
 \begin{figure}[tbp]
 \begin{center}
 \includegraphics[width=6in]{wavelengths}
-\caption{Plot of the average maximum prediction length vs. the spacing between samples.}\label{spacing}
+\caption{Plot of the average maximum prediction length vs. the spacing between samples. The default number of samples in the eavesdropper array in this test is $M = 133$.}\label{spacing}
 \end{center}
 \end{figure}
 Figure \ref{spacing} shows the average maximum prediction length vs. spacing between measurements. There is a steady increase in the estimation quality of the array as the spacing increases. The number of samples remains constant as the spacing is increased, so the length of the array grows throughout the test. At its optimal spacing of 0.45$\lambda$ the length of the eavesdropper array is approximately 60$\lambda$, with the resulting maximum prediction length being 43$\lambda$.
@@ -179,7 +179,7 @@ Figure \ref{Scatter} shows the number of scatterers in the scenario. Predictably
 \begin{figure}[tbp]
 \begin{center}
 \includegraphics[width=6in]{signalToNoise}
-\caption{This plot shows the average maximum prediction length vs. SNR. }\label{SNR}
+\caption{Plot of the average maximum prediction length vs. SNR. }\label{SNR}
 \end{center}
 \end{figure}
 Figure \ref{SNR} shows how increasing signal-to-noise ratio of the sampled signal greatly increases the estimation performance and extends the average maximum prediction length. The default value for the simulations in all other tests was $13$dB. In all tests, including the SNR test, there is there is snapshot averaging occurring. The default value is 100 snapshots so there is an effect gain of $20$dB to all SNR values. Having said that, performance of the estimation drastically improves past $24$dB ($44$dB with averaging). Signal-to-noise ratio is the most important factor in the effectiveness of the estimation method.
@@ -187,7 +187,7 @@ Figure \ref{SNR} shows how increasing signal-to-noise ratio of the sampled signa
 \begin{figure}[tbp]
 \begin{center}
 \includegraphics[width=6in]{numSnapshots}
-\caption{Plot showing the number of snapshots averaged vs. average max prediction length. At 75 snapshots the estimation reaches the end of the sampling array, and by 100 snapshots the estimation is good enough to predict several wavelengths.}\label{snapshot}
+\caption{Plot of the average maximum prediction length vs. number of snapshots averaged. At 75 snapshots the estimation reaches the end of the sampling array, and by 100 snapshots the estimation is good enough to predict several wavelengths.}\label{snapshot}
 \end{center}
 \end{figure}
 Figure \ref{snapshot} shows the effect of one method to increase the effective SNR of the signal. Averaging multiple observation snapshots of the same channel realization has a great impact on signal quality. Given the ability to take multiple observations the resultant estimation is very accurate. This figure shows that for the default scenario 100 snapshots, which is typical for direction of arrival applications, is sufficient to significantly improve estimation performance, raising the effective SNR to $33$db. 
