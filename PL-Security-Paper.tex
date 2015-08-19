@@ -145,7 +145,7 @@ Section \ref{prediction} described the signal estimation process. In this sectio
 %I changed the letter associations for agreement with earlier math.
 The Monte Carlo simulation tests 7 different variables: $M$, the number of samples taken; $d$, the sample spacing in terms of wavelength; $N$, the number of scatterers; $O$, the number of observation snapshots; $P$, the maximum number of sinusoids allowed in the rootMUSIC estimate; $T$, the threshold value used in the rootMUSIC algorithm to separate the signal and noise subspaces; and SNR, the signal-to-noise ratio.
 
-From a default scenario each parameter is taken over a reasonable span to determine the estimation's sensitivity to that parameter. The resultant average sample values are plotted against each swept parameter. The Cram\'er-Rao lower bound presented in \cite{kckpVTC2015} was used to identify suitable parameters for a default simulation scenario. These parameters are: $M = 133$; $d = .3$; $N = 7$; $O = 100$; $P = 33$; $T = 100$; SNR $= 13$dB. The array length in carrier wavelengths with these parameters is $40\lambda$ and the averaging raises the default SNR to $33$dB.
+From a default scenario each parameter is taken over a reasonable span to determine the estimation's sensitivity to that parameter. The resultant average sample values are plotted against each swept parameter. The Cram\'er-Rao lower bound presented in \cite{kckpVTC2015} was used to identify suitable parameters for a default simulation scenario. These parameters are: $M = 133$; $d = .3$; $N = 7$; $O = 100$; $P = 33$; $T = 100$; SNR $= 13$dB. The array length in carrier wavelengths with these parameters is $40\lambda$ and the averaging raises the default SNR to $33$dB. For reference, a 1000 iteration Monte Carlo simulation was conducted using the default scenario.The average maximum prediction length past the sampling array was $21\lambda$.
 
 %%%REFER TO VTC PAPER: "The CRLB expressions presented in \cite{**vtc**} were used to identify suitable parameters for a default simulation scenario.   ...more details and maybe graphs if we feel like it.  Putting this in its own subsection might be a good idea.
 
@@ -156,7 +156,7 @@ From a default scenario each parameter is taken over a reasonable span to determ
 \caption{Plot showing the increase of samples and array length improving the estimation quality, then deteriorating slightly past 300 samples. $d = 0.3\lambda$ is the default spacing interval}\label{M}
 \end{center}
 \end{figure}
-Each variable is tested individually against the default scenario. The figures show the model's sensitivity to these variables. Figure \ref{M} shows the number of samples in the eavesdropper's sampling array. It is shown that the quality of the estimation increases significantly up to 160 samples, then levels off. 160 samples with a default spacing of $d = 0.3\lambda$ corresponds to 48$\lambda$. The average max prediction lengths with 160 samples is 130 samples past the sampling array. This corresponds to 39$\lambda$.
+Each variable is tested individually against the default scenario. The figures show the model's sensitivity to these variables. Figure \ref{M} shows the number of samples in the eavesdropper's sampling array. It is shown that the quality of the estimation increases significantly up to 160 samples, then levels off. 160 samples with a default spacing of $d = 0.3\lambda$ corresponds to 48$\lambda$. The average max prediction lengths with 160 samples is 130 samples past the sampling array, or 39$\lambda$.
 %insert figure 1
 
 \begin{figure}[tbp]
