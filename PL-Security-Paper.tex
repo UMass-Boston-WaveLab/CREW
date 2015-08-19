@@ -84,7 +84,7 @@ This discussion has provided a lower bound and an upper bound on the mutual info
 %belongs to Eric
 As discussed in Section \ref{mutualinfo}, channel information may persist over distances greater than the correlation length. Therefore, long-range prediction techniques as in \cite{duel-hallen2007} may be applied to predict the channel from spatial samples. Rather than using long-range prediction to predict the channel transfer function ahead temporally as is the typical usage, it is predicted spatially.
 
-It is assumed that the eavesdropper has knowledge of the location of one of the legitimate nodes, and has the ability to take a number of spatial samples along a line in the direction of that node.  Previous literature \cite{duel-hallen2007} has shown that spectral estimation can be applied to a temporal prediction scenario by estimating channel parameters and predicting the channel by constructing a new model of it. In that literature it is shown to be accurate within a Doppler wavelength as long as the channel parameters varied slowly. It is expected that spatial sampling and spectral estimation is a reasonable approach for an eavesdropper to take in estimating the channel at a distance. 
+It is assumed that the eavesdropper has knowledge of the location of one of the legitimate nodes, and has the ability to take a number of spatial samples along a line in the direction of that node.  Previous literature \cite{duel-hallen2007} has shown that spectral estimation can be applied to a temporal prediction scenario by estimating channel parameters and predicting the channel by constructing a new model of it. In experimental implementation with real-world channels, the channel parameters varied slowly enough that this prediction method was accurate within a Doppler wavelength. Therefore, it is a reasonable approach for the eavedropper to reconstruct the channel with parameter estimation using spatial sampling and spectral estimation. 
 
 %In temporal prediction applications, it has been observed that time variation of the amplitudes and frequencies in the sum-of-sinusoids model is on the order of 0.1 seconds \cite{duel-hallen2007}. 
 
@@ -95,9 +95,9 @@ It is assumed that the eavesdropper has knowledge of the location of one of the 
 \end{center}
 \end{figure}
 
-The channel model is shown in Figure \ref{scene}. Alice is the transmitter, and the desired estimation location at Bob. Eve is an array of sample readings taken in line with the listener. Scatterers are represented by the objects between Alice and Bob. It has been observed that most real world channels contain less than 10 large scatterers \cite{duel-hallen2000}. 
+The channel model is shown in Figure \ref{scene}. Alice and Bob are both trancievers. Eve is an eavesdropper sampling array in line with Bob. Scatterers are represented by the objects between Alice and Bob. It has been observed that most real world channels contain less than 10 large scatterers \cite{duel-hallen2000}. 
 
-In the simulation it is assumed that the sender Alice and all the scatterers reside in the far field of the eavesdropper array as well as the desired estimation location. The eavesdropper uses direction of arrival techniques to estimate the amplitudes and spatial frequencies of the scattering paths. Once the eavesdropper estimates the channel parameters, it uses them to reconstruct the channel transfer function. To achieve this an array of samples of length $Md+qd$ is constructed, where $d$ is the spacing between measurements, $M$ is the number of spatial samples, and $q$ is the number of sample lengths ahead the eavesdropper would like to predict. 
+In the simulation it is assumed that the sender Alice and all the scatterers reside in the far field of the eavesdropper array as well as the desired estimation location. The eavesdropper uses direction of arrival techniques to estimate the amplitudes and spatial frequencies of the scattering paths. Once the eavesdropper estimates the channel parameters, it uses them to reconstruct the channel transfer function. To achieve this an array of samples of length $Md$ is constructed, where $d$ is the spacing between measurements, $M$ is the number of spatial samples. The eavesdropper is intending to reconcruct the channel out to a length of $(M+q)d$, where $q$ is the distance between the end of the sampling array and Bob. 
 
 Equation \ref{chan} describes the channel transfer function along the line of eavesdropper samples.
 
@@ -109,22 +109,22 @@ H_m= \sum_{n=1}^N \alpha_n e^{-j(k_n)md}
 
 The solution to the parameter estimation problem can be broken into two parts: estimating the wave numbers $k_n$ , then estimating the complex amplitudes $\alpha_n$. The simulated eavesdropper uses the rootMUSIC algorithm supplied in MATLAB to determine the spatial frequencies of the scattering paths \cite{matlab}. RootMUSIC uses eigenvalue analysis of the channel's correlation matrix to estimate the signal's frequency content. The specific command used takes the sampling results as well as a threshold value which serves to separate the noise subspace from the signal subspace. It then estimates the discrete frequency spectrum, as well as providing the signal power. 
 
-In order to determine complex amplitude we used the method described in \cite{andersen1999}. The spectral estimation algorithm determines the spatial frequency of each scattering path. Constant spatial sampling is used, so (\ref{chan}) is simplified to determine the signal poles $z_n$.
+In order to determine complex amplitude we used the method described in \cite{andersen1999}. The spectral estimation algorithm determines the spatial frequency of each scattering path. Constant spatial sampling is used, so (\ref{chan}) is simplified by substituting the signal poles $z_n$ for the complex exponentials.
 
 \begin{equation}\label{complexamp}
-H_m = \sum_{n=1}^N \alpha_n e^{-j(k_n)md} = \sum_{n=1}^N \alpha_n z_n^m
+h_m = \sum_{n=1}^N \alpha_n e^{-j(k_n)md} = \sum_{n=1}^N \alpha_n z_n^m
 \end{equation}
 
-Based on the estimated values of the signal poles, the complex amplitudes can be derived by solving the following linear equations.
+Based on the estimated values of the signal poles, the complex amplitudes can be derived by solving the following linear equations. $\boldsymbol{A}$ is a Vandermonde matric of signal poles, where the $M^\mathrm{th}$ row contains all the poles raised to the $(M-1)^\mathrm{th}$ power. 
 
 \begin{equation}\label{matrix}
-h = A \alpha
+\mathbf{h} = \mathbf{A \boldsymbol{\alpha}}
 \end{equation}
 
-which is a system of linear equations of complex amplitude $\alpha^T = [\alpha_1, \alpha_2,... ,\alpha_M]$. The estimated complex amplitudes $\hat{\alpha}$ are then found by solving (\ref{matrix}) for $\alpha$ \cite{andersen1999}.
+which is a system of linear equations of complex amplitude $\boldsymbol{\alpha^T} = [\alpha_1, \alpha_2,... ,\alpha_M]$. The estimated complex amplitudes $\hat{\alpha}$ are then found by solving (\ref{matrix}) for $\alpha$ \cite{andersen1999}.
 
 \begin{equation}\label{ahat}
-\hat{\alpha}=(A^HA)^{-1}A^Hh
+\boldsymbol{\hat{\alpha}}=\boldsymbol{(A^HA)^{-1}A^Hh}
 \end{equation}
 
 
@@ -138,9 +138,10 @@ The weakness of using spectral estimation, and rootMUSIC in particular, is the s
 \section{Spatial Long-Range Channel Prediction Simulated Results}\label{simresults}
 %Should we take a baseline average prediction length at default values?
 
-Section \ref{prediction} described the signal estimation process. In this section a Monte Carlo simulation is run to evaluate the maximum estimation distance for the scenario with varying channel parameters. Each variable which shows impact on the estimation outcome is simulated 1000 times. An average is assembled for each swept variable in the Monte Carlo. During each of the 1000 runs the sample number at which the error of the estimation exceeds 5\% is recorded. From a default scenario each parameter is taken over a reasonable span to determine the estimation's sensitivity to that parameter. The resultant average sample values are plotted against each swept parameter. The cramer-rao lower bound presented in \cite{kckpVTC2015} was used to identify suitable parameters for a default simulation scenario.  %insert graphs and refer to them 
+Section \ref{prediction} described the signal estimation process. In this section a Monte Carlo simulation is used to evaluate the average maximum estimation distance for the scenario with varying channel parameters. Each value of each variable which shows impact on the estimation outcome is simulated 1000 times. An average is assembled for each swept variable in the Monte Carlo. During each of the 1000 runs the sample number at which the error of the estimation exceeds 5\% is recorded. This error is computed by assembling an array, which is populated for each sweeping variable by taking the max value of each pass, dividing it by the number of runs, then adding it to the value of that array position. From a default scenario each parameter is taken over a reasonable span to determine the estimation's sensitivity to that parameter. The resultant average sample values are plotted against each swept parameter. The Cram\`er-Rao lower bound presented in \cite{kckpVTC2015} was used to identify suitable parameters for a default simulation scenario.  %insert graphs and refer to them 
 
-For the Monte Carlo simulation tests 7 different variables. $N$, the number of samples taken, $d$ sample spacing in terms of wavelength, $S$ the number of scatterers, $O$ the number of observation snapshots, $P$ the maximum number of sinusoids that make up the rootMUSIC estimate, $T$ the threshhold value used in the rootMUSIC algorithm to seperate the signal and noise subspaces, and the signal-to-noise ratio $SNR$.
+%I changed the letter associations for agreement with earlier math.
+The Monte Carlo simulation tests 7 different variables: $M$ the number of samples taken; $d$ sample spacing in terms of wavelength; $N$ the number of scatterers; $O$ the number of observation snapshots; $P$ the maximum number of sinusoids that make up the rootMUSIC estimate; $T$ the threshhold value used in the rootMUSIC algorithm to seperate the signal and noise subspaces; $SNR$ the signal-to-noise ratio.
 
 %%%REFER TO VTC PAPER: "The CRLB expressions presented in \cite{**vtc**} were used to identify suitable parameters for a default simulation scenario.   ...more details and maybe graphs if we feel like it.  Putting this in its own subsection might be a good idea.
 
@@ -148,65 +149,74 @@ For the Monte Carlo simulation tests 7 different variables. $N$, the number of s
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[height=2in]{numMeasurements}
-\caption{Data showing the increase of sample desity improving estimation quality, then deteriorating past 300 samples. $L=40$ is the default length for this simulation and $d = 0.3\lambda$ as the default spacing interval}\label{N}
+\caption{Plot showing the increase of samples and array length improving the estimation quality, then deteriorating slightly past 300 samples. $d = 0.3\lambda$ is the default spacing interval}\label{M}
 \end{center}
 \end{figure}
 
-Each variable is tested individually against the default scenario. The figures to follow show the model's sensitivity to these variables. Figure \ref{N} show the number of samples in the eavesdropper's sampling array. This is actually a function of the length of the array over the spacing, $N = L/d$. It is shown that the minimum useful number of measurement points on the array is approximately 150 samples. Values over 300 begin to deteriorate, this is due to the default spacing $d = 0.3$. The sample points become too close compared to the length of the array and the quality of the estimation suffers slightly. 
+Each variable is tested individually against the default scenario. The figures show the model's sensitivity to these variables. Figure \ref{M} shows the number of samples in the eavesdropper's sampling array. It is shown that the quality of the estimation increases significantly up to approximately 160 samples, then levels off. 160 samples with a default spacing of $d = 0.3\lambda$ corresponds to 48$\lambda$. 
 %insert figure 1
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[height=2in]{wavelengths}
-\caption{Data showing the increased samples spacing with a constant array length. $L=40$ is the default length for this simulation and $N = L/d$ so the number of measurements decreases as the value of $d$ gets larger.}\label{spacing}
+\caption{Plot of the spacing between samples vs. the average maximum prediction length. At default values for the length of the array $L=40$, the spacing reaches an optimal level at $0.45\lamda$ }\label{spacing}
 \end{center}
 \end{figure}
 
-Figure \ref{spacing} is the spacing between measurements. There is a steady increase in the estimation quality of the array as the spacing increases. As explained before, the number of samples in a function of the length of the eavesdropper array and the spacing, so increased spacing reduces the number of samples taken. Reducing the number of samples appears to have little effect on the estimation quality as long as the array length remains constant.
+Figure \ref{spacing} shows the average maximum prediction length vs. spacing between measurements. There is a steady increase in the estimation quality of the array as the spacing increases. As explained before, the number of samples in a function of the length of the eavesdropper array and the spacing, so increased spacing reduces the number of samples taken. Reducing the number of samples appears to have little effect on the estimation quality as long as the array length remains constant.
 %insert fig 2
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[height=2in]{numScatterers}
-\caption{}\label{Scatter}
+\caption{Plot of scatterers vs. average max prediction length. More than 10 scatterers in the scenario minimizes the effectiveness of the estimation method.}\label{Scatter}
 \end{center}
 \end{figure}
 
-Figure \ref{Scatter} shows the number of scatterers in the scenario. Predictably, additional scattering paths increase the complexity of the estimation problem. With this eavesdropper configuration, there is a steep drop off in the quality of the estimation at 7 scatterers. This is consistent with the behavior predicted in \cite{kckpVTC2015}. 
+Figure \ref{Scatter} shows the number of scatterers in the scenario. Predictably, additional scattering paths increase the complexity of the estimation problem. With this eavesdropper configuration, there is a constant drop-off in the quality of the estimation, with near complete failure at 10 scatterers. This is consistent with the behavior predicted in \cite{kckpVTC2015}. This deterioration can be limited by an increase in SNR. 
 
 \begin{figure}[ht!]
 \begin{center}
-\includegraphics[height=2in]{wavelengths}
-\caption{}\label{SNR}
+\includegraphics[height=2in]{signalToNoise}
+\caption{This plot shows the SNR vs. average prediction length. Signal-to-noise ratio is the most important factor in the effectiveness of the estimation method.}\label{SNR}
 \end{center}
 \end{figure}
 
-Figure \ref{SNR} show an effort to increase the effective SNR of the signal. Averaging multiple observation snapshots of the same channel realization has a great impact on signal quality. Given the ability to take multiple observations the resultant estimation is very accurate. This figure shows that for the default scenario 100 snapshots is sufficient to significantly improve estimation performance. 
+Figure \ref{SNR} shows how increasing signal-to-noise ratio of the sampled signal greatly increases the estimation preformance and extends the averaged maximum prediction length. The default value for the simulations in all other tests was $13db$. Performance of the estimation drastically improves past $24db$, so rthe simulation uses averaged snapshots to increase the SNR.
 
 \begin{figure}[ht!]
 \begin{center}
-\includegraphics[height=2in]{wavelengths}
-\caption{}\label{thresh}
+\includegraphics[height=2in]{numSnapshots}
+\caption{Plot showing the number of snapshots averaged vs. average max prediction length. At 75 snapshots the estimation reaches the end of the sampling array, and by 100 snapshots the estimation is good enough to predict several wavelengths.}\label{snapshot}
 \end{center}
 \end{figure}
 
-Figure \ref{thresh} is a modifier used by the rootMUSIC algorith to separate the signal subspace of the correlation matrix from the noise subspace. 
+Figure \ref{snapshot} shows the effect of one method to increase the effective SNR of the signal. Averaging multiple observation snapshots of the same channel realization has a great impact on signal quality. Given the ability to take multiple observations the resultant estimation is very accurate. This figure shows that for the default scenario 100 snapshots, which is typical for Direction of Arrival applications, is sufficient to significantly improve estimation performance, raising the effective SNR to $33db$. 
 
 \begin{figure}[ht!]
 \begin{center}
-\includegraphics[height=2in]{wavelengths}
-\caption{}\label{sinusoid}
+\includegraphics[height=2in]{musicNoise}
+\caption{Plot showing the noise subspace threshold vs. prediction length. There is a general trend towards better quality of the estimate using higher noise threashold, however the improvement is unpredictable value to value.}\label{thresh}
 \end{center}
 \end{figure}
 
-Figure \ref{sinusoid} shows the number of component sinusoids that make up the MUSIC estimate. This variable is very sensitive to being far more or less than the actual number of sinusoids that make up a signal space. %What can I say about this? Any more than 5 times the number of scatterers and the prediction falls sharply?
+The rootMUSIC algorith uses this value to separate the signal subspace of the correlation matrix from the noise subspace. Eigenvalues below the threshold value $\lambda_{min} *thresh$ are assigned to the noise subspace\cite{matlab}. Figure \ref{thresh} shows the rootMUSIC modifier threshold plotted vs. the average maximum prediction length. %I don't really know what to say here. It's spiky, but I don't really know why 
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[height=2in]{numSinusoids}
+\caption{Plot showing the maximum dimension of the signal subspace vs. average maximum prediction length. This graph show a strong improvement over the first 15 values, then levels out.}\label{sinusoid}
+\end{center}
+\end{figure}
+
+Figure \ref{sinusoid} shows the second modifier value for the rootMUSIC algorithm. This value specifies the maximum dimension of the signal subspace. For the default scenario, a value of 20 is optimal for prediction length.
 %describe the channel simulation (very similar to problem setup from previous section) - what did we assume about the problem geometry - how are the angles distributed? (uniformly) what is f_doppler/f_c?
 
 %find average prediction length and how it varies for different values of $d$ (element spacing in E), $N$ (number of elements in E), and $S$ (number of scatterers) - include figures 
 
 \section{Conclusion}
 
-It can be concluded that by applying long-range prediction to estimate the channel transfer function that an eavesdropper could reconstruct a signal more than a correlation lenth away from the receiver's position.  This indicates that the minimum safe distance for secure key generation based on wireless fading must be reexamined.
+It can be concluded by applying long-range prediction to estimate the channel transfer function that an eavesdropper could reconstruct a signal more than a correlation lenth away from the receiver's position.  This indicates that the minimum safe distance for secure key generation based on wireless fading must be reexamined.
 
-In order to achieve this in the scenario constructed here the eavesdropper must know details about the environment, specifically the location of a transmission node. Besides knowledge, an array of sufficient complexity to conduct this work would have to have a certain degree of complexity. 
+In order to achieve this in the scenario constructed here the eavesdropper must know details about the environment, specifically the location of Bob. Besides knowledge, the eavesdropper would have to posses a sophisticated sampling array and the processing power to conduct the estimation.%what else?
 
 
 %our analysis is potentially pessimistic because we assume the channel parameters don't change within the sampling interval - however, it may be possible to extend the estimation to include both the channel parameters and their first derivatives.  CRLB will increase because it usually increases with additional parameters.
