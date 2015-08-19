@@ -13,7 +13,7 @@
 \usepackage{graphicx} % support the \includegraphics command and options
 \usepackage{amsmath}
 % \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
-
+\usepackage{placeins}
 %%% PACKAGES
 \usepackage{booktabs} % for much better looking tables
 \usepackage{array} % for better arrays (eg matrices) in maths
@@ -22,9 +22,9 @@
 \usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
 % These packages are all incorporated in the memoir class to one degree or another...
 
-\renewcommand{\topfraction}{0.8} 
-\renewcommand{\bottomfraction}{0.8} 
-\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\topfraction}{0.85} 
+\renewcommand{\bottomfraction}{0.85} 
+\renewcommand{\floatpagefraction}{0.8}
 %%% The "real" document content comes below...
 
 \title{SPATIAL CHANNEL PREDICTION FOR EAVESDROPPING ON WIRELESS FADING BASED KEY GENERATION} %this title is not bad
@@ -147,14 +147,14 @@ Section \ref{prediction} described the signal estimation process. In this sectio
 From a default scenario each parameter is taken over a reasonable span to determine the estimation's sensitivity to that parameter. The resultant average sample values are plotted against each swept parameter. The Cram\'er-Rao lower bound presented in \cite{kckpVTC2015} was used to identify suitable parameters for a default simulation scenario.  %insert graphs and refer to them 
 
 %I changed the letter associations for agreement with earlier math.
-The Monte Carlo simulation tests 7 different variables: $M$ the number of samples taken; $d$, the sample spacing in terms of wavelength; $N$, the number of scatterers; $O$, the number of observation snapshots; $P$, the maximum number of sinusoids allowed in the rootMUSIC estimate; $T$, the threshold value used in the rootMUSIC algorithm to separate the signal and noise subspaces; and SNR, the signal-to-noise ratio.
+The Monte Carlo simulation tests 7 different variables: $M$, the number of samples taken; $d$, the sample spacing in terms of wavelength; $N$, the number of scatterers; $O$, the number of observation snapshots; $P$, the maximum number of sinusoids allowed in the rootMUSIC estimate; $T$, the threshold value used in the rootMUSIC algorithm to separate the signal and noise subspaces; and SNR, the signal-to-noise ratio.
 
 %%%REFER TO VTC PAPER: "The CRLB expressions presented in \cite{**vtc**} were used to identify suitable parameters for a default simulation scenario.   ...more details and maybe graphs if we feel like it.  Putting this in its own subsection might be a good idea.
 
 %How do I introduce the defaults of the scenario without explaining line by line what the code is?
 \begin{figure}[tbp]
 \begin{center}
-\includegraphics[width=5.5in]{numMeasurements}
+\includegraphics[width=6in]{numMeasurements}
 \caption{Plot showing the increase of samples and array length improving the estimation quality, then deteriorating slightly past 300 samples. $d = 0.3\lambda$ is the default spacing interval}\label{M}
 \end{center}
 \end{figure}
@@ -163,7 +163,7 @@ Each variable is tested individually against the default scenario. The figures s
 
 \begin{figure}[tbp]
 \begin{center}
-\includegraphics[width=5.5in]{wavelengths}
+\includegraphics[width=6in]{wavelengths}
 \caption{Plot of the average maximum prediction length vs. the spacing between samples. At default values for the length of the array $L=40$, the spacing reaches an optimal level at $0.45\lambda$ }\label{spacing}
 \end{center}
 \end{figure}
@@ -172,7 +172,7 @@ Figure \ref{spacing} shows the average maximum prediction length vs. spacing bet
 
 \begin{figure}[tbp]
 \begin{center}
-\includegraphics[width=5.5in]{numScatterers}
+\includegraphics[width=6in]{numScatterers}
 \caption{Plot of average maximum prediction length vs. the number of scatterers. More than 10 scatterers in the scenario minimizes the effectiveness of the estimation method.}\label{Scatter}
 \end{center}
 \end{figure}
@@ -180,7 +180,7 @@ Figure \ref{Scatter} shows the number of scatterers in the scenario. Predictably
 
 \begin{figure}[tbp]
 \begin{center}
-\includegraphics[width=5.5in]{signalToNoise}
+\includegraphics[width=6in]{signalToNoise}
 \caption{This plot shows the average maximum prediction length vs. SNR. }\label{SNR}
 \end{center}
 \end{figure}
@@ -188,7 +188,7 @@ Figure \ref{SNR} shows how increasing signal-to-noise ratio of the sampled signa
 
 \begin{figure}[tbp]
 \begin{center}
-\includegraphics[width=5.5in]{numSnapshots}
+\includegraphics[width=6in]{numSnapshots}
 \caption{Plot showing the number of snapshots averaged vs. average max prediction length. At 75 snapshots the estimation reaches the end of the sampling array, and by 100 snapshots the estimation is good enough to predict several wavelengths.}\label{snapshot}
 \end{center}
 \end{figure}
@@ -196,14 +196,14 @@ Figure \ref{snapshot} shows the effect of one method to increase the effective S
 
 \begin{figure}[ptb]
 \begin{center}
-\includegraphics[width=5.5in]{musicNoise}
+\includegraphics[width=6in]{musicNoise}
 \caption{Plot showing the noise subspace threshold vs. prediction length. There is a general trend towards better quality of the estimate using higher noise threshold, however the improvement is unpredictable value to value.}\label{thresh}
 \end{center}
 \end{figure}
 
 \begin{figure}[ptb]
 \begin{center}
-\includegraphics[width=5.5in]{numSinusoids}
+\includegraphics[width=6in]{numSinusoids}
 \caption{Plot showing the maximum dimension of the signal subspace vs. average maximum prediction length. This graph show a strong improvement over the first 15 values, then levels out.}\label{sinusoid}
 \end{center}
 \end{figure}
@@ -213,7 +213,7 @@ Figure \ref{sinusoid} shows the second modifier value for the rootMUSIC algorith
 %describe the channel simulation (very similar to problem setup from previous section) - what did we assume about the problem geometry - how are the angles distributed? (uniformly) what is f_doppler/f_c?
 
 %find average prediction length and how it varies for different values of $d$ (element spacing in E), $N$ (number of elements in E), and $S$ (number of scatterers) - include figures 
-
+\FloatBarrier
 \section{Conclusion}
 
 It can be concluded by applying long-range prediction to estimate the channel transfer function that an eavesdropper could reconstruct a signal more than a correlation length away from the receiver's position.  This indicates that the minimum safe distance for secure key generation based on wireless fading must be reexamined.
