@@ -26,7 +26,7 @@ mindk=pi/(16*M*d);
 
 testM = 50:10:300;
 testN = 1:20;
-testd = 0.1:0.01:0.5;
+testd = 0.1:0.01:1;
 testq = (M+1):(2*M);
 testSNR = 1:30; %in dB
 testdk = pi/(256*M*d):pi/(32*M*d):pi/(2*M*d);
