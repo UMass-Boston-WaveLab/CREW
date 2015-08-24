@@ -166,7 +166,7 @@ Figure \ref{M} shows the number of samples in the eavesdropper's sampling array.
 \caption{Average maximum prediction length vs. the spacing between samples. The default number of samples in the eavesdropper array in this test is $M = 133$.}\label{spacing}
 \end{center}
 \end{figure}
-Figure \ref{spacing} shows the average maximum prediction length vs. the spacing between spatial samples. There is a steady increase in the estimation quality of the array as the spacing increases. The number of samples remains constant as the spacing is increased, so the length of the array grows throughout the test. At its optimal spacing of 0.45$\lambda$ the length of the eavesdropper array is approximately 60$\lambda$, with the resulting maximum prediction length being 43$\lambda$.
+Figure \ref{spacing} shows the average maximum prediction length vs. the spacing between spatial samples. There is a steady increase in the estimation quality of the array as the spacing increases. The number of samples remains constant as the spacing is increased, so the length of the array grows throughout the test. At the spacing of 0.45$\lambda$ the length of the eavesdropper array is approximately 60$\lambda$, with the resulting maximum prediction length being 43$\lambda$. Further testing has shown that the estimation quality levels out at $0.45\lambda$.
 %insert fig 2
 
 \begin{figure}[tbp]
@@ -191,7 +191,7 @@ Figure \ref{SNR} shows how increasing the signal-to-noise ratio of the eavesdrop
 \caption{Average maximum prediction length vs. number of snapshots averaged. At 75 snapshots the estimation reaches the end of the sampling array, and by 100 snapshots the estimation is good enough to predict several wavelengths.}\label{snapshot}
 \end{center}
 \end{figure}
-Figure \ref{snapshot} shows the effect of averaging multiple observation snapshots of the same channel realization.  This technique has a great impact on estimation quality. Given the ability to take multiple observations the resultant estimation is very accurate. This figure shows that for the default scenario 100 snapshots, which is typical for direction of arrival applications, is sufficient to significantly improve estimation performance, raising the effective SNR to $33$db. 
+Figure \ref{snapshot} shows that averaging multiple observation snapshots of the same channel realization has a great impact on signal quality. This figure shows that for the default scenario 100 snapshots is sufficient to significantly improve the performance., raising the effective SNR to $33dB$. Direction of arrival applications typically use 100 to 1000 snapshots, so the usage here is well within the realm of possibility. %bleh
 
 \begin{figure}[ptb]
 \begin{center}
