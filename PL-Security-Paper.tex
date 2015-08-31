@@ -153,7 +153,7 @@ Each parameter is swept over a reasonable span to determine the estimation's sen
 %How do I introduce the defaults of the scenario without explaining line by line what the code is?
 \begin{figure}[tbp]
 \begin{center}
-\includegraphics[width=6in]{numMeasurements}
+\includegraphics[width=6in]{numMeasurements.jpg}
 \caption{Plot showing the increase of samples and array length improving the estimation quality, then deteriorating slightly past 300 samples. $d = 0.3\lambda$ is the default spacing interval}\label{M}
 \end{center}
 \end{figure}
@@ -162,7 +162,7 @@ Figure \ref{M} shows the number of samples in the eavesdropper's sampling array.
 
 \begin{figure}[tbp]
 \begin{center}
-\includegraphics[width=6in]{wavelengths}
+\includegraphics[width=6in]{wavelengths.jpg}
 \caption{Average maximum prediction length vs. the spacing between samples. The default number of samples in the eavesdropper array in this test is $M = 133$.}\label{spacing}
 \end{center}
 \end{figure}
@@ -171,7 +171,7 @@ Figure \ref{spacing} shows the average maximum prediction length vs. the spacing
 
 \begin{figure}[tbp]
 \begin{center}
-\includegraphics[width=6in]{numScatterers}
+\includegraphics[width=6in]{numScatterers.jpg}
 \caption{Average maximum prediction length vs. the number of scatterers.}\label{Scatter}
 \end{center}
 \end{figure}
@@ -179,7 +179,7 @@ Figure \ref{Scatter} shows how the average maximum prediction length varies depe
 
 \begin{figure}[tbp]
 \begin{center}
-\includegraphics[width=6in]{signalToNoise}
+\includegraphics[width=6in]{signalToNoise.jpg}
 \caption{Average maximum prediction length vs. SNR. }\label{SNR}
 \end{center}
 \end{figure}
@@ -187,26 +187,26 @@ Figure \ref{SNR} shows how increasing the signal-to-noise ratio of the eavesdrop
 
 \begin{figure}[tbp]
 \begin{center}
-\includegraphics[width=6in]{numSnapshots}
+\includegraphics[width=6in]{numSnapshots.jpg}
 \caption{Average maximum prediction length vs. number of snapshots averaged. At 75 snapshots the estimation reaches the end of the sampling array, and by 100 snapshots the estimation is good enough to predict several wavelengths.}\label{snapshot}
 \end{center}
 \end{figure}
-Figure \ref{snapshot} shows that averaging multiple observation snapshots of the same channel realization has a great impact on signal quality. This figure shows that for the default scenario 100 snapshots is sufficient to significantly improve the performance., raising the effective SNR to $33dB$. Direction of arrival applications typically use 100 to 1000 snapshots, so the usage here is well within the realm of possibility. %bleh
+Figure \ref{snapshot} shows that averaging multiple observation snapshots of the same channel realization has a great impact on signal quality. This figure shows that for the default scenario 100 snapshots is sufficient to significantly improve the performance., raising the effective SNR to $33 \ \mathrm{dB}$. Direction of arrival applications typically use 100 to 1000 snapshots, so the usage here is well within the realm of possibility. %bleh
 
 \begin{figure}[ptb]
 \begin{center}
-\includegraphics[width=6in]{musicNoise}
-\caption{Average maximum prediction length vs. noise subspace threshold. }\label{thresh}
+\includegraphics[width=6in]{musicNoise.jpg}
+\caption{Average maximum prediction length vs. noise subspace threshold multiplier. }\label{thresh}
 \end{center}
 \end{figure}
 
 \begin{figure}[ptb]
 \begin{center}
-\includegraphics[width=6in]{numSinusoids}
+\includegraphics[width=6in]{numSinusoids.jpg}
 \caption{Average maximum prediction length vs. maximum dimension of the signal subspace. }\label{sinusoid}
 \end{center}
 \end{figure}
-The rootMUSIC algorithm uses the threshold value to separate the signal subspace of the correlation matrix from the noise subspace. Eigenvalues below the smallest estimated eigenvalue of the signal's correlation matrix, $\lambda_{min} *T$ are assigned to the noise subspace\cite{matlab}. Figure \ref{thresh} shows the average maximum prediction length plotted vs. the rootMUSIC modifier threshold. There is a general trend towards better quality of the estimate using higher noise threshold, however the improvement is unpredictable value to value.%I don't really know what to say here. It's spiky, but I don't really know why 
+The rootMUSIC algorithm uses the threshold multiplier value to separate the signal subspace of the correlation matrix from the noise subspace. The smallest estimated eigenvalue of the signal's correlation matrix, $\lambda_{min}$, is multiplied by $T$ to obtain a threshold value.  Sinusoids with eigenvalues below the threshold are assigned to the noise subspace\cite{matlab}. Figure \ref{thresh} shows the average maximum prediction length plotted vs. the rootMUSIC modifier threshold. There is a general trend towards better quality of the estimate using higher noise threshold, however the improvement is unpredictable value to value.%I don't really know what to say here. It's spiky, but I don't really know why 
 
 Figure \ref{sinusoid} shows the effect of the second modifier value for the rootMUSIC algorithm. This value specifies the maximum dimension of the signal subspace. For the default scenario, a value of 20 is optimal for prediction length. The threshold modifier, and to a lesser extent the maximum dimension modifier are both very sensitive to changes in the scenario construction. If the sampled correlation matrix is too small or too large vs. these modifier values the performance of the estimation is severely degraded. Additionally, the performance of the threshold value for a given scenario is extremely uneven, as evidenced by the roughness of the plot in Figure \ref{thresh}.
 
