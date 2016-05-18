@@ -1,0 +1,46 @@
+\documentclass{ieeetran}
+
+\title{Channel reconstruction eavesdropping for link signature keying}
+%alternative titles
+%Channel reconstruction eavesdropping for link signature keying
+%On the minimum secure distance for link signature keying
+\author{E.~Brown and K.~C.~Kerby-Patel}
+\date{}
+\begin{document}
+\begin{abstract}goes here\end{abstract}
+\section{Introduction}
+%LSK uses the inherent reciprocity and location dependence of wireless fading channels to generate symmetric encryption keys for two users without requiring computational key exchange or a physical meeting.
+%people are pretty excited about it
+%possible advantages - IT secure, less computation required?
+%need to characterize security - can't be adopted otherwise.  For this technique it's the minimum secure distance
+\section{Motivation}
+%correlation length is usually cited as min secure distance
+	%often gets simplified to half wavelength, which is corr length of Raylegh fading channel.
+	%mention He
+	
+%mutual information is the true measure of security (cite Cover probably) but it depends on probability distribution and is hard to characterize in practice.  depending on venue, provide equation for mutual information.
+	%check on acceptability of discussing MI of continuous things
+%correlation length is used instead, but it represents only a lower bound on MI (in the case that H is jointly Gaussian at two observation locations)
+%Upper bound on mutual information btw. channel observations, derived from data processing inequality, is MI between channel params at those two locations.  Chan params are slowly varying (cite)
+
+%since H is a deterministic function of chan params, we view this as estimation problem and characterize the eavesdropper's ability to estimate the unknown chan params from noisy observations of H.  
+%The goal is that this will lead to a new way of thinking about the minimum secure distance
+
+\section{Simulated Channel Reconstruction}
+%simulated results were presented at Allerton and are briefly summarized here
+%eavesdropper observes channel, estimates params, reconstructs channel
+	%assumptions:
+		%channel transfer function is sum of sinusoids (narrowband)
+		%channel params don't change (far field)
+		%shape of eavesdropper array & features of channel
+%Monte Carlo sim
+%Simulation plots
+
+\section{Experiment}
+%setup
+	%radios
+	%sigproc
+	%channel
+%results
+\section{Conclusion}
+\end{document}

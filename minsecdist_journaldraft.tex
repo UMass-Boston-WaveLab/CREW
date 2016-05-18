@@ -1,0 +1,45 @@
+\documentclass{ieeetran}
+
+\title{A new minimum secure distance for link signature keying}
+%alternative titles
+%Channel reconstruction eavesdropping for link signature keying
+%On the minimum secure distance for link signature keying
+\author{K.~C.~Kerby-Patel}
+\date{}
+\begin{document}
+\begin{abstract}goes here\end{abstract}
+\section{Introduction}
+%LSK uses the inherent reciprocity and location dependence of wireless fading channels to generate symmetric encryption keys for two users without requiring computational key exchange or a physical meeting.
+%people are pretty excited about it
+%possible advantages - IT secure, less computation required?
+%need to characterize security - can't be adopted otherwise.  For this technique it's the minimum secure distance
+\section{Motivation}
+%correlation length is usually cited as min secure distance
+	%often gets simplified to half wavelength, which is corr length of Raylegh fading channel.
+	%mention He
+	
+%mutual information is the true measure of security (cite Cover probably) but it depends on probability distribution and is hard to characterize in practice.  depending on venue, provide equation for mutual information.
+	%check on acceptability of discussing MI of continuous things
+%correlation length is used instead, but it represents only a lower bound on MI (in the case that H is jointly Gaussian at two observation locations)
+%Upper bound on mutual information btw. channel observations, derived from data processing inequality, is MI between channel params at those two locations.  Chan params are slowly varying (cite)
+
+%since H is a deterministic function of chan params, we view this as estimation problem and characterize the eavesdropper's ability to estimate the unknown chan params from noisy observations of H.  
+%The goal is that this will lead to a new way of thinking about the minimum secure distance
+
+\section{Minimum Variance of Eavesdropper Channel Reconstruction}
+%eavesdropper observes channel, estimates params, reconstructs channel
+%CRLB math (shortened) (cite statistical sigproc book)
+%Monte Carlo sim 
+	%assumptions:
+		%channel transfer function is sum of sinusoids (narrowband channel)
+		%channel params don't change (far field)
+		%shape of eavesdropper array & features of channel
+%CRLB plots
+
+\section{Minimum Secure Distance}
+%A new minimum secure distance may be derived using the CRLB results from the previous section.  If the estimator is unbiased, the eavesdropper's estimate of the channel transfer function is a complex random variable with mean $h$ and variance at least as large as the CRLB.  [check and then cite statistical signal processing]  (what is its distribution?)
+
+%$h$ is a random variable; $\hat{h}$ is also a random variable
+
+\section{Conclusion}
+\end{document}

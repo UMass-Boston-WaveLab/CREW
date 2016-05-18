@@ -1,0 +1,141 @@
+\documentclass[12pt, titlepage]{article}
+
+\usepackage{cite}
+\usepackage{graphicx} 
+\usepackage{fullpage}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{pdfpages}
+
+\title{Link Signature Keying for Skeptics}
+\author{{\normalsize K.~C.~Kerby-Patel}}
+\date{}
+
+\begin{document}
+\bibliographystyle{ieeetran}
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+\section*{Project Summary}
+
+
+\subsection*{Intellectual Merit}
+This work represents a new paradigm for analysis of link signature based security techniques, grounded in the physics of the propagation channel.  It identifies and addresses a major gap in the present understanding of issues surrounding practical implementation and adoption of LSK by applying estimation theoretic concepts to model the capabilities of a sophisticated eavesdropper.  Ultimately, the proposed approach will strengthen the security of LS based security strategies, allowing identification of suitable channels for LSK, development of defensive strategies for legitimate nodes, and evaluation of information theoretic security metrics for LSK scenarios.
+
+\subsection*{Broader Impacts}
+%"Some examples are: designing innovative courses or curricula; conducting outreach and mentoring activities to enhance scientific literacy or involve students from groups that have been traditionally underrepresented in science; researching students' learning and conceptual development in the discipline; incorporating research activities into undergraduate courses; linking education activities to industrial, international, or cross-disciplinary work; and implementing innovative methods for evaluation and assessment."
+
+%The proposed project depends on understanding 
+	%wave behavior
+	%phase
+	%superposition
+%as well as
+	%probability/statistics/random processes
+	%information theory
+	%particularly data processing inequality and mutual info
+	%estimation theory
+
+%outreach activities - early introduction of wave concepts?
+	%if at UMB, develop an ``innovative'' course in communication theory with emphasis on wireless channel and its behavior, plus statistics - perhaps with some kind of outreach thing like an encryption wars
+%improving representation of women/underrepresented groups in engineering/mentoring/etc.
+	%if at NEU, support a co-op or something where they can work on this?
+	%if I do something like this, how related does it need to be to the research topic?
+\newpage
+\section*{Objectives}
+%big problem
+Modern life depends on encryption to protect sensitive information.  At present, encryption keys are either shared via computational key exchange methods like Diffie-Hellman, or by the physical distribution of security tokens.  Both these methods have disadvantages: computational key exchange is potentially vulnerable to quantum computing, while physical key management and distribution is logistically difficult and expensive.  Link signature keying (LSK) has been proposed as an alternative to both methods.  
+
+%ref to lit #1
+LSK is a promising new approach to encryption which uses the inherent reciprocity and location dependence of the wireless channel to generate a random number seed for symmetric key generation \cite{hershey1995, hassan1996, azimisadjadi2007, mathur2008}.  It has applications as an alternative to physical key management because nodes can generate symmetric keys without a physical meeting.  It is also interesting as an alternative to computational key exchange because it has been claimed to be information theoretically secure and would therefore not be vulnerable to quantum computing \cite{ye2010}.  
+
+%ref to lit #2
+However, many security claims related to LSK rest on na\"{i}ve assumptions about the probabilistic behavior of wireless channels.  Research on LSK has largely ignored the underlying physical behavior of the wireless channel, which results in optimistic conclusions about its security.  In particular, since LSK depends on the physical behavior of the wireless channel, the security metric of LSK is typically stated as a minimum secure distance (MSD) beyond which an eavesdropper would be unable to estimate the channel transfer function and derive the legitimate nodes' key. Current practice is to use the channel correlation length as the MSD.  However, this usage discounts the fact that channel observations are a deterministic function of slowly-varying environmental parameters which can persist over distances much greater than the correlation length \cite{jakes1974, duel-hallen2007}.  It has been pointed out in \cite{he2013} that many practical channels have correlation lengths longer than a wavelength (which is commonly assumed to be an appropriate MSD); this work goes further to argue that correlation length in general is not applicable to MSD, even in channels with short correlation lengths.  Our initial work has indicated that the correlation-based understanding of the MSD is indeed inappropriate, and a sophisticated eavesdropper could predict the channel at distances much greater than the correlation length \cite{kckpVTC2015, brown2015}.  
+
+
+%this is the part with the hero narrative
+The objective of this proposal is to produce a more conservative, rigorous, and trustworthy understanding of LSK security informed by the physics of the propagation environment.  We propose an alternative paradigm, based on information theory and estimation theory and grounded in physical wave propagation behavior.  An LSK eavesdropper's channel prediction problem has parallels in remote sensing topics like direction of arrival estimation, so similar techniques can be applied to estimate the eavesdropper's capabilities.  
+%...which makes LSK well suited to an electromagnetics-based approach despite its superficial connection to cryptography(?)
+
+The proposed framework will ultimately provide
+%
+a definitive answer on the question of LSK's information theoretic security 
+%
+and a more conservative means to estimate the MSD.  It will also 
+%
+permit the analysis of more sophisticated eavesdropper geometries and 
+%
+defensive strategies for legitimate nodes.  Collectively, these objectives 
+%
+move toward establishing the viability of LSK as a practical encryption method and as an alternative to physical key management and computational key exchange schemes.
+
+\section*{Research Plan}
+\subsection*{Background}
+Link signature keying schemes have been proposed by a number of authors in recent years.  All implementations of LSK rely upon two particular qualities of the wireless propagation channel: first, that it is reciprocal, since the channel transfer function between a pair of locations is the same when measured in both directions; and second, that in a sufficiently scattering-rich environment it is strongly location-dependent. 
+%would like to put specific refs that use each technique next to the technique (phase vs. RSS, privacy amp, key reconciliation)
+
+In a typical LSK implementation, two nodes (Alice and Bob) negotiate a key based on their measurements of the wireless channel.  First, Alice transmits a known training sequence (or channel sounding waveform), which travels through the propagation environment and interacts with any scatterers that are present.  Bob's observation of the waveform consists of the superposition of the training sequence after it travels along many scattering paths with different delay times and amplitudes. Next, Bob transmits the same training sequence.  Alice also records a version of the training sequence that has been modified by the propagation channel.  Alice and Bob then use their observations and the known training sequence to estimate the channel transfer function.  Depending on the particular scheme, the phase \cite{hershey1995, hassan1996, sayeed2008} or amplitude \cite{azimisadjadi2007, mathur2008, ye2010, premnath2013, jana2013} of the channel transfer function is then quantized.  Alice and Bob may perform information reconciliation and privacy amplification operations on the resulting samples in order to agree on the final key bits.  Finally, Alice and Bob arrive at a shared encryption key.  New key bits may be obtained whenever the environment has changed enough to provide a new channel realization; for mobile terminals this may occur on a time scale of milliseconds \cite{hershey1995}.
+ 
+Because of the location dependence of the channel, it is frequently stated that LSK is secure as long as no eavesdroppers exist within half a carrier wavelength of the legitimate nodes, which corresponds to the correlation length of a Rayleigh fading channel.  He et al. have pointed out that some channels have much longer correlation lengths, and the assumption that the minimum secure distance (MSD) is a half wavelength is often inappropriately optimistic \cite{he2013}.  It is observed in \cite{jakes1974} %section 1.6
+ that, while mobile terminals may observe short correlation lengths due to large angular spread and nearby scatterers, base stations tend to observe long correlation lengths because the angular spread is smaller from that point of view, and the distance to scatterers is larger.
+%also the one about ``mimic attack'' which assumes the impostor knows the channel? not sure if that is relevant.
+This point of view still permits the use of the channel correlation length as the MSD, it simply points out that in general the correlation length may not be a half wavelength.  The use of the correlation length as the MSD stems from the Gaussian form of most statistical channel models for communications.
+%say more things about this - confuses how fading is \emph{modeled} with how fading \emph{physically occurs}
+\begin{itemize}
+\item 
+\end{itemize}
+In the next section, we will argue that the correlation length is not an appropriate estimator of the MSD, and results in optimistic security claims by representing a best-case scenario.
+
+
+\subsection*{Initial Results}
+%madiseh2008 knows about the upper bound based on the data processing inequality but doesn't make the next step to disqualifying the correlation function.
+The argument against corr len and our simplistic eavesdropper - should this be in background too?
+\begin{itemize}
+\item "confuses how fading is \emph{modeled} with how fading \emph{physically occurs}"
+\item show that use of corr len implicitly uses corr func as proxy for MI and thus assumes Gaussian statistics, which are a lower bound on MI in general\cite{cover2006-jgvars}
+\item argue against use of correlation length as proxy for MI because chan params vary so slowly even for quickly varying channels - \cite{jakes1974, duel-hallen2007}
+\item so it makes sense in many cases to assume we have one realization of random chan params within an observation window, and they could be estimated
+\item temporal channel prediction is a thing - no reason we can't do it spatially also - \cite{eyceoz1999, andersen1999, duel-hallen2000, isukapalli2006} - note that spectral estimation, multilateration, and SAR also exist
+\end{itemize}
+
+Summary of our initial results - and should this be in background?
+\begin{itemize}
+\item CRLB for multi-sample eavesdropper doing a spectral estimation problem showed it is possible to predict over distances greater than a wavelength \cite{kckpVTC2015}
+\item Simulation of the same \cite{brown2015}
+\item Experiment if completed - cite fresh APS paper
+\end{itemize}
+
+\subsection*{Technical Approach}
+\begin{itemize}
+%I shouldn't say yet, because I haven't proved it, but the way to derive the MSD is to find the capacity of some combination of channels where the things that get measured are \theta, h_E, h_B. This would mean the prob dist of theta that maximizes mutual information between some pair of these quantities, because that's what channel capacity is.  Since we assume we don't know p(\theta)
+\item Information theoretic argument to find MSD based on upper (not lower) bound on MI.  If we assume we don't know the prob dist of $\theta$, this amounts to finding the prob dist for $\theta$ that maximizes $I(h_{AE}, h_{AB})$, under some constraints (maybe we know the angular spread and other things about the channel).  Which, in turn, is kind of the capacity of a ``meta-channel.'' 
+\item Examine alternative scenarios, eavesdropper strategies, and constraints
+\begin{itemize}
+\item Eve doesn't have perfect knowledge of any node's location, just a noisy estimate
+\item Scatterers not in far field, so it's a TDOA problem
+\item Eve has a single antenna that passes through the scene, so it's a SAR problem
+\item Eve's samples are in some other configuration (grid, circle around B, random locations) rather than a line
+\end{itemize}
+\item Are there defensive strategies for Alice and Bob? 
+\begin{itemize}
+	\item channel/antenna manipulation
+	\item selecting a hospitable channel
+\end{itemize}
+\end{itemize}
+
+\subsection*{Risks}
+\subsection*{Timeline}
+\subsection*{Evaluation}
+\subsection*{Future Work}
+
+\section*{Education Plan}
+%issue 1: low interest at UG level because emag is perceived as "hard"; continued need for new radio/comms/emag people as wireless communications and sensing find new applications all the time
+%issue 2: women in engineering
+%goals: recruit young scientists to Emag/radio/comms: K-12 early introduction to wave concepts (?), generate interest at UG level via "fun with waves" workshops (that can drop in to emag courses?), low-math or project-based emag courses to improve interest (?), study how UGs shift from DC circuit concepts to RF circuit/wave concepts (!!! - potentialntially use the workshop lessons as "interventions"?), sponsor a senior design project(?), mentoring grad students (obvi)
+%help with retention of women engineers via mentoring, professional development activities
+
+%"must indicate the goals and objectives of the proposed education activities, how it will be integrated with the research component, and the criteria for assessing how these goals will be met."
+\section*{Broader Impacts}  
+%impact of both ed plan and research plan, and how they are related to each other.
+\bibliography{PL-Library}
+\end{document}
