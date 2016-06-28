@@ -17,106 +17,106 @@ function [CRLBvsM, CRLBvsN, CRLBvsd, CRLBvsq, CRLBvsSNR] = CRLBmontecarlo2(reps)
 
 %default values
 tic
-M=80; %in general, make M be odd so CRLB calculation is simplified
+M=31; %in general, make M be odd so CRLB calculation is simplified
 N=7;
 d=0.45;
 SNR=23; %in dB: 10*log10(avg(|h|^2/|n|^2)) = 10*log10(N/sigma^2)
-q=M+floor(10/d); %10 wavelengths beyond sample region is default
+q=M+floor(2/d); %2 wavelengths beyond sample region is default
 mindk=pi/(16*M*d);
 
-testM = 50:10:300;
+testM = 9:2:51;
 testN = 1:20;
 testd = 0.1:0.01:1;
 testq = (M+1):(2*M);
 testSNR = 1:30; %in dB
 testdk = pi/(256*M*d):pi/(32*M*d):pi/(2*M*d);
+testMqs = 8:4:20;
 
 temp=0;
-CRLBvsM = zeros(size(testM));
+CRLBvsM = zeros(length(testM),length(testMqs));
 CRLBvsN = zeros(size(testN));
 CRLBvsd = zeros(size(testd));
 CRLBvsq = zeros(size(testq));
 CRLBvsSNR = zeros(size(testSNR));
 CRLBvsdk = zeros(size(testdk));
 
-rvsM = zeros(size(testM));
+
+rvsM = zeros(length(testM),length(testMqs));
 rvsN = zeros(size(testN));
 rvsd = zeros(size(testd));
 rvsq = zeros(size(testq));
 rvsSNR = zeros(size(testSNR));
 rvsdk = zeros(size(testdk));
+rvsMq = zeros(size(testMqs));
 
-parfor ii=1:length(testM)
-    temp=0;
-    for jj = 1:reps
-        [r, crlb]=chanestCRLB(N, testM(ii), d, q, 10^(SNR/10), mindk);
-        temp=temp+crlb/reps;
-        rvsM(ii) = rvsM(ii)+r/reps;
+for ii=1:length(testM)
+    for jj=1:length(testMqs)
+        temp=0;
+        parfor kk = 1:reps
+            [~, crlb]=chanestCRLB(N, testM(ii), d, testMqs(jj), 10^(SNR/10), mindk);
+            temp=temp+crlb/reps;
+        end
+        CRLBvsM(ii,jj)=temp;
     end
-    CRLBvsM(ii)=temp;
-    
-    
 end
 
-parfor ii=1:length(testN)
-    temp=0;
-    for jj = 1:reps
-        [r, crlb]=chanestCRLB(testN(ii), M, d, q, 10^(SNR/10), mindk); %averaging
-        temp=temp+crlb/reps;
-        rvsN(ii) =rvsN(ii)+r/reps;
-    end
-    CRLBvsN(ii)=temp;
-    
-    
-end
-
-parfor ii=1:length(testd)
-    temp=0;
-    for jj = 1:reps
-        [r, crlb]=chanestCRLB(N, M*d/testd(ii), testd(ii), q, 10^(SNR/10), mindk);
-        temp=temp+crlb/reps;
-         rvsd(ii) = rvsd(ii)+r/reps;
-    end
-    CRLBvsd(ii)=temp;
-    
-   
-end
-
-parfor ii=1:length(testq)
-    temp=0;
-    for jj = 1:reps
-        [r, crlb]=chanestCRLB(N, M, d, testq(ii), 10^(SNR/10), mindk);
-        temp=temp+crlb/reps;
-        rvsq(ii) = rvsq(ii)+r/reps;
-    end
-    CRLBvsq(ii)=temp;
-    
-    
-end
-
-parfor ii=1:length(testSNR)
-    temp=0;
-    for jj = 1:reps
-        [r, crlb]=chanestCRLB(N, M, d, q, 10^(testSNR(ii)/10), mindk);
-        temp=temp+crlb/reps; 
-        rvsSNR(ii) = rvsSNR(ii)+r/reps;
-    end
-    CRLBvsSNR(ii)=temp;
-    
-    
-end
-
-parfor ii=1:length(testdk)
-    temp=0;
-    for jj = 1:reps
-        [r, crlb]=chanestCRLB(N, M, d, q, 10^(SNR/10), testdk(ii));
-        temp=temp+crlb/reps; 
-        rvsdk(ii) = rvsdk(ii)+r/reps;
-    end
-    CRLBvsdk(ii)=temp;
-    
-    
-end
+% parfor ii=1:length(testN)
+%     temp=0;
+%     for jj = 1:reps
+%         [r, crlb]=chanestCRLB(testN(ii), M, d, q, 10^(SNR/10), mindk); %averaging
+%         temp=temp+crlb/reps;
+%         rvsN(ii) =rvsN(ii)+r/reps;
+%     end
+%     CRLBvsN(ii)=temp;
+%     
+%     
+% end
+% 
+% parfor ii=1:length(testd)
+%     temp=0;
+%     for jj = 1:reps
+%         [r, crlb]=chanestCRLB(N, M*d/testd(ii), testd(ii), q, 10^(SNR/10), mindk);
+%         temp=temp+crlb/reps;
+%          rvsd(ii) = rvsd(ii)+r/reps;
+%     end
+%     CRLBvsd(ii)=temp;
+%     
+%    
+% end
+% 
+% parfor ii=1:length(testq)
+%     temp=0;
+%     for jj = 1:reps
+%         [r, crlb]=chanestCRLB(N, M, d, testq(ii), 10^(SNR/10), mindk);
+%         temp=temp+crlb/reps;
+%         rvsq(ii) = rvsq(ii)+r/reps;
+%     end
+%     CRLBvsq(ii)=temp;
+%     
+%     
+% end
+% 
+% parfor ii=1:length(testSNR)
+%     temp=0;
+%     for jj = 1:reps
+%         [r, crlb]=chanestCRLB(N, M, d, q, 10^(testSNR(ii)/10), mindk);
+%         temp=temp+crlb/reps; 
+%         rvsSNR(ii) = rvsSNR(ii)+r/reps;
+%     end
+%     CRLBvsSNR(ii)=temp;
+% end
+% 
+% parfor ii=1:length(testdk)
+%     temp=0;
+%     for jj = 1:reps
+%         [r, crlb]=chanestCRLB(N, M, d, q, 10^(SNR/10), testdk(ii));
+%         temp=temp+crlb/reps; 
+%         rvsdk(ii) = rvsdk(ii)+r/reps;
+%     end
+%     CRLBvsdk(ii)=temp;
+%     
+%     
+% end
 
 %these are for debugging the default parameter choices
 % figure;
@@ -139,45 +139,46 @@ h1=figure;
 plot(testM*d, real(CRLBvsM), 'linewidth',2)
 xlabel('Measurement Length (wavelengths)')
 ylabel('Estimator Minimum Variance')
-ylim([0,0.1])
+ylim([0,0.3])
 narrowfig(h1)
+legend([num2str(testMqs.') repmat(' samples ahead',length(testMqs),1)])
 
-h2=figure; 
-plot(testN, real(CRLBvsN), 'linewidth',2)
-xlabel('Number of Scatterers')
-ylabel('Estimator Minimum Variance')
-ylim([0,0.1])
-narrowfig(h2)
-
-h3=figure; 
-plot(testd, real(CRLBvsd), 'linewidth',2)
-xlabel('Space Between Samples (Wavelengths) - constant total length')
-ylabel('Estimator Minimum Variance')
-ylim([0,0.1])
-narrowfig(h3)
-
-h4=figure; 
-plot(testq-M, real(CRLBvsq), 'linewidth',2)
-xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
-ylabel('Estimator Minimum Variance')
-ylim([0,0.1])
-narrowfig(h4)
-
-h5=figure; 
-plot(testSNR, real(CRLBvsSNR), 'linewidth',2)
-xlabel('Signal to Noise Ratio (dB)')
-ylabel('Estimator Minimum Variance')
-ylim([0,0.1])
-narrowfig(h5)
-
-h6=figure; 
-plot(testdk*M*d, real(CRLBvsdk), 'linewidth',2)
-xlabel('Minimum \Delta_kMd (radians)') %total accumulated phase difference btw. two scatterer paths over array length
-ylabel('Estimator Minimum Variance')
-set(gca, 'xtick', [0, pi/8, pi/4,3*pi/8, pi/2])
-set(gca, 'xticklabel', {'0';'\pi/8';'\pi/4'; '3\pi/8'; '\pi/2'})
-ylim([0,0.1])
-narrowfig(h6)
+% h2=figure; 
+% plot(testN, real(CRLBvsN), 'linewidth',2)
+% xlabel('Number of Scatterers')
+% ylabel('Estimator Minimum Variance')
+% ylim([0,0.3])
+% narrowfig(h2)
+% 
+% h3=figure; 
+% plot(testd, real(CRLBvsd), 'linewidth',2)
+% xlabel('Space Between Samples (Wavelengths) - constant total length')
+% ylabel('Estimator Minimum Variance')
+% ylim([0,0.3])
+% narrowfig(h3)
+% 
+% h4=figure; 
+% plot(testq-M, real(CRLBvsq), 'linewidth',2)
+% xlabel(sprintf('Number of Samples Predicted Ahead (sample spacing = %.2f wavelengths)', d))
+% ylabel('Estimator Minimum Variance')
+% ylim([0,0.3])
+% narrowfig(h4)
+% 
+% h5=figure; 
+% plot(testSNR, real(CRLBvsSNR), 'linewidth',2)
+% xlabel('Signal to Noise Ratio (dB)')
+% ylabel('Estimator Minimum Variance')
+% ylim([0,0.3])
+% narrowfig(h5)
+% 
+% h6=figure; 
+% plot(testdk*M*d, real(CRLBvsdk), 'linewidth',2)
+% xlabel('Minimum \Delta_kMd (radians)') %total accumulated phase difference btw. two scatterer paths over array length
+% ylabel('Estimator Minimum Variance')
+% set(gca, 'xtick', [0, pi/8, pi/4,3*pi/8, pi/2])
+% set(gca, 'xticklabel', {'0';'\pi/8';'\pi/4'; '3\pi/8'; '\pi/2'})
+% ylim([0,0.3])
+% narrowfig(h6)
 
 % figure; 
 % plot(testdk*M*d, rvsdk)
