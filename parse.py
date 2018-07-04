@@ -5,14 +5,15 @@ File created on 7/1/2018
 This script parses the cero output.
 """
 
-import scipy as sp
 import json
+import csv
 
 '''
 get files
 parse json
 pull out all tags and add them to data object
 '''
+
 
 class Position:
     """
@@ -27,9 +28,10 @@ class Position:
     The offset value in the header is about .007 seconds from the rx_time. Not sure what that tag is meant to represent.
     Hugh can you look into that for me?
 
+
     Attributes
     ----------
-    tags : dict of dicts
+    data : dict of dicts
         Each packet has attached tags from GNURadio. They are saved into the
     run_num : int
         This is for bookeeping. You record the run # then can compare results across runs
@@ -61,21 +63,27 @@ def condition_json(filename):
     with open(filename, 'r') as json_file:
         data = json_file.read()
         json_file.close()
-    data =
-    json_file = open('fixed_data.json')
+    data = data.replace('}{', '},\n{')
+    json_file = open('fixed_data.json', 'w+')
     json_file.seek(0, 0)
     json_file.write('[\n' + data + '\n]')
-    json_file.
+    json_file.close()
 
 
-def crew_read(filename = 'fixed_data.json'):
-    '''
+def crew_read(run_num, times_filename='time_sets.csv', json_filename='fixed_data.json'):
+    """
 
-    :param filename:
+    :param run_num:
+    :param times_filename:
+    :param json_filename:
     :return:
-    '''
-    with open(filename) as json_file:
+    """
+    with open(json_filename) as json_file:
         data = json.load(json_file)
-        for p =
-
-    return Position(tags, run_num, time_sets)
+        json_file.close()
+    time_sets = []
+    with open(times_filename) as time_file:
+        times = csv.reader(time_file, delimiter=',')
+        for row in times:
+            time_sets = time_sets.append(row)
+    return Position(data, run_num, time_sets)
