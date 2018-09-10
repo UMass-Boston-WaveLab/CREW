@@ -35,23 +35,24 @@ class Position:
         Each packet has attached tags from GNURadio. They are saved into the
     run_num : int
         This is for bookeeping. You record the run # then can compare results across runs
-    time_sets : ndarray
+    time_set : ndarray
         This is an array of door open and door close times, so that we can delineate data from one position from another and remove
         data from the set that is impacted by RF signals outside the room.
     """
-    def __init__(self, data, run_num, time_sets):
+    def __init__(self, data, pos_num, time_sets):
         self.data = data
-        self.run_num = run_num
-        self.time_sets = time_sets
+        self.pos_num = pos_num
+        self.time_set = time_set
 
-    def get_tag(self, key):
+    def get_data(self, data):
         """
-        Return data from particular key. As is, valid keys are: packet_num, rx_time, ofdm_sync_carrier_offset,
-        ofdm_sync_chan_taps, packet_len
+        Returns a data cube containing the data from each packet received in specified time slice.
+        :param time_slice:
+        :return: data ndarray
+        """
 
-        :param key:
-        :return: tag dict
-        """
+
+
 
 
 def condition_json(filename):
@@ -64,16 +65,18 @@ def condition_json(filename):
         data = json_file.read()
         json_file.close()
     data = data.replace('}{', '},\n{')
-    json_file = open('fixed_data.json', 'w+')
+    json_file = open('conditioned_data.json', 'w+')
     json_file.seek(0, 0)
     json_file.write('[\n' + data + '\n]')
     json_file.close()
 
 
-def crew_read(run_num, times_filename='time_sets.csv', json_filename='fixed_data.json'):
+def crew_read(run_num, run_date, run_notes, times_filename='time_sets.csv', json_filename='conditioned_data.json'):
     """
+    While running test, create a CSV with a comma delimiter, (or code another delimiter). This method will
+    create a set of position objects for the run. These objects will have attributes for date, time, notes...
 
-    :param run_num:
+    :param run_num, run_date, run_notes:
     :param times_filename:
     :param json_filename:
     :return:
@@ -86,4 +89,4 @@ def crew_read(run_num, times_filename='time_sets.csv', json_filename='fixed_data
         times = csv.reader(time_file, delimiter=',')
         for row in times:
             time_sets = time_sets.append(row)
-    return Position(data, run_num, time_sets)
+    return RunSet(data, run_num, run_date, run_notes, time_sets)
